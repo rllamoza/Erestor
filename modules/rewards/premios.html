@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incentivos & Méritos - Erestor Sentinel</title>
+    <link rel="stylesheet" href="../../shared/assets/css/styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">ADMIN</div>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li id="menu-dashboard"><a href="../dashboard/index.html">Dashboard</a></li>
+            <li id="menu-usuarios"><a href="../users/usuarios.html">Gestión Usuarios</a></li>
+            <li id="menu-redes"><a href="../networks/redes.html">Redes</a></li>
+            <li id="menu-sedes"><a href="../networks/sedes.html">Sedes</a></li>
+            <li id="menu-eventos"><a href="../events/eventos.html">Eventos y Horas</a></li>
+            <li id="menu-asistencia-admin"><a href="../attendance/admin_asistencia.html">Control Asistencia</a></li>
+            <li id="menu-asistencia" style="display:none;"><a href="../attendance/asistencia.html">Registrar
+                    Asistencia</a></li>
+            <li id="menu-premios" class="active"><a href="../rewards/premios.html">Premios</a></li>
+            <li id="menu-areas"><a href="../networks/areas.html">Áreas de Servicio</a></li>
+            <li id="menu-asignaciones"><a href="../events/asignaciones.html">⚡ Asignar Personal</a></li>
+            <li id="menu-reportes"><a href="../reports/reportes.html">Reportes</a></li>
+            <li id="menu-configuracion"><a href="../dashboard/configuracion.html">Configuración</a></li>
+            <li id="menu-perfil" style="display:none;"><a href="../users/perfil.html"
+                   >&#128100; Mi
+                    Perfil</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <div class="dashboard-container">
+            <header class="top-nav">
+                <div class="nav-left">
+                    <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                    <div>
+                        <div class="logo">ERESTOR // RECONOCIMIENTOS</div>
+                        <span class="erestor-badge purple" style="font-size: 0.65rem; margin-top: 2px;">
+                            <span class="live-dot" style="width: 5px; height: 5px;"></span> GAMIFICACIÓN & MÉRITOS
+                        </span>
+                    </div>
+                </div>
+                <div class="user-nav-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Cambiar Modo">🌓</button>
+                    <div class="user-profile">
+                        <span class="user-name" id="user-display-name">Usuario</span>
+                        <span class="user-email" id="user-display-email">correo@ejemplo.com</span>
+                    </div>
+                </div>
+                <div class="stats-overview">
+                    <button class="btn-glow-pink" onclick="evaluarPremios()">EVALUAR GANADORES HOY</button>
+                </div>
+            </header>
+            <div class="search-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+                <input type="text" id="searchInput" placeholder="Buscar por nombre, descripción, criterio..."
+                    class="form-control-modal"
+                    style="flex: 1; margin: 0;">
+                <button class="btn-glow" onclick="handleSearch()"
+                    style="padding: 8px 20px; min-width: 120px; border-color: #f1c40f; color: #f1c40f;">BUSCAR</button>
+            </div>
+            <main class="grid-content" style="display:block;">
+                <div class="panel panel-large">
+                    <div class="panel-header" style="color:#f1c40f; border-bottom-color:#f1c40f;">CATÁLOGO DE PREMIOS
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table" id="premiosTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre / Título</th>
+                                    <th>Descripción</th>
+                                    <th>Criterio Evaluación</th>
+                                </tr>
+                            </thead>
+                            <tbody><!-- Data injected via JS --></tbody>
+                        </table>
+                    </div>
+                    <div id="premiosPagination"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../../shared/assets/js/common_ui.js?v=3.0"></script>
+    <script src="../../shared/assets/js/paginator.js?v=1.1"></script>
+    <script>
+        const token = sessionStorage.getItem('token');
+        let premiosPaginator;
+
+        function initPremiosPaginator() {
+            premiosPaginator = initPaginator({
+                containerId: 'premiosTable',
+                paginationId: 'premiosPagination',
+                apiUrl: 'api/premios.php',
+                token: token,
+                limit: 10,
+                renderRow: (p) => {
+                    return `
+                        <tr>
+                            <td>${p.id}</td>
+                            <td><strong style="color:#f1c40f">🏆 ${p.nombre}</strong></td>
+                            <td>${p.descripcion || ''}</td>
+                            <td>${p.criterio || ''}</td>
+                        </tr>`;
+                }
+            });
+            premiosPaginator.loadPage(1);
+        }
+
+        function handleSearch() {
+            const term = document.getElementById('searchInput').value;
+            premiosPaginator.search(term);
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        initPremiosPaginator();
+
+        function evaluarPremios() {
+            alert('Ejecutando motor de evaluación de ganadores...');
+            authFetch('api/evaluar.php')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log(data.premios_calculados);
+                        alert('Evaluación completada con éxito. Revisa la consola para ver a los ganadores de hoy basados en el Ranking actual.');
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>

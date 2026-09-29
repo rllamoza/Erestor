@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Erestor Ops - Planificador &amp; Asignaciones Drag&amp;Drop</title>
+<!-- Google Fonts: Inter & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-container": "#00424f",
+            "primary": "#4cd7f6",
+            "on-tertiary-fixed-variant": "#004e5a",
+            "secondary-fixed": "#6ffbbe",
+            "surface-tint": "#4cd7f6",
+            "outline": "#869397",
+            "surface": "#0f131d",
+            "secondary-container": "#00a572",
+            "primary-fixed": "#acedff",
+            "primary-container": "#06b6d4",
+            "tertiary-fixed": "#a2eeff",
+            "on-surface": "#dfe2f1",
+            "secondary-fixed-dim": "#4edea3",
+            "tertiary": "#2fd9f4",
+            "surface-bright": "#353944",
+            "inverse-primary": "#00687a",
+            "error-container": "#93000a",
+            "tertiary-container": "#00b7cf",
+            "secondary": "#4edea3",
+            "on-surface-variant": "#bcc9cd",
+            "on-primary": "#003640",
+            "surface-container-lowest": "#0a0e18",
+            "surface-container-highest": "#313540",
+            "on-secondary-fixed": "#002113",
+            "on-error": "#690005",
+            "inverse-on-surface": "#2c303b",
+            "on-tertiary-container": "#00434d",
+            "inverse-surface": "#dfe2f1",
+            "surface-container-high": "#262a35",
+            "tertiary-fixed-dim": "#2fd9f4",
+            "on-background": "#dfe2f1",
+            "surface-container": "#1c1f2a",
+            "outline-variant": "#3d494c",
+            "on-tertiary-fixed": "#001f25",
+            "on-secondary-container": "#00311f",
+            "surface-container-low": "#171b26",
+            "on-error-container": "#ffdad6",
+            "on-tertiary": "#00363e",
+            "on-secondary-fixed-variant": "#005236",
+            "surface-variant": "#313540",
+            "background": "#0f131d",
+            "primary-fixed-dim": "#4cd7f6",
+            "surface-dim": "#0f131d",
+            "on-secondary": "#003824",
+            "on-primary-fixed-variant": "#004e5c",
+            "on-primary-fixed": "#001f26",
+            "error": "#ffb4ab"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-kiosk": "2.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-tablet": "2rem",
+            "margin": "1rem",
+            "gutter": "1.5rem",
+            "margin-kiosk": "3.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "800" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "fontWeight": "700" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 19px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0a0e18;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #262a35;
+      border-radius: 4px;
+      border: 1px solid #3d494c;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4cd7f6;
+    }
+    /* Subtle grid background simulation */
+    .cyber-grid {
+      background-image: linear-gradient(to right, rgba(76, 215, 246, 0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(76, 215, 246, 0.02) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/></head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex overflow-hidden cyber-grid select-none">
+<!-- ========================================================================= -->
+<!-- 1. BARRA LATERAL IZQUIERDA (SideNavBar Shared Component)                 -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 flex flex-col justify-between p-4 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant dark:border-outline-variant">
+<!-- Top Branding / Header -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-surface-container-highest border border-primary/40 shadow-[0_0_15px_rgba(76,215,246,0.2)]">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="deployed_code">deployed_code</span>
+<span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container-low animate-pulse"></span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-md text-headline-md tracking-wider text-primary dark:text-primary uppercase font-bold text-[18px] leading-5">ERESTOR OPS</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            v4.2 • Nodo Operativo Central
+          </span>
+</div>
+</div>
+<!-- Quick Action / CTA -->
+<button class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-primary-container/20 border border-primary/30 text-primary font-label-md text-label-md hover:bg-primary-container/30 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[16px]" data-icon="person_add">person_add</span>
+<span>Registrar Voluntario</span>
+</button>
+<!-- Navigation Tabs (from JSON & active status) -->
+<nav class="flex flex-col gap-1 mt-1">
+<!-- Tab 1: Monitoreo en Vivo -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="radar">radar</span>
+<span>Monitoreo en Vivo</span>
+</div>
+<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-secondary/15 text-secondary border border-secondary/30">EN VIVO</span>
+</a>
+<!-- Tab 2: Asignación Drag&Drop (ACTIVE MATCH) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-high dark:bg-surface-container-high text-primary dark:text-primary font-label-md text-label-md border-l-2 border-primary shadow-[0_0_12px_rgba(76,215,246,0.15)] active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-semibold">Asignación Drag&amp;Drop</span>
+</a>
+<!-- Tab 3: Base de Voluntarios -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="group">group</span>
+<span>Base de Voluntarios</span>
+</a>
+<!-- Tab 4: Gestión de Turnos -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="schedule">schedule</span>
+<span>Gestión de Turnos</span>
+</a>
+<!-- Tab 5: Dispositivos Kiosk -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="nest_display">nest_display</span>
+<span>Dispositivos Kiosk</span>
+</a>
+<!-- Tab 6: Configuración Sistema -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="settings">settings</span>
+<span>Configuración Sistema</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="flex flex-col gap-2 pt-3 border-t border-outline-variant">
+<!-- Central Server Telemetry Ping -->
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/60">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4edea3]"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Servidor Central</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-mono">ÓPTIMO</span>
+</div>
+<!-- Support & Logout from JSON -->
+<div class="flex items-center justify-between px-1">
+<a class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors py-1" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="contact_support">contact_support</span>
+<span>Soporte Técnico</span>
+</a>
+<a class="text-on-surface-variant hover:text-error transition-colors p-1" href="#" title="Cerrar Sesión">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CONTAINER (Offset by 256px for Sidebar)                     -->
+<!-- ========================================================================= -->
+<div class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- ======================================================================= -->
+<!-- 2. BARRA SUPERIOR OPERATIVA (TopNavBar & Contextual Mission Bar)        -->
+<!-- ======================================================================= -->
+<header class="h-20 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant px-6 flex items-center justify-between shrink-0 z-30">
+<!-- Left Filters: Evento, Fecha, Turno -->
+<div class="flex items-center gap-3">
+<!-- Event Dropdown -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="church">church</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none text-[10px]">EVENTO ACTIVO</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate max-w-[200px]">Servicio General - Sede Central</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+<!-- Date Picker -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="calendar_today">calendar_today</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none text-[10px]">FECHA PROGRAMADA</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Dom, 26 Oct 2025</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Shift Selector -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="schedule">schedule</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none text-[10px]">TURNO OPERATIVO</span>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-medium">08:30 - 13:00</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] bg-primary/10 text-primary border border-primary/30">Mañana</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Hub: Cobertura & Stat Chips -->
+<div class="flex items-center gap-6 px-4 py-2 rounded-xl bg-surface-container/60 border border-outline-variant/60 shadow-inner">
+<div>
+<div class="flex items-center justify-between text-[11px] mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">COBERTURA MATRIZ</span>
+<span class="font-label-md text-label-md text-secondary font-bold font-mono">88% <span class="text-on-surface-variant font-normal">(44/50)</span></span>
+</div>
+<!-- Progress Bar Cyan to Emerald -->
+<div class="w-48 h-2 rounded-full bg-surface-container-highest overflow-hidden p-[1px]">
+<div class="h-full rounded-full bg-gradient-to-r from-primary to-secondary shadow-[0_0_8px_rgba(78,222,163,0.4)]" style="width: 88%"></div>
+</div>
+</div>
+<div class="h-8 w-px bg-outline-variant/60"></div>
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-error flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+              6 vacantes
+            </span>
+<span class="text-[10px] text-on-surface-variant">Críticas sin cubrir</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary font-semibold">8 Áreas</span>
+<span class="text-[10px] text-on-surface-variant">Habilitadas</span>
+</div>
+</div>
+</div>
+<!-- Primary Action Buttons -->
+<div class="flex items-center gap-2.5">
+<!-- AI Auto Assign -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high border border-primary/40 text-primary font-label-md text-label-md hover:bg-primary/10 hover:shadow-[0_0_12px_rgba(76,215,246,0.2)] transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[17px]" data-icon="auto_awesome">auto_awesome</span>
+<span>Auto-Asignar IA</span>
+</button>
+<!-- Save Matrix -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container-high hover:border-outline transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined text-[17px]" data-icon="save">save</span>
+<span>Guardar Matriz</span>
+</button>
+<!-- High-Contrast Primary: Notify Volunteers -->
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-[0_0_16px_rgba(78,222,163,0.35)] hover:bg-secondary-fixed-dim hover:shadow-[0_0_22px_rgba(78,222,163,0.5)] transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]" data-icon="send">send</span>
+<span>Notificar Voluntarios</span>
+</button>
+</div>
+</header>
+<!-- ======================================================================= -->
+<!-- 3. CONTENEDOR PRINCIPAL: PANEL IZQUIERDO + HORIZONTAL KANBAN MATRIZ     -->
+<!-- ======================================================================= -->
+<main class="flex-1 flex overflow-hidden p-4 gap-4 bg-surface"><div class="flex flex-col w-full h-full overflow-hidden">
+<!-- Dynamic Operational Sub-Bar / Quick Filters & Matrix Status -->
+<section class="shrink-0 flex items-center justify-between px-3 py-2 bg-surface-container-low rounded-xl mb-3 shadow-md">
+<!-- Network / Affinity Segmented Control -->
+<div class="flex items-center gap-1.5 overflow-x-auto">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider px-2 py-1">Filtro Red:</span>
+<button class="px-3 py-1 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm transition-all">Todas las Redes</button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-all">Jóvenes (24)</button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-all">Profesionales (18)</button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-all">Matrimonios (12)</button>
+<button class="px-3 py-1 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant font-label-md text-label-md transition-all">Bienvenida &amp; Protocolo</button>
+</div>
+<!-- Live Telemetry / Match Efficiency & Hotkey Tips -->
+<div class="flex items-center gap-4 shrink-0 pl-2">
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-surface-container">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">MATCH IA: 94.2%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sin colisiones de horario</span>
+</div>
+<div class="hidden xl:flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-primary font-mono text-[10px]">Arrastre</span>
+<span>para asignar a zona</span>
+</div>
+</div>
+</section>
+<!-- SPLIT WORKSPACE: Volunteer Pool (Left) + Matrix Kanban Lanes (Right) -->
+<div class="flex-1 flex gap-4 min-h-0 overflow-hidden">
+<!-- ================================================================= -->
+<!-- LEFT PANEL: Banco de Personal / Pool de Voluntarios (340px)       -->
+<!-- ================================================================= -->
+<aside class="w-80 shrink-0 flex flex-col bg-surface-container-low rounded-xl p-3 shadow-lg overflow-hidden">
+<!-- Pool Header with Counter -->
+<div class="flex items-center justify-between pb-3 shrink-0">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">group_add</span>
+</div>
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold leading-tight">Pool Disponible</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Banco operativo en espera</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-bold">18 LIBRES</span>
+</div>
+<!-- Quick Search Bar with Hotkey -->
+<div class="relative mb-2.5 shrink-0">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[17px]">search</span>
+<input class="w-full pl-9 pr-14 py-2 rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant/70 font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-primary shadow-inner" placeholder="Buscar voluntario o DNI..." type="text"/>
+<span class="absolute right-2 top-2 px-1.5 py-0.5 rounded bg-surface-container-highest text-[10px] text-on-surface-variant font-mono">⌘K</span>
+</div>
+<!-- Filter Micro Chips -->
+<div class="flex gap-1.5 pb-2.5 shrink-0 overflow-x-auto">
+<button class="px-2.5 py-1 rounded-md bg-primary-container text-on-primary-container font-label-sm text-label-sm font-semibold shrink-0">Todos (18)</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shrink-0">Calificados (11)</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shrink-0">1ra Vez (3)</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shrink-0">Radio/C2 (4)</button>
+</div>
+<!-- Draggable Volunteer Cards List -->
+<div class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+<!-- Volunteer 1: Draggable -->
+<article class="group relative p-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high transition-all cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md" draggable="true">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-[18px] mt-2">drag_indicator</span>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover shadow" data-alt="Close-up professional portrait of a smiling Latino male tech volunteer in a modern navy blue audio-visual vest with soft cyber cyan stage lights in the dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ9Y_P0vRGR87tNkQa1RShSeR2QaeG25hTFIfMpFRIyBBbZZKC7eijVhQzV1OiczQywcT3D_oBUMq9-poUpxGOxqTH3jzm1QJeUK4WHMk_sT1wpMReTIHOyiIkNj4JxGULn8z_8WQE8iWdnbedJV3_1pHKNPt4sQRLpLVWENllCenPuI56SGa6TkAYFf51jUkMUpEs-ZMQhwkkIjHq5BqepAUUUeQ_dexUOK-YfbWTVRtZ7dRb5LR3"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<h3 class="font-title-md text-title-md text-on-surface font-bold truncate text-[14px]">Diego Arismendi</h3>
+<span class="font-label-sm text-label-sm text-primary font-mono shrink-0">98% Fit</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Red Jóvenes • Nvl 5 (1,840 pts)</p>
+<!-- Tags / Skill Badges -->
+<div class="flex flex-wrap gap-1 mt-1.5">
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-tertiary/15 text-tertiary">Audio FOH</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-primary/10 text-primary">Switcher TV</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-surface-container-highest text-on-surface-variant">08:00 - 13:30</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Volunteer 2: Draggable -->
+<article class="group relative p-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high transition-all cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md" draggable="true">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-[18px] mt-2">drag_indicator</span>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover shadow" data-alt="Portrait of a friendly young Hispanic woman volunteer wearing subtle glasses and an event headset, illuminated with gentle cool studio LED tones against dark acoustic panels" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6iIn9_2hun-6HSJicfPKVKZPkRgEswc6FGNrl-0fdlmPGzwLkJJn-zeQw4n_mcWxFw6Qf7QfLjTZBxI5GNcZ12pvK0k-4dBWd5QNIwBY8HMBHL5d-uNqUpK-buetpTrCKsOIJ46j5i1t2OQyYq-x6IOHVHFhplYbVG8OvHV5PjgTHza4HNS_eXmUkita0LvmC5B7SpwiF7zwp_WpN2WnanqvD7PUDd9oIrSfElMOAtOcvuW8Xa4qN"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<h3 class="font-title-md text-title-md text-on-surface font-bold truncate text-[14px]">Camila Rojas</h3>
+<span class="font-label-sm text-label-sm text-secondary font-mono shrink-0">95% Fit</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Red Profesionales • Nvl 4</p>
+<div class="flex flex-wrap gap-1 mt-1.5">
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-secondary/15 text-secondary">Bilingüe (EN/ES)</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-primary/10 text-primary">Anfitriona</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-surface-container-highest text-on-surface-variant">08:15 - 13:00</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Volunteer 3: Draggable -->
+<article class="group relative p-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high transition-all cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md" draggable="true">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-[18px] mt-2">drag_indicator</span>
+<div class="relative shrink-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold shadow">
+                MR
+              </div>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<h3 class="font-title-md text-title-md text-on-surface font-bold truncate text-[14px]">Manuel Ramos</h3>
+<span class="font-label-sm text-label-sm text-primary font-mono shrink-0">91% Fit</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Red Matrimonios • Nvl 3</p>
+<div class="flex flex-wrap gap-1 mt-1.5">
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-error-container text-error">Primeros Aux.</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-primary/10 text-primary">Radio Comms</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-surface-container-highest text-on-surface-variant">08:00 - 13:15</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Volunteer 4: Draggable -->
+<article class="group relative p-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high transition-all cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md" draggable="true">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-[18px] mt-2">drag_indicator</span>
+<div class="relative shrink-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary font-bold shadow">
+                FP
+              </div>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<h3 class="font-title-md text-title-md text-on-surface font-bold truncate text-[14px]">Florencia Paz</h3>
+<span class="font-label-sm text-label-sm text-secondary font-mono shrink-0">87% Fit</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Red Jóvenes • Nvl 2 (Primer Servicio)</p>
+<div class="flex flex-wrap gap-1 mt-1.5">
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-secondary/15 text-secondary">Pedagogía Niños</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-surface-container-highest text-on-surface-variant">08:30 - 13:00</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Volunteer 5: Draggable -->
+<article class="group relative p-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high transition-all cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md" draggable="true">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-[18px] mt-2">drag_indicator</span>
+<div class="relative shrink-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold shadow">
+                JG
+              </div>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-1">
+<h3 class="font-title-md text-title-md text-on-surface font-bold truncate text-[14px]">Jorge Guzmán</h3>
+<span class="font-label-sm text-label-sm text-primary font-mono shrink-0">94% Fit</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Red Adultos • Nvl 6 (Supervisor)</p>
+<div class="flex flex-wrap gap-1 mt-1.5">
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-primary/10 text-primary">Seguridad / C3</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-secondary/15 text-secondary">Logística</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-surface-container-highest text-on-surface-variant">07:45 - 13:30</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Quick Pool Insights Micro Footer -->
+<div class="mt-2 pt-2 border-t border-outline-variant/30 flex items-center justify-between text-[11px] text-on-surface-variant">
+<span>13 confirmaron por WhatsApp</span>
+<button class="text-primary hover:underline font-label-sm text-label-sm">Ver todos</button>
+</div>
+</aside>
+<!-- ================================================================= -->
+<!-- RIGHT/CENTER: Matriz Kanban de Asignación por Zonas (Scrollable)  -->
+<!-- ================================================================= -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface-container-lowest rounded-xl p-3 shadow-lg overflow-hidden">
+<!-- Matrix Top Utility Row -->
+<div class="flex items-center justify-between pb-3 shrink-0">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Matriz Operativa de Despliegue</h2>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-mono text-[11px]">5 Zonas Activas</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- Quick Filter toggles -->
+<div class="flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-lg">
+<button class="p-1 rounded text-on-surface-variant hover:text-primary transition-colors" title="Vista Expandida">
+<span class="material-symbols-outlined text-[17px]">view_column</span>
+</button>
+<button class="p-1 rounded text-on-surface-variant hover:text-primary transition-colors" title="Compactar Todo">
+<span class="material-symbols-outlined text-[17px]">unfold_less</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Shift Target: 08:30 – 13:00</span>
+</div>
+</div>
+<!-- Horizontal Kanban Zones Board -->
+<div class="flex-1 flex gap-3 overflow-x-auto pb-2 custom-scrollbar min-h-0">
+<!-- ============================================================= -->
+<!-- ZONE 1: Protocolo & Bienvenida (100% Cubierto)                -->
+<!-- ============================================================= -->
+<section class="w-72 shrink-0 flex flex-col bg-surface-container-low rounded-xl p-2.5 shadow-md">
+<!-- Zone Header -->
+<div class="flex items-center justify-between pb-2 mb-2 bg-surface-container rounded-lg p-2 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">waving_hand</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold text-[13px] leading-tight">Protocolo &amp; Bienvenida</h3>
+<span class="font-label-sm text-label-sm text-secondary font-mono">Meta: 4/4 (100%)</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-bold">COMPLETO</span>
+</div>
+<!-- Slots Container -->
+<div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+<!-- Slot 1 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Coordinador Puerta Principal</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-1.5 py-0.2 rounded font-mono">08:15 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold text-xs">CM</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Carlos Mendoza</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado App
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Anfitrión Pasillo Central A</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:30 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">VQ</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Valeria Quispe</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado WhatsApp
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 3 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Recepción Nuevos Miembros</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:30 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold text-xs">SV</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Sebastián Vera</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado App
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 4 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Entrega de Boletines / Guía</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:30 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary font-bold text-xs">EC</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Elena Castro</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado WhatsApp
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ============================================================= -->
+<!-- ZONE 2: Multimedia & Transmisión TV (1 VACANTE INTERACTIVA)   -->
+<!-- ============================================================= -->
+<section class="w-72 shrink-0 flex flex-col bg-surface-container-low rounded-xl p-2.5 shadow-md">
+<!-- Zone Header -->
+<div class="flex items-center justify-between pb-2 mb-2 bg-surface-container rounded-lg p-2 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">videocam</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold text-[13px] leading-tight">Multimedia &amp; TV</h3>
+<span class="font-label-sm text-label-sm text-primary font-mono">Meta: 4/5 (80%)</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary/15 text-primary font-label-sm text-label-sm font-bold">1 VACANTE</span>
+</div>
+<!-- Slots Container -->
+<div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+<!-- Slot 1 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Director General de Cámaras</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-1.5 py-0.2 rounded font-mono">08:00 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">MR</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Mateo Rivas</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado App
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Cámara Lateral Izq (PTZ/Rig)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:15 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold text-xs">GP</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Gabriel Pinto</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado App
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 3 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Consola Audio Principal FOH</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-1.5 py-0.2 rounded font-mono">07:45 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary font-bold text-xs">AS</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Andrea Silva</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado App
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 4 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Iluminación Escenario DMX</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:00 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">RL</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Renzo Luján</h4>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">hourglass_top</span> Pendiente firma
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE DROP TARGET: Empty Critical Slot -->
+<div class="relative p-3 rounded-xl bg-primary/5 hover:bg-primary/10 transition-all flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-1.5 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</div>
+<span class="font-title-md text-title-md text-primary font-bold text-[13px]">Operador Switcher / Cám 2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Arrastre a Diego Arismendi o haga click</span>
+<div class="mt-2 flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-primary/20 text-primary font-label-sm text-label-sm font-mono">Req: Nvl 4+ &amp; Video</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ============================================================= -->
+<!-- ZONE 3: Seguridad & Perímetro (3/4 • 75%)                     -->
+<!-- ============================================================= -->
+<section class="w-72 shrink-0 flex flex-col bg-surface-container-low rounded-xl p-2.5 shadow-md">
+<!-- Zone Header -->
+<div class="flex items-center justify-between pb-2 mb-2 bg-surface-container rounded-lg p-2 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">shield</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold text-[13px] leading-tight">Seguridad &amp; Perímetro</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Meta: 3/4 (75%)</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-variant text-on-surface font-label-sm text-label-sm font-bold">1 VACANTE</span>
+</div>
+<div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+<!-- Slot 1 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Jefe de Perímetro / Radio Central</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-1.5 py-0.2 rounded font-mono">07:30 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">HC</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Hernán Cárdenas</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Control de Estacionamiento A</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:00 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold text-xs">RT</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Rodrigo Torres</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Slot 3 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Acceso Puerta de Emergencia</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:15 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary font-bold text-xs">MA</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Marcos Albarrán</h4>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">sms</span> Pendiente SMS
+                    </span>
+</div>
+</div>
+<div class="flex items-center text-outline-variant hover:text-on-surface cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+<!-- Drop Target 2 -->
+<div class="relative p-3 rounded-xl bg-surface-container hover:bg-surface-container-high transition-all flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="w-7 h-7 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant mb-1 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface font-medium text-[13px]">Monitoreo CCTV / Pasillos</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Soltar voluntario aquí</span>
+</div>
+</div>
+</section>
+<!-- ============================================================= -->
+<!-- ZONE 4: Kids Zone & Cuna (100% Cubierto)                      -->
+<!-- ============================================================= -->
+<section class="w-72 shrink-0 flex flex-col bg-surface-container-low rounded-xl p-2.5 shadow-md">
+<!-- Zone Header -->
+<div class="flex items-center justify-between pb-2 mb-2 bg-surface-container rounded-lg p-2 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">child_care</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold text-[13px] leading-tight">Kids Zone &amp; Cuna</h3>
+<span class="font-label-sm text-label-sm text-secondary font-mono">Meta: 3/3 (100%)</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-bold">COMPLETO</span>
+</div>
+<div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+<!-- Slot 1 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Coordinadora Sala Cuna (0-2 años)</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-1.5 py-0.2 rounded font-mono">08:15 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">LM</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Lucía Morales</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">verified</span> Validada
+                    </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">more_vert</span>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Maestra Párvulos (3-5 años)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:30 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary font-bold text-xs">PM</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Paola Méndez</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">verified</span> Validada
+                    </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">more_vert</span>
+</div>
+</div>
+<!-- Slot 3 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Recepción &amp; Pulseras RFID</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:15 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold text-xs">DS</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Daniela Salinas</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado
+                    </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">more_vert</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ============================================================= -->
+<!-- ZONE 5: Cafetería & Atención Pastoral (1 VACANTE CRÍTICA)      -->
+<!-- ============================================================= -->
+<section class="w-72 shrink-0 flex flex-col bg-surface-container-low rounded-xl p-2.5 shadow-md">
+<!-- Zone Header -->
+<div class="flex items-center justify-between pb-2 mb-2 bg-surface-container rounded-lg p-2 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">coffee</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface font-bold text-[13px] leading-tight">Cafetería &amp; Comunión</h3>
+<span class="font-label-sm text-label-sm text-error font-mono">Meta: 2/3 (66%)</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm font-bold">1 CRÍTICA</span>
+</div>
+<div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+<!-- Slot 1 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Encargado Módulo Central</span>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-1.5 py-0.2 rounded font-mono">08:00 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">GO</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Gonzalo Oliva</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado
+                    </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">more_vert</span>
+</div>
+</div>
+<!-- Slot 2 -->
+<div class="p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm text-primary font-semibold truncate">Atención a Servidores &amp; Pastores</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">08:15 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-bold text-xs">NP</div>
+<div>
+<h4 class="font-title-md text-title-md text-on-surface font-semibold text-[13px] leading-none">Nidia Parra</h4>
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-0.5 mt-0.5">
+<span class="material-symbols-outlined text-[13px]">check_circle</span> Confirmado
+                    </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[16px]">more_vert</span>
+</div>
+</div>
+<!-- Drop Target 3 -->
+<div class="relative p-3 rounded-xl bg-error/5 hover:bg-error/10 transition-all flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="w-8 h-8 rounded-full bg-error/20 flex items-center justify-center text-error mb-1.5 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+</div>
+<span class="font-title-md text-title-md text-error font-bold text-[13px]">Apoyo Logística &amp; Limpieza</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Asignar con prioridad urgente</span>
+<div class="mt-2 flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-error-container text-error font-label-sm text-label-sm font-mono">Alta demanda 09:30</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- =================================================================== -->
+<!-- CONTINGENCY & DISPATCH DOCK (Bottom Floating Command Bar)           -->
+<!-- =================================================================== -->
+<footer class="mt-3 shrink-0 px-4 py-2.5 rounded-xl bg-surface-container-low shadow-xl flex items-center justify-between">
+<!-- Unsaved Changes & State Tracking -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-title-md text-title-md text-on-surface font-bold text-[14px]">3 cambios sin publicar</span>
+</div>
+<span class="text-on-surface-variant text-[12px]">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Último autoguardado local: hace 42 segundos</span>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-all ml-2">
+<span class="material-symbols-outlined text-[15px]">undo</span>
+<span>Deshacer</span>
+</button>
+</div>
+<!-- Right Actions: AI Auto-fill + Batch Push Alerts -->
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high text-primary hover:bg-surface-variant font-label-md text-label-md font-semibold transition-all">
+<span class="material-symbols-outlined text-[17px]">auto_fix_high</span>
+<span>Resolver Vacantes con IA</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold shadow-md hover:bg-primary-fixed transition-all">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>Publicar Matriz &amp; Notificar a 44 Voluntarios</span>
+</button>
+</div>
+</footer>
+</div>
+<script>
+  // Drag & drop visual interaction feedback for tactical matrix demo
+  document.addEventListener('DOMContentLoaded', () => {
+    const draggables = document.querySelectorAll('[draggable="true"]');
+    draggables.forEach(card => {
+      card.addEventListener('dragstart', (e) => {
+        card.classList.add('opacity-40');
+      });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('opacity-40');
+      });
+    });
+  });
+</script></main>
+</div>
+<div class="fixed inset-0 bg-surface-container-lowest/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+<div class="max-w-2xl w-full bg-surface-container-low border border-primary/40 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.25)] overflow-hidden flex flex-col">
+<!-- Modal Header -->
+<div class="px-6 py-4 bg-surface-container border-b border-outline-variant/60 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-primary">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span>Telemetría de Personal // Puesto Activo #ASG-4091</span>
+</div>
+<div class="flex items-center gap-3">
+<h2 class="font-title-md text-headline-md text-on-surface font-bold text-[20px]">Ficha Operativa de Asignación</h2>
+<span class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 font-label-sm text-[11px] font-bold font-mono">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_#4edea3]"></span>
+            CONFIRMADO VÍA APP (08:15 AM)
+          </span>
+</div>
+</div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer" title="Cerrar Ficha">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body Content -->
+<div class="p-6 space-y-5 overflow-y-auto max-h-[75vh] custom-scrollbar">
+<!-- Volunteer Profile Card -->
+<div class="flex items-start justify-between p-4 rounded-xl bg-surface-container border border-outline-variant/40">
+<div class="flex items-center gap-3.5">
+<div class="relative">
+<div class="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xl border-2 border-primary shadow-[0_0_12px_rgba(76,215,246,0.3)]">
+              CM
+            </div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container shadow-[0_0_8px_#4edea3]"></span>
+</div>
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<h3 class="font-title-md text-on-surface font-bold text-[18px]">Carlos Mendoza</h3>
+<span class="px-2 py-0.2 rounded bg-surface-container-highest text-on-surface-variant text-[11px] font-mono">DNI 74829104</span>
+</div>
+<p class="font-label-sm text-secondary font-medium flex items-center gap-1.5 text-[12px]">
+<span class="material-symbols-outlined text-[14px]">military_tech</span>
+              Red Jóvenes • Nivel 5 (1,840 pts mérito)
+            </p>
+<span class="text-[11px] text-on-surface-variant font-mono">Credencial: #VOL-2025-089</span>
+</div>
+</div>
+<!-- Quick Comm Buttons -->
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-secondary/15 text-secondary border border-secondary/30 hover:bg-secondary/25 transition-colors font-label-sm text-[12px] font-semibold cursor-pointer" title="Contactar WhatsApp">
+<span class="material-symbols-outlined text-[15px]">chat</span>
+<span>WhatsApp</span>
+</button>
+<button class="p-1.5 rounded-lg bg-surface-container-high text-on-surface hover:text-primary transition-colors cursor-pointer" title="Llamar">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+</div>
+</div>
+<!-- Operational Slot & Telemetry -->
+<div class="grid grid-cols-2 gap-3">
+<div class="p-3.5 rounded-xl bg-surface-container/60 border border-outline-variant/30 flex flex-col gap-1">
+<span class="font-label-sm text-on-surface-variant text-[11px] uppercase tracking-wider">Puesto Asignado</span>
+<span class="font-title-md text-primary font-bold text-[14px] leading-tight">Coordinador Puerta Principal Norte</span>
+<span class="font-label-sm text-on-surface-variant text-[11px]">Área: Protocolo &amp; Bienvenida</span>
+</div>
+<div class="p-3.5 rounded-xl bg-surface-container/60 border border-outline-variant/30 flex flex-col gap-1">
+<span class="font-label-sm text-on-surface-variant text-[11px] uppercase tracking-wider">Horario Operativo</span>
+<span class="font-title-md text-on-surface font-semibold text-[14px] font-mono">08:15 AM - 13:00 PM</span>
+<span class="font-label-sm text-secondary text-[11px] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            Llegada estimada: 08:05 AM
+          </span>
+</div>
+<div class="p-3.5 rounded-xl bg-surface-container/60 border border-outline-variant/30 flex flex-col gap-1">
+<span class="font-label-sm text-on-surface-variant text-[11px] uppercase tracking-wider">Canal Radial Asignado</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">podcasts</span>
+<span class="font-title-md text-on-surface font-semibold text-[13px]">Canal 02 - Protocolo &amp; Acceso</span>
+</div>
+<span class="font-label-sm text-on-surface-variant text-[11px] font-mono">Freq: 462.5625 MHz</span>
+</div>
+<div class="p-3.5 rounded-xl bg-surface-container/60 border border-outline-variant/30 flex flex-col gap-1">
+<span class="font-label-sm text-on-surface-variant text-[11px] uppercase tracking-wider">Sector Supervisado</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">door_front</span>
+<span class="font-title-md text-on-surface font-semibold text-[13px]">Pórtico Central</span>
+</div>
+<span class="font-label-sm text-on-surface-variant text-[11px]">Aforo zona: 450 pax</span>
+</div>
+</div>
+<!-- Performance Metrics & Skill Badges -->
+<div class="p-4 rounded-xl bg-surface-container/40 border border-outline-variant/30 space-y-3">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/30">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider text-[11px]">Confiabilidad &amp; Historial Operativo</span>
+<div class="flex items-center gap-4 text-xs font-mono">
+<span class="text-secondary font-bold">98.4% SLA PUNTUALIDAD</span>
+<span class="text-primary font-bold">4.95 / 5.0 ★</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-on-surface-variant text-[11px] block mb-2">Habilidades &amp; Certificaciones Validadas:</span>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 text-[11px] font-medium">Liderazgo de Acceso</span>
+<span class="px-2 py-0.5 rounded bg-secondary/15 text-secondary border border-secondary/20 text-[11px] font-medium">Manejo de Multitudes</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface text-[11px] font-medium">Primeros Auxilios Básicos</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[11px] font-medium">Audio Básico</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer Actions -->
+<div class="px-6 py-3.5 bg-surface-container border-t border-outline-variant/60 flex items-center justify-between">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-[13px] cursor-pointer">
+<span class="material-symbols-outlined text-[17px]">swap_horiz</span>
+<span>Reasignar Puesto</span>
+</button>
+<div class="flex items-center gap-2.5">
+<button class="px-4 py-1.5 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-bright transition-colors font-label-md text-[13px] cursor-pointer">
+          Cerrar Ficha
+        </button>
+<button class="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-[13px] font-bold shadow-md hover:bg-primary-fixed transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[17px]">notifications_active</span>
+<span>Enviar Alerta / Check-in</span>
+</button>
+</div>
+</div>
+</div>
+</div></body></html>

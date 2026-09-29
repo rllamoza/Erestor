@@ -1,0 +1,19 @@
+# Desactivar el listado de directorios
+Options -Indexes
+
+# Proteger archivos de configuración y ocultos
+<FilesMatch "^\.|\.(config|ini|log|sql|zip|bak)$">
+    order allow,deny
+    deny from all
+</FilesMatch>
+
+# Asegurar que el servidor devuelva los tipos MIME correctos y prohibir la ejecución de scripts en carpetas de assets si se burlara el filtro
+<FilesMatch "\.(php|php5|php7|phtml)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
+</FilesMatch>

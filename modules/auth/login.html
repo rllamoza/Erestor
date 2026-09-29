@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Acceso & Telemetría Operativa - Erestor Ops</title>
+  <!-- Google Fonts: Inter, JetBrains Mono, Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#070a10',
+            surface: '#0d131f',
+            'surface-dark': '#06090e',
+            primary: '#22d3ee',
+            'primary-glow': '#06b6d4',
+            secondary: '#4edea3',
+            danger: '#f87171'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .tactical-glow {
+      box-shadow: 0 0 25px rgba(34, 211, 238, 0.22);
+    }
+    .green-glow {
+      box-shadow: 0 0 20px rgba(78, 222, 163, 0.25);
+    }
+    /* Mode display switching */
+    /* Default is Responsive via CSS: */
+    @media (max-width: 767px) {
+      .view-smartphone { display: block !important; }
+      .view-tablet { display: none !important; }
+      .view-desktop { display: none !important; }
+    }
+    @media (min-width: 768px) and (max-width: 1279px) {
+      .view-smartphone { display: none !important; }
+      .view-tablet { display: block !important; }
+      .view-desktop { display: none !important; }
+    }
+    @media (min-width: 1280px) {
+      .view-smartphone { display: none !important; }
+      .view-tablet { display: none !important; }
+      .view-desktop { display: block !important; }
+    }
+
+    /* Force mode classes override */
+    body.force-mobile .view-smartphone { display: block !important; }
+    body.force-mobile .view-tablet { display: none !important; }
+    body.force-mobile .view-desktop { display: none !important; }
+
+    body.force-tablet .view-smartphone { display: none !important; }
+    body.force-tablet .view-tablet { display: block !important; }
+    body.force-tablet .view-desktop { display: none !important; }
+
+    body.force-desktop .view-smartphone { display: none !important; }
+    body.force-desktop .view-tablet { display: none !important; }
+    body.force-desktop .view-desktop { display: block !important; }
+  </style>
+</head>
+<body class="bg-[#070a10] text-slate-100 font-body antialiased min-h-screen cyber-grid selection:bg-cyan-500/20 selection:text-cyan-300">
+
+  <!-- ================= TOP FLOATING DEVICE SIMULATOR TOOLBAR ================= -->
+  <div class="fixed top-2 right-4 z-50 flex items-center gap-1.5 p-1 rounded-xl bg-[#0d131f]/90 border border-slate-700/60 backdrop-blur-md shadow-2xl text-[11px] font-mono select-none">
+    <span class="text-slate-400 px-2 flex items-center gap-1">
+      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+      Vista:
+    </span>
+    <button onclick="setDeviceView('auto')" id="btn-view-auto" class="px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold transition-all">Auto</button>
+    <button onclick="setDeviceView('mobile')" id="btn-view-mobile" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition-all">📱 Smartphone</button>
+    <button onclick="setDeviceView('tablet')" id="btn-view-tablet" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition-all">📟 iPad</button>
+    <button onclick="setDeviceView('desktop')" id="btn-view-desktop" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition-all">🖥️ Desktop</button>
+  </div>
+
+  <!-- ###################################################################### -->
+  <!-- ################# 1. DISEÑO SMARTPHONE (DISEÑO 1) #################### -->
+  <!-- ###################################################################### -->
+  <div class="view-smartphone min-h-screen p-4 pb-12 max-w-md mx-auto space-y-4">
+    
+    <!-- Top System Badges -->
+    <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 px-1 pt-2">
+      <div class="flex items-center gap-1.5 text-cyan-400 font-bold">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span>NODO CENTRAL-E1 // 14MS</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-slate-300">HSM TLS 1.3</span>
+        <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold">ES:E1</span>
+      </div>
+    </div>
+
+    <!-- Security Warning Banner -->
+    <div class="p-2.5 rounded-xl bg-[#0f172a]/90 border border-cyan-500/30 flex items-center justify-between text-[11px] font-mono">
+      <div class="flex items-center gap-2 text-cyan-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        <span>ACCESO RESTRINGIDO // CLEARANCE NIVEL 4</span>
+      </div>
+      <span class="text-slate-400 text-[10px]">v4.2 • SOC 24/7</span>
+    </div>
+
+    <!-- Hero Brand Title -->
+    <div class="text-center pt-2 space-y-2">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-[#0e1d28] border border-cyan-400/50 flex items-center justify-center tactical-glow">
+        <span class="material-symbols-outlined text-cyan-400 text-[32px]">shield</span>
+      </div>
+      <div>
+        <h1 class="text-2xl font-black tracking-wider text-white font-headline">ERESTOR OPS</h1>
+        <p class="text-xs font-mono text-cyan-400 font-semibold">Ecosistema Táctico • <span class="text-emerald-400">Terminal Móvil v4.2</span></p>
+        <p class="text-[11px] text-slate-400 mt-1">Portal de Acceso &amp; Telemetría Operativa • Gestión Territorial</p>
+      </div>
+    </div>
+
+    <!-- Tab Selector -->
+    <div class="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#0d131f] border border-slate-800 text-xs font-semibold">
+      <button class="py-2 rounded-lg bg-cyan-400 text-black font-bold flex items-center justify-center gap-1 shadow-sm">
+        <span class="material-symbols-outlined text-[16px]">pin</span>
+        <span>ID &amp; PIN</span>
+      </button>
+      <button onclick="simulateBioScan('mobile')" class="py-2 rounded-lg text-slate-400 hover:text-white flex items-center justify-center gap-1 transition-all">
+        <span class="material-symbols-outlined text-[16px]">face</span>
+        <span>Sentinel Bio</span>
+      </button>
+      <button onclick="simulateNfcTap('mobile')" class="py-2 rounded-lg text-slate-400 hover:text-white flex items-center justify-center gap-1 transition-all">
+        <span class="material-symbols-outlined text-[16px]">contactless</span>
+        <span>NFC / Fob</span>
+      </button>
+    </div>
+
+    <!-- Form Container -->
+    <form onsubmit="handleFormSubmit(event, 'mobile')" class="p-5 rounded-2xl bg-[#0d131f]/95 border border-slate-700/60 backdrop-blur-xl shadow-2xl space-y-4">
+      <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-800">
+        <span class="text-cyan-400 font-mono font-bold flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">sensors</span>
+          AUTENTICACIÓN VECTOR E-1
+        </span>
+        <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold">
+          ENLACE ACTIVO
+        </span>
+      </div>
+
+      <!-- Credencial Input -->
+      <div>
+        <div class="flex items-center justify-between text-xs mb-1 font-mono">
+          <label class="text-slate-400">Identificador / Credencial Operativa</label>
+          <span class="text-cyan-400 font-bold text-[10px]">SUPERVISOR</span>
+        </div>
+        <div class="relative flex items-center">
+          <span class="absolute left-3 text-slate-500 font-mono text-sm">@</span>
+          <input type="text" id="mobile-identifier" value="rllamoza@erestor.ops" required
+                 class="w-full pl-8 pr-10 py-2.5 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-400">
+          <button type="button" onclick="triggerQrScan('mobile')" class="absolute right-2.5 text-cyan-400 hover:text-white" title="Escanear QR">
+            <span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PIN Input -->
+      <div>
+        <div class="flex items-center justify-between text-xs mb-1 font-mono">
+          <label class="text-slate-400 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">key</span>
+            Código PIN / Cifrado Táctico
+          </label>
+          <span class="text-emerald-400 text-[10px]">SHA-512 HSM</span>
+        </div>
+        <div class="relative flex items-center">
+          <span class="absolute left-3 text-slate-500">
+            <span class="material-symbols-outlined text-[18px]">lock</span>
+          </span>
+          <input type="password" id="mobile-password" value="123456" required
+                 class="w-full pl-9 pr-10 py-2.5 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs tracking-widest font-mono focus:outline-none focus:border-cyan-400">
+          <button type="button" onclick="togglePassVisibility('mobile-password')" class="absolute right-2.5 text-slate-400 hover:text-white">
+            <span class="material-symbols-outlined text-[18px]">visibility</span>
+          </button>
+        </div>
+        <div class="text-right mt-1.5">
+          <a href="#" onclick="alert('Contacte al administrador del SOC para regeneración de credencial')" class="text-[11px] text-cyan-400 hover:underline">¿Olvidó su clave o PIN operativo?</a>
+        </div>
+      </div>
+
+      <!-- Campus Operativo -->
+      <div>
+        <div class="flex items-center justify-between text-xs mb-1 font-mono">
+          <label class="text-slate-400 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px] text-cyan-400">location_on</span>
+            Campus Operativo en Rango
+          </label>
+          <span class="text-cyan-400 text-[10px] font-bold">GEO-SYNC OK</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-[#070a10] border border-slate-700 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#4edea3]"></span>
+            <div>
+              <strong class="text-xs text-white block">Sede Central – Campus Mayor</strong>
+              <span class="text-[10px] text-slate-400 font-mono">Sector Alfa • Capacidad 1.8k PAX</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-slate-400 text-[18px]">keyboard_arrow_down</span>
+        </div>
+      </div>
+
+      <!-- Checkbox & Support -->
+      <div class="flex items-center justify-between text-xs pt-1">
+        <label class="flex items-center gap-2 text-slate-300 cursor-pointer text-[11px]">
+          <input type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
+          <span>Turno continuo activo (8 hrs)</span>
+        </label>
+        <a href="#" onclick="alert('Canal de soporte SOC Erestor 24/7 activo')" class="text-slate-400 hover:text-cyan-400 text-[11px] font-mono">Soporte SOC ↗</a>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="w-full py-3.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 active:scale-98 text-black font-extrabold text-sm tracking-wider uppercase flex items-center justify-center gap-2 tactical-glow transition-all">
+        <span class="material-symbols-outlined text-[20px]">bolt</span>
+        <span>INICIAR SESIÓN OPERATIVA</span>
+        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+      </button>
+    </form>
+
+    <!-- Periféricos de Validación Rápida -->
+    <div class="space-y-2">
+      <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
+        <span>PERIFÉRICOS DE VALIDACIÓN RÁPIDA</span>
+        <span class="text-emerald-400 font-bold">HARDWARE READY</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div onclick="simulateBioScan('mobile')" class="p-3 rounded-xl bg-[#0d131f] border border-slate-800 hover:border-cyan-500/50 cursor-pointer transition-all space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="material-symbols-outlined text-cyan-400 text-[20px]">face</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          </div>
+          <strong class="text-xs text-white block">Sentinel Bio</strong>
+          <span class="text-[10px] text-slate-400 block font-mono">Lente Frontal // AI 99.8%</span>
+          <span class="text-[10px] text-cyan-400 font-semibold block pt-1">Tap para Scan</span>
+        </div>
+
+        <div onclick="simulateNfcTap('mobile')" class="p-3 rounded-xl bg-[#0d131f] border border-slate-800 hover:border-cyan-500/50 cursor-pointer transition-all space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="material-symbols-outlined text-cyan-400 text-[20px]">contactless</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          </div>
+          <strong class="text-xs text-white block">Lector NFC</strong>
+          <span class="text-[10px] text-slate-400 block font-mono">Antena // Fob o Gafete</span>
+          <span class="text-[10px] text-emerald-400 font-semibold block pt-1">Listo para tap</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sentinel Local Infrastructure -->
+    <div class="p-3 rounded-xl bg-[#0d131f] border border-slate-800 space-y-2">
+      <div class="flex items-center justify-between text-[11px] font-mono">
+        <span class="text-slate-300 flex items-center gap-1.5 font-bold">
+          <span class="material-symbols-outlined text-[16px] text-cyan-400">hub</span>
+          INFRAESTRUCTURA SENTINEL LOCAL
+        </span>
+        <span class="text-emerald-400 font-bold flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          ONLINE
+        </span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center font-mono">
+        <div class="p-2 rounded-lg bg-[#070a10]">
+          <span class="text-[9px] text-slate-400 block">Geocerca GPS</span>
+          <strong class="text-xs text-cyan-400">25m OK</strong>
+          <span class="text-[8px] text-slate-500 block">4/4 Satélites</span>
+        </div>
+        <div class="p-2 rounded-lg bg-[#070a10]">
+          <span class="text-[9px] text-slate-400 block">Kioscos Sync</span>
+          <strong class="text-xs text-emerald-400">12 / 12</strong>
+          <span class="text-[8px] text-slate-500 block">100% Mallado</span>
+        </div>
+        <div class="p-2 rounded-lg bg-[#070a10]">
+          <span class="text-[9px] text-slate-400 block">NTP Precisión</span>
+          <strong class="text-xs text-white">±0.2s</strong>
+          <span class="text-[8px] text-slate-500 block">Atomic Lock</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Footer -->
+    <div class="text-center text-[10px] text-slate-500 font-mono space-y-1 pt-2">
+      <div class="flex items-center justify-center gap-1.5 text-slate-400">
+        <span class="material-symbols-outlined text-[14px] text-cyan-400">verified_user</span>
+        <span>Conexión Cifrada AES-256 GCM • ISO 27001 / SOC 2 Tipo II</span>
+      </div>
+      <p>Acceso monitoreado y auditado forensemente por el Centro de Operaciones Erestor.</p>
+      <p class="text-slate-600">© 2025 ERESTOR OPS • Erestor Tactical OS // SOC Nivel 4</p>
+    </div>
+  </div>
+
+
+  <!-- ###################################################################### -->
+  <!-- ################### 2. DISEÑO DESKTOP (DISEÑO 2) ##################### -->
+  <!-- ###################################################################### -->
+  <div class="view-desktop min-h-screen flex flex-col justify-between p-6 lg:p-8 max-w-[1700px] mx-auto">
+    
+    <!-- Top Navigation Bar (Exacto al diseño 2) -->
+    <header class="flex items-center justify-between pb-6 border-b border-slate-800/80">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-[#0e1d28] border border-cyan-400/50 flex items-center justify-center tactical-glow">
+          <span class="material-symbols-outlined text-cyan-400 text-[22px]">shield</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-white text-base tracking-wider font-headline">ERESTOR OPS</span>
+            <span class="text-xs font-mono text-cyan-400">// v4.2</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400">NODO OPERATIVO CENTRAL</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 text-xs font-mono">
+        <span class="px-2.5 py-1 rounded bg-[#0d131f] border border-slate-700 text-slate-300 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[14px]">lock</span> TLS 1.3
+        </span>
+        <span class="flex items-center gap-1.5 text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          LATENCIA: 14ms
+        </span>
+        <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-bold">ES E1-CORE</span>
+      </div>
+
+      <div class="flex items-center gap-3 text-xs font-mono">
+        <button class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/60 font-semibold shadow-sm">
+          ACCESO
+        </button>
+        <button onclick="alert('Telemetría en tiempo real: 14 campus sincronizados')" class="px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-white transition-colors">
+          TELEMETRÍA
+        </button>
+        <button onclick="alert('Módulo de recuperación SOC')" class="px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-white transition-colors">
+          RECUPERACIÓN
+        </button>
+
+        <span class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold text-[11px] flex items-center gap-1.5 ml-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          DEFCON 4 // SOC 24/7 ACTIVO
+        </span>
+
+        <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs text-slate-300">
+          EO
+        </div>
+      </div>
+    </header>
+
+    <!-- Main 2-Column Desktop Grid -->
+    <main class="grid grid-cols-12 gap-8 my-auto py-8 items-center">
+      
+      <!-- Columna Izquierda: Portal & Telemetría (7 columnas) -->
+      <div class="col-span-7 space-y-6">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span>CONSOLA TÁCTICA • MÓDULO DE ADMISIÓN</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">
+              SISTEMA NOMINAL
+            </span>
+          </div>
+          <h1 class="text-3xl lg:text-4xl font-extrabold text-white font-headline tracking-tight leading-tight">
+            Portal de Acceso &amp; Telemetría Operativa
+          </h1>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-xl">
+            Control perimétrico automatizado de asistencia y roles para directores de despliegue táctico, coordinadores de campus y supervisores de brigadas sanitarias y logísticas.
+          </p>
+
+          <div class="flex items-center gap-4 text-xs font-mono text-slate-400 mt-3 pt-3 border-t border-slate-800/80">
+            <span class="text-cyan-300 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-cyan-400">check_circle</span>
+              Regla Activa: <strong class="text-white">Anti-Doble Marcación</strong>
+            </span>
+            <span>•</span>
+            <span>Ventana de Tolerancia: <strong class="text-white">10m</strong></span>
+            <span>•</span>
+            <span>Sync: <strong class="text-emerald-400">Hoy 04:00 AM</strong></span>
+          </div>
+        </div>
+
+        <!-- 4 Telemetry KPI Cards -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-[#0d131f]/90 border border-slate-800/80 backdrop-blur-md space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 uppercase font-mono">NODO PRIMARIO</span>
+              <span class="text-[10px] text-cyan-400 font-mono font-bold">99.998% QoS</span>
+            </div>
+            <strong class="text-sm text-white font-headline block">Central-E1 (Lima Met.)</strong>
+            <span class="text-[11px] text-slate-400 block font-mono">Enlace activo via Fibra Criptográfica E-7</span>
+            <div class="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-800 text-emerald-400">
+              <span>● 14ms (Estable)</span>
+              <span class="text-slate-400">Latencia Sub-20ms</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0d131f]/90 border border-slate-800/80 backdrop-blur-md space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 uppercase font-mono">MÓDULO HSM CRIPTO</span>
+              <span class="text-[10px] text-cyan-400 font-mono font-bold">ECDSA OK</span>
+            </div>
+            <strong class="text-sm text-white font-headline block">FIPS 140-3 EAL6+</strong>
+            <span class="text-[11px] text-slate-400 block font-mono">Validación SHA-512 con firma HMAC rotativa</span>
+            <div class="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-800 text-cyan-400">
+              <span>Claves efímeras rotativas</span>
+              <span class="text-slate-400">0s drift</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0d131f]/90 border border-slate-800/80 backdrop-blur-md space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 uppercase font-mono">GEOCERCAS SATELITALES</span>
+              <span class="text-[10px] text-cyan-400 font-mono font-bold">GNSS Lock</span>
+            </div>
+            <strong class="text-sm text-white font-headline block">4 / 4 Perímetros Sync</strong>
+            <span class="text-[11px] text-slate-400 block font-mono">RTK GPS submétrico + Beacons BLE-Mesh</span>
+            <div class="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-800 text-emerald-400">
+              <span>● Bloqueo anti-spoofing</span>
+              <span class="text-slate-400">Sincronizado</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0d131f]/90 border border-slate-800/80 backdrop-blur-md space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-slate-400 uppercase font-mono">MALLA KIOSK SENTINEL</span>
+              <span class="text-[10px] text-cyan-400 font-mono font-bold">100% Online</span>
+            </div>
+            <strong class="text-sm text-white font-headline block">12 / 12 Operativos</strong>
+            <span class="text-[11px] text-slate-400 block font-mono">Torniquetes ópticos y scanners QR dual</span>
+            <div class="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-800 text-emerald-400">
+              <span>Cero demoras (0 colas)</span>
+              <span class="text-slate-400">4 sedes activas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetría Waveform Chart en Vivo -->
+        <div class="p-5 rounded-2xl bg-[#0d131f]/90 border border-slate-800/80 backdrop-blur-md space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase font-mono block">FLUJO DE VERIFICACIONES EN TIEMPO REAL</span>
+              <strong class="text-sm text-white font-headline">98.9% Sin Fricción // Tasa Nominal</strong>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 text-xs font-mono font-bold flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              3,480 Check-ins / hora
+            </span>
+          </div>
+
+          <!-- SVG Waveform -->
+          <div class="relative w-full h-24 pt-2">
+            <svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 500 80">
+              <defs>
+                <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <path d="M 0 65 Q 120 50 200 30 T 360 40 T 450 15 L 500 18 L 500 80 L 0 80 Z" fill="url(#waveGrad)"/>
+              <path d="M 0 65 Q 120 50 200 30 T 360 40 T 450 15 L 500 18" fill="none" stroke="#22d3ee" stroke-width="2.5"/>
+              <circle cx="200" cy="30" r="4" fill="#4edea3" stroke="#070a10" stroke-width="2"/>
+              <circle cx="360" cy="40" r="4" fill="#22d3ee" stroke="#070a10" stroke-width="2"/>
+              <circle cx="450" cy="15" r="4" fill="#4edea3" stroke="#070a10" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 border-t border-slate-800 pt-2">
+            <span>06:00 (Apertura)</span>
+            <span>07:30 (Cambio Guardia)</span>
+            <span>09:00 (Pico Turno Matutino)</span>
+            <span class="text-cyan-400 font-bold">● 10:15 (Actual)</span>
+          </div>
+        </div>
+
+        <!-- Campus Mayor & SOC Status -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-3.5 rounded-xl bg-[#0d131f] border border-slate-800 space-y-1">
+            <span class="text-[10px] text-cyan-400 font-mono font-bold flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">apartment</span> CAMPUS MAYOR • SEDE CENTRAL
+            </span>
+            <strong class="text-xs text-white block">Aforo 1,800 Pax // 1,420 En Sitio</strong>
+            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1">
+              <div class="h-full bg-cyan-400 rounded-full w-[78%]"></div>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0d131f] border border-slate-800 space-y-1">
+            <span class="text-[10px] text-emerald-400 font-mono font-bold flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">memory</span> SOC HEURISTICS
+            </span>
+            <strong class="text-xs text-white block">Anti-Doble Marcación</strong>
+            <span class="text-[10px] text-slate-400 font-mono">Sincronizado hoy 04:00 AM</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Columna Derecha: Tarjeta de Acceso Operativo (5 columnas) -->
+      <div class="col-span-5">
+        <form onsubmit="handleFormSubmit(event, 'desktop')" class="p-8 rounded-3xl bg-[#0d131f]/95 border border-slate-700/80 backdrop-blur-2xl shadow-2xl space-y-5 tactical-glow">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+              <span class="text-xs font-mono text-cyan-400 font-bold uppercase">CREDENCIAL OPERATIVA DE MANDO</span>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono text-[10px]">ACCESO RESTRINGIDO // NIVEL 4</span>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-extrabold text-white font-headline">Acceso Operativo Seguro</h2>
+            <p class="text-xs text-slate-400 mt-1">Ingrese sus credenciales de despliegue o use periféricos autorizados por el SOC.</p>
+          </div>
+
+          <!-- Switcher Mode -->
+          <div class="grid grid-cols-3 gap-2 p-1 rounded-xl bg-[#070a10] border border-slate-800 text-xs font-mono">
+            <button type="button" class="py-2 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 font-bold">
+              *** PIN &amp; ID
+            </button>
+            <button type="button" onclick="alert('FIDO2 Hardware Key en escucha USB/NFC')" class="py-2 rounded-lg text-slate-400 hover:text-white transition-colors">
+              FIDO2 / Key
+            </button>
+            <button type="button" onclick="alert('Kiosk Bypass para terminal táctil')" class="py-2 rounded-lg text-slate-400 hover:text-white transition-colors">
+              Kiosk Bypass
+            </button>
+          </div>
+
+          <!-- Identificador Operativo -->
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1 font-mono">
+              <label class="text-slate-400">IDENTIFICADOR OPERATIVO / DNI</label>
+              <button type="button" onclick="loadDemoSupervisor('desktop')" class="text-cyan-400 hover:underline text-[11px]">Cargar Demo Supervisor</button>
+            </div>
+            <div class="relative flex items-center">
+              <span class="absolute left-3.5 text-slate-500 font-mono">
+                <span class="material-symbols-outlined text-[18px]">badge</span>
+              </span>
+              <input type="text" id="desktop-identifier" value="VOL-2025-089" required
+                     class="w-full pl-10 pr-10 py-3 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs font-mono tracking-wider focus:outline-none focus:border-cyan-400">
+              <span class="absolute right-3.5 text-emerald-400">
+                <span class="material-symbols-outlined text-[18px]">check_circle</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- PIN Táctico -->
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1 font-mono">
+              <label class="text-slate-400">PIN TÁCTICO (4 A 6 DÍGITOS HSM)</label>
+              <span class="text-slate-500 text-[10px]">SHA-512 Mask</span>
+            </div>
+            <div class="relative flex items-center">
+              <span class="absolute left-3.5 text-slate-500">
+                <span class="material-symbols-outlined text-[18px]">lock</span>
+              </span>
+              <input type="password" id="desktop-password" value="123456" required
+                     class="w-full pl-10 pr-10 py-3 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs tracking-widest font-mono focus:outline-none focus:border-cyan-400">
+              <button type="button" onclick="togglePassVisibility('desktop-password')" class="absolute right-3.5 text-slate-400 hover:text-white">
+                <span class="material-symbols-outlined text-[18px]">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sede Operativa Designada -->
+          <div>
+            <label class="text-xs text-slate-400 font-mono block mb-1">SEDE OPERATIVA DESIGNADA</label>
+            <div class="relative flex items-center">
+              <span class="absolute left-3.5 text-slate-500">
+                <span class="material-symbols-outlined text-[18px]">church</span>
+              </span>
+              <select id="desktop-sede" class="w-full pl-10 pr-8 py-3 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs font-mono appearance-none focus:outline-none focus:border-cyan-400 cursor-pointer">
+                <option value="1">Sede Central - Campus Mayor (1.8k PAX) - Torniquetes A-D</option>
+                <option value="2">Sede Norte (Megacentro) - Puerta 1 & 2</option>
+                <option value="3">Sede Sur (Distrito Tecnológico)</option>
+              </select>
+              <span class="absolute right-3.5 pointer-events-none text-slate-400">
+                <span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Checkbox & Support -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="flex items-center gap-2 text-slate-300 cursor-pointer text-[11px]">
+              <input type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
+              <span>Turno continuo seguro (8 hrs)</span>
+            </label>
+            <a href="#" onclick="alert('Contacte al Centro SOC para recuperar credenciales')" class="text-slate-400 hover:text-cyan-400 text-[11px] font-mono">Recuperar Credencial</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 active:scale-98 text-black font-extrabold text-sm tracking-wider uppercase flex items-center justify-center gap-2 tactical-glow transition-all">
+            <span class="material-symbols-outlined text-[20px]">bolt</span>
+            <span>INICIAR SESIÓN OPERATIVA</span>
+          </button>
+
+          <!-- Peripherals Quick Access -->
+          <div class="pt-3 border-t border-slate-800 space-y-2">
+            <span class="text-[10px] text-slate-500 font-mono uppercase block text-center">AUTENTICACIÓN RÁPIDA PERIFÉRICA</span>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="simulateBioScan('desktop')" class="p-2.5 rounded-xl bg-[#070a10] border border-slate-800 hover:border-cyan-500/50 flex items-center gap-2 text-left transition-all">
+                <span class="material-symbols-outlined text-cyan-400 text-[18px]">face</span>
+                <div>
+                  <strong class="text-xs text-white block">Facial Sentinel</strong>
+                  <span class="text-[9px] text-slate-400 font-mono">AI Liveness 99.8%</span>
+                </div>
+              </button>
+
+              <button type="button" onclick="simulateNfcTap('desktop')" class="p-2.5 rounded-xl bg-[#070a10] border border-slate-800 hover:border-cyan-500/50 flex items-center gap-2 text-left transition-all">
+                <span class="material-symbols-outlined text-cyan-400 text-[18px]">contactless</span>
+                <div>
+                  <strong class="text-xs text-white block">Credencial NFC / RFID</strong>
+                  <span class="text-[9px] text-slate-400 font-mono">Acercar al lector</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Security Badges Footer -->
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800">
+            <span>🔒 AES-256-GCM</span>
+            <span>ISO 27001</span>
+            <span>GDPR COMPLIANT</span>
+            <span class="text-cyan-400 font-bold">SOC 2 TIPO II</span>
+          </div>
+        </form>
+      </div>
+
+    </main>
+
+    <!-- Desktop Global Footer -->
+    <footer class="flex items-center justify-between pt-6 border-t border-slate-800/80 text-[11px] font-mono text-slate-500">
+      <div>
+        <strong class="text-slate-400">ERESTOR TACTICAL OS © 2025</strong> • Acceso Restringido Nivel 4 • Retención Criptográfica SHA-512 (30 días)
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-emerald-400 flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Sincronización NTP Atómica OK
+        </span>
+        <span>BUILD-HASH: <strong class="text-slate-400">#8824-NX-V42</strong></span>
+      </div>
+    </footer>
+  </div>
+
+
+  <!-- ###################################################################### -->
+  <!-- #################### 3. DISEÑO IPAD (DISEÑO 3) ####################### -->
+  <!-- ###################################################################### -->
+  <div class="view-tablet min-h-screen p-5 md:p-6 max-w-6xl mx-auto flex flex-col justify-between space-y-4">
+    
+    <!-- Top Tablet Navigation Bar (Exacto al diseño 3) -->
+    <header class="flex items-center justify-between pb-3 border-b border-slate-800">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-[#0e1d28] border border-cyan-400/50 flex items-center justify-center shadow-sm">
+          <span class="material-symbols-outlined text-cyan-400 text-[18px]">shield</span>
+        </div>
+        <div>
+          <span class="font-extrabold text-white text-sm tracking-wider font-headline">ERESTOR.OPS</span>
+          <span class="px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-400 text-[9px] font-mono font-bold">v4.2</span>
+          <span class="text-[10px] font-mono text-slate-400 ml-1">TERMINAL TÁCTICO // IPAD</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 text-xs font-mono">
+        <span class="text-emerald-400 flex items-center gap-1 text-[11px]">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> CENTRAL-E1 // 14ms
+        </span>
+        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">HSM TLS 1.3</span>
+        <span class="px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 font-bold text-[10px]">ES E1</span>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs font-mono">
+        <button class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 font-bold">Autenticación</button>
+        <button onclick="alert('Telemetría iPad')" class="px-2 py-1 text-slate-400 hover:text-white">Telemetría</button>
+        <button onclick="alert('Nodos Ops')" class="px-2 py-1 text-slate-400 hover:text-white">Nodos Ops</button>
+        <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold">DEFCON 4 / SOC 24/7</span>
+        <div class="w-7 h-7 rounded-full bg-cyan-900 border border-cyan-500 flex items-center justify-center text-[10px] font-bold text-cyan-200">RL</div>
+      </div>
+    </header>
+
+    <!-- Tablet Hero Banner (Exacto a la imagen 3) -->
+    <div class="p-4 rounded-2xl bg-[#0d131f]/90 border border-slate-800 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+          <span class="material-symbols-outlined text-[20px]">tablet_mac</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-extrabold text-white font-headline">ERESTOR.OPS</h2>
+            <span class="px-2 py-0.2 rounded bg-slate-800 text-slate-300 text-[10px] font-mono">ACCESO RESTRINGIDO // NIVEL 4</span>
+            <span class="px-2 py-0.2 rounded bg-emerald-500/15 text-emerald-400 text-[10px] font-mono font-bold">● SOC 24/7 ONLINE</span>
+          </div>
+          <p class="text-xs text-slate-400">Terminal Táctico de Acceso &amp; Telemetría // iPad Edition v4.2 • Táctil Certificado</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 text-center font-mono text-[10px]">
+        <div class="px-2.5 py-1.5 rounded-xl bg-[#070a10] border border-slate-800">
+          <span class="text-slate-500 block">NODO MAESTRO</span>
+          <strong class="text-white text-xs">CENTRAL-E1</strong>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-[#070a10] border border-slate-800">
+          <span class="text-slate-500 block">LATENCIA</span>
+          <strong class="text-cyan-400 text-xs">12ms HSM</strong>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-[#070a10] border border-slate-800">
+          <span class="text-slate-500 block">CIFRADO CRIPTO</span>
+          <strong class="text-white text-xs">TLS 1.3 / E-7</strong>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-[#070a10] border border-slate-800">
+          <span class="text-slate-500 block">REGIÓN</span>
+          <strong class="text-emerald-400 text-xs">LIMA MET.</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Selector Tabs for Tablet -->
+    <div class="grid grid-cols-4 gap-2 p-1 rounded-xl bg-[#0d131f] border border-slate-800 text-xs font-mono font-bold">
+      <button class="py-2 rounded-lg bg-cyan-400 text-black flex items-center justify-center gap-1.5 shadow-sm">
+        <span class="material-symbols-outlined text-[16px]">pin</span>
+        <span>ID &amp; PIN OPERATIVO</span>
+      </button>
+      <button onclick="simulateBioScan('tablet')" class="py-2 rounded-lg text-slate-400 hover:text-white flex items-center justify-center gap-1.5 transition-all">
+        <span class="material-symbols-outlined text-[16px]">face</span>
+        <span>SENTINEL BIO FACIAL</span>
+      </button>
+      <button onclick="simulateNfcTap('tablet')" class="py-2 rounded-lg text-slate-400 hover:text-white flex items-center justify-center gap-1.5 transition-all">
+        <span class="material-symbols-outlined text-[16px]">contactless</span>
+        <span>NFC / RFID TOKEN</span>
+      </button>
+      <button onclick="alert('FIDO2 hardware key bypass')" class="py-2 rounded-lg text-slate-400 hover:text-white flex items-center justify-center gap-1.5 transition-all">
+        <span class="material-symbols-outlined text-[16px]">vpn_key</span>
+        <span>BYPASS / FIDO2</span>
+      </button>
+    </div>
+
+    <!-- Tablet 2-Panel Work Area -->
+    <div class="grid grid-cols-12 gap-5 flex-1 items-start">
+      
+      <!-- Panel Izquierdo: Formulario Táctil + Keypad (6 columnas) -->
+      <form onsubmit="handleFormSubmit(event, 'tablet')" class="col-span-6 p-5 rounded-2xl bg-[#0d131f]/95 border border-slate-700/80 backdrop-blur-md shadow-xl space-y-3.5">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <strong class="text-sm font-bold text-white font-headline">Credenciales del Operador</strong>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-slate-800 text-cyan-400 text-[10px] font-mono">SEC-KEY 512b</span>
+        </div>
+
+        <!-- Identificador DNI -->
+        <div>
+          <div class="flex items-center justify-between text-xs mb-1 font-mono">
+            <label class="text-slate-400">IDENTIFICADOR INSTITUCIONAL / DNI</label>
+            <span class="text-cyan-400 font-bold text-[10px]">SUPERVISOR CERT L1</span>
+          </div>
+          <div class="relative flex items-center">
+            <input type="text" id="tablet-identifier" value="VOL-2025-089" required
+                   class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-400">
+            <button type="button" onclick="triggerQrScan('tablet')" class="absolute right-2 px-2 py-0.5 rounded bg-[#14232c] border border-cyan-500/40 text-cyan-400 text-[10px] font-mono flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">qr_code</span> QR Scan
+            </button>
+          </div>
+          <span class="text-[10px] text-slate-500 font-mono block mt-1">● Sincronizado: <strong class="text-slate-300">rllamoza@erestor.ops (Rodrigo Llamoza)</strong></span>
+        </div>
+
+        <!-- PIN Táctil con Display y Keypad On-Screen -->
+        <div>
+          <div class="flex items-center justify-between text-xs mb-1 font-mono">
+            <label class="text-slate-400">CÓDIGO PIN / CLAVE MAESTRA OPERATIVA</label>
+            <span class="text-emerald-400 text-[10px]">SHA-512 HSM OK</span>
+          </div>
+          
+          <div class="relative flex items-center mb-2">
+            <input type="password" id="tablet-password" value="123456" required
+                   class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-slate-700 text-white text-center text-sm tracking-widest font-mono focus:outline-none focus:border-cyan-400">
+            <button type="button" onclick="togglePassVisibility('tablet-password')" class="absolute right-3 text-slate-400 hover:text-white">
+              <span class="material-symbols-outlined text-[16px]">visibility</span>
+            </button>
+          </div>
+
+          <!-- iPad Touch Keypad -->
+          <div class="grid grid-cols-11 gap-1 font-mono text-xs">
+            <button type="button" onclick="appendPin('1')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">1</button>
+            <button type="button" onclick="appendPin('2')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">2</button>
+            <button type="button" onclick="appendPin('3')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">3</button>
+            <button type="button" onclick="appendPin('4')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">4</button>
+            <button type="button" onclick="appendPin('5')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">5</button>
+            <button type="button" onclick="appendPin('6')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">6</button>
+            <button type="button" onclick="appendPin('7')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">7</button>
+            <button type="button" onclick="appendPin('8')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">8</button>
+            <button type="button" onclick="appendPin('9')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">9</button>
+            <button type="button" onclick="appendPin('0')" class="py-2 rounded-lg bg-[#070a10] border border-slate-800 hover:border-cyan-400 font-bold active:bg-cyan-500/20">0</button>
+            <button type="button" onclick="backspacePin()" class="py-2 rounded-lg bg-red-950/40 border border-red-800/60 text-red-400 hover:text-white flex items-center justify-center active:bg-red-500/20">
+              <span class="material-symbols-outlined text-[16px]">backspace</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sede Operativa -->
+        <div>
+          <div class="flex items-center justify-between text-xs mb-1 font-mono">
+            <label class="text-slate-400">SEDE OPERATIVA ASIGNADA</label>
+            <span class="text-emerald-400 text-[10px]">● Geo-Sync OK</span>
+          </div>
+          <select id="tablet-sede" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-400 cursor-pointer">
+            <option value="1">Sede Central – Campus Mayor (1.8k PAX)</option>
+            <option value="2">Sede Norte (Megacentro)</option>
+            <option value="3">Sede Sur (Distrito Tecnológico)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between text-xs pt-1">
+          <label class="flex items-center gap-2 text-slate-300 cursor-pointer text-[11px]">
+            <input type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
+            <span>Turno Continuo de 8 Horas</span>
+          </label>
+          <a href="#" onclick="alert('Contacte al supervisor SOC')" class="text-cyan-400 text-[11px] font-mono">¿Asistencia SOC o Clave?</a>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-black font-extrabold text-xs tracking-wider uppercase flex items-center justify-center gap-2 tactical-glow transition-all">
+          <span class="material-symbols-outlined text-[18px]">bolt</span>
+          <span>INICIAR SESIÓN OPERATIVA</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </button>
+      </form>
+
+      <!-- Panel Derecho: Sentinel Bio Facial + NFC + Supervisores (6 columnas) -->
+      <div class="col-span-6 space-y-3.5">
+        
+        <!-- Sentinel Bio Facial HUD (Exacto al diseño 3) -->
+        <div class="p-4 rounded-2xl bg-[#0d131f]/95 border border-slate-700/80 backdrop-blur-md shadow-xl space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-white font-bold font-headline flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-cyan-400 text-[18px]">videocam</span>
+              SENTINEL BIO FACIAL
+            </span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold">
+              ● 99.8% LIVENESS AI
+            </span>
+          </div>
+
+          <!-- Video Viewfinder HUD -->
+          <div class="relative w-full h-44 rounded-xl bg-[#070a10] border border-cyan-500/40 overflow-hidden flex items-center justify-center">
+            <!-- Background face silhouette/mockup -->
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" 
+                 class="w-full h-full object-cover opacity-40 filter grayscale">
+
+            <!-- HUD Overlay Brackets -->
+            <div class="absolute inset-4 pointer-events-none border border-cyan-500/20">
+              <span class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></span>
+              <span class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></span>
+              <span class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></span>
+              <span class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></span>
+            </div>
+
+            <!-- Face Tracking Target -->
+            <div class="relative z-10 p-2 rounded-lg border border-cyan-400/80 bg-cyan-950/60 text-center font-mono text-[10px] space-y-0.5 shadow-lg">
+              <span class="text-cyan-300 font-bold block">OBJ: ROSTRO</span>
+              <span class="text-emerald-400 font-bold block">LOCALIZADO</span>
+              <span class="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 text-[9px] font-bold block">BIO-ID VALIDADO</span>
+            </div>
+
+            <div class="absolute top-2 left-3 text-[9px] font-mono text-cyan-300">
+              FPS: 60.0 • EXPO: AUTO<br>FOV: FRONT ULTRA-WIDE 122°
+            </div>
+          </div>
+
+          <button type="button" onclick="simulateBioScan('tablet')" class="w-full py-2 rounded-xl bg-[#14232c] hover:bg-[#1f3647] border border-cyan-500/50 text-cyan-400 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+            <span class="material-symbols-outlined text-[16px]">photo_camera</span>
+            <span>Escanear Rostro (Captura Instantánea)</span>
+          </button>
+        </div>
+
+        <!-- Lector NFC & Smart Ring -->
+        <div class="p-3.5 rounded-2xl bg-[#0d131f]/95 border border-slate-700/80 backdrop-blur-md space-y-2">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-white font-bold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-cyan-400 text-[16px]">contactless</span>
+              LECTOR NFC &amp; SMART RING
+            </span>
+            <span class="text-slate-400 text-[10px]">13.56 MHz ISO 14443A</span>
+          </div>
+
+          <div onclick="simulateNfcTap('tablet')" class="p-2.5 rounded-xl bg-[#070a10] border border-slate-800 hover:border-cyan-400/50 cursor-pointer flex items-center gap-3 transition-all">
+            <div class="w-8 h-8 rounded-lg bg-emerald-950/60 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+              <span class="material-symbols-outlined text-[18px]">wifi</span>
+            </div>
+            <div>
+              <strong class="text-xs text-white block font-headline">Antena Lista al Reverso</strong>
+              <span class="text-[10px] text-slate-400 font-mono">Aproxime credencial física, pulsera RFID o gafete al borde superior.</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-1">
+            <span>● Intensidad: <strong class="text-slate-300">-42 dBm (Óptimo)</strong></span>
+            <span class="text-emerald-400 font-bold">LISTO PARA LECTURA</span>
+          </div>
+        </div>
+
+        <!-- Supervisores en Guardia -->
+        <div class="p-3 rounded-2xl bg-[#0d131f]/95 border border-slate-700/80 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="flex -space-x-2">
+              <div class="w-7 h-7 rounded-full bg-cyan-900 border border-cyan-500 flex items-center justify-center text-[10px] font-bold text-cyan-200">RL</div>
+              <div class="w-7 h-7 rounded-full bg-emerald-900 border border-emerald-500 flex items-center justify-center text-[10px] font-bold text-emerald-200">MB</div>
+              <div class="w-7 h-7 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center text-[9px] font-bold text-slate-300">+14</div>
+            </div>
+            <div>
+              <strong class="text-xs text-white block font-headline">Supervisores en Guardia</strong>
+              <span class="text-[10px] text-slate-400 font-mono">16 activos en Campus Mayor</span>
+            </div>
+          </div>
+          <button type="button" onclick="alert('16 Supervisores activos')" class="px-2.5 py-1 rounded-lg bg-[#070a10] border border-slate-700 text-slate-300 hover:text-white text-[10px] font-mono">
+            Ver Rol
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Tablet Footer -->
+    <footer class="pt-3 border-t border-slate-800 text-[10px] font-mono text-slate-500 flex items-center justify-between">
+      <div>
+        <strong class="text-slate-400">ERESTOR-OPS PROTOCOL</strong> • SECTOR CRIPTO-AUTÓNOMO E-7
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400">● SINC 100% OPERATIVO</span>
+        <span>TERMINAL ID: <strong class="text-slate-400">T-8824-NX</strong></span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="loginToast" class="fixed bottom-6 right-6 z-50 bg-[#0d131f] border border-cyan-400 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300">
+    <span class="material-symbols-outlined text-cyan-400">verified</span>
+    <span id="loginToastMsg" class="text-xs font-mono">Operación completada</span>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // Device view manager
+    function setDeviceView(view) {
+      document.body.classList.remove('force-mobile', 'force-tablet', 'force-desktop');
+      
+      const btnAuto = document.getElementById('btn-view-auto');
+      const btnMob = document.getElementById('btn-view-mobile');
+      const btnTab = document.getElementById('btn-view-tablet');
+      const btnDesk = document.getElementById('btn-view-desktop');
+
+      [btnAuto, btnMob, btnTab, btnDesk].forEach(b => {
+        b.className = "px-2 py-1 rounded-lg text-slate-400 hover:text-white transition-all";
+      });
+
+      if (view === 'mobile') {
+        document.body.classList.add('force-mobile');
+        btnMob.className = "px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold";
+      } else if (view === 'tablet') {
+        document.body.classList.add('force-tablet');
+        btnTab.className = "px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold";
+      } else if (view === 'desktop') {
+        document.body.classList.add('force-desktop');
+        btnDesk.className = "px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold";
+      } else {
+        btnAuto.className = "px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold";
+      }
+    }
+
+    // Toggle password visibility
+    function togglePassVisibility(inputId) {
+      const el = document.getElementById(inputId);
+      if (el) {
+        el.type = el.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    // On-screen keypad for iPad
+    function appendPin(digit) {
+      const pass = document.getElementById('tablet-password');
+      if (pass && pass.value.length < 12) {
+        pass.value += digit;
+      }
+    }
+
+    function backspacePin() {
+      const pass = document.getElementById('tablet-password');
+      if (pass) {
+        pass.value = pass.value.slice(0, -1);
+      }
+    }
+
+    function loadDemoSupervisor(mode) {
+      if (mode === 'desktop') {
+        document.getElementById('desktop-identifier').value = 'admin@gobernanza.local';
+        document.getElementById('desktop-password').value = '123456';
+      }
+      showToast('Demo Supervisor cargado (admin@gobernanza.local / 123456)');
+    }
+
+    function triggerQrScan(mode) {
+      showToast(`Escáner QR activado para credencial ${mode.toUpperCase()}`);
+    }
+
+    function simulateBioScan(mode) {
+      showToast(`Verificando biometría facial en modo ${mode.toUpperCase()}...`);
+      setTimeout(() => {
+        showToast('✓ Liveness 99.8% comprobado: Rodrigo Llamoza autenticado.');
+      }, 700);
+    }
+
+    function simulateNfcTap(mode) {
+      showToast(`Antena NFC activa: Aproxime token/gafete al sensor.`);
+      setTimeout(() => {
+        showToast('✓ Token NFC #9928-ISO14443A leído con éxito.');
+      }, 700);
+    }
+
+    // Unified Authentication Handler
+    async function handleFormSubmit(e, mode) {
+      e.preventDefault();
+
+      let email = '';
+      let password = '';
+
+      if (mode === 'mobile') {
+        email = document.getElementById('mobile-identifier').value.trim();
+        password = document.getElementById('mobile-password').value;
+      } else if (mode === 'tablet') {
+        email = document.getElementById('tablet-identifier').value.trim();
+        password = document.getElementById('tablet-password').value;
+      } else {
+        email = document.getElementById('desktop-identifier').value.trim();
+        password = document.getElementById('desktop-password').value;
+      }
+
+      showToast('Autenticando en Nodo Central-E1...');
+
+      try {
+        const res = await fetch('api/login.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          sessionStorage.setItem('user', JSON.stringify(data.user));
+          sessionStorage.setItem('token', data.token);
+          showToast(`¡Bienvenido ${data.user.name || 'Operador'}! Acceso Nivel 4 Concedido.`);
+
+          setTimeout(() => {
+            const isAdmin = ['superadmin', 'admin', 'coordinador', 'supervisor'].includes(data.user.role);
+            if (isAdmin) {
+              window.location.href = '../dashboard/index.html';
+            } else {
+              window.location.href = '../attendance/kiosco.html';
+            }
+          }, 600);
+        } else {
+          showToast('Error: ' + (data.error || 'Credenciales no autorizadas'));
+        }
+      } catch (err) {
+        showToast('Error de conexión con el nodo central');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('loginToast');
+      document.getElementById('loginToastMsg').innerText = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

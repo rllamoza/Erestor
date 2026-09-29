@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erestor - Galería Maestra de Diseños y Pantallas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #dfe2f1; }
+    .bg-tech-grid {
+      background-image: linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+  </style>
+</head>
+<body class="bg-[#0b0f19] bg-tech-grid min-h-screen text-slate-200">
+  <!-- TOP BAR -->
+  <header class="border-b border-[#262a35] bg-[#0f131d]/90 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-[#1c1f2a] border border-[#4cd7f6]/40 flex items-center justify-center text-[#4cd7f6] shadow-[0_0_15px_rgba(76,215,246,0.25)]">
+        <span class="material-symbols-outlined text-2xl">grid_view</span>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold font-['Plus_Jakarta_Sans'] text-[#4cd7f6]">Erestor UI • Catálogo Maestro</h1>
+        <p class="text-xs text-slate-400">Sistema de Asistencia / Registro de Personal y Voluntarios</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <a href="design.md" target="_blank" class="px-4 py-2 rounded-xl bg-[#1c1f2a] hover:bg-[#262a35] border border-[#3d494c] hover:border-[#4cd7f6] text-xs font-semibold text-slate-300 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm text-[#4cd7f6]">description</span>
+        Ver design.md
+      </a>
+      <a href="animaciones/visor_animaciones.html" class="px-4 py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-500/40 text-xs font-semibold text-cyan-300 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">animation</span>
+        Animaciones Interactivas
+      </a>
+      <a href="../modules/attendance/asistencia.html" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs hover:brightness-110 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">rocket_launch</span>
+        Ir a la Aplicación
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6 md:p-8 space-y-10">
+
+    <!-- HERO METRICS -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="p-5 rounded-2xl bg-[#1c1f2a]/70 border border-[#262a35] backdrop-blur-sm">
+        <div class="text-xs text-slate-400 uppercase font-semibold">Total Pantallas</div>
+        <div class="text-3xl font-extrabold text-[#4cd7f6] mt-1 font-['JetBrains_Mono']">6</div>
+        <div class="text-xs text-slate-500 mt-1">Kiosco, Auditoría, Planificador, IA</div>
+      </div>
+      <div class="p-5 rounded-2xl bg-[#1c1f2a]/70 border border-[#262a35] backdrop-blur-sm">
+        <div class="text-xs text-slate-400 uppercase font-semibold">Archivos HTML</div>
+        <div class="text-3xl font-extrabold text-[#4edea3] mt-1 font-['JetBrains_Mono']">6</div>
+        <div class="text-xs text-slate-500 mt-1">100% interactivos y responsive</div>
+      </div>
+      <div class="p-5 rounded-2xl bg-[#1c1f2a]/70 border border-[#262a35] backdrop-blur-sm">
+        <div class="text-xs text-slate-400 uppercase font-semibold">Capturas HD</div>
+        <div class="text-3xl font-extrabold text-[#2fd9f4] mt-1 font-['JetBrains_Mono']">6</div>
+        <div class="text-xs text-slate-500 mt-1">Resolución hasta 2560x2048</div>
+      </div>
+      <div class="p-5 rounded-2xl bg-[#1c1f2a]/70 border border-[#262a35] backdrop-blur-sm">
+        <div class="text-xs text-slate-400 uppercase font-semibold">Design Tokens</div>
+        <div class="text-3xl font-extrabold text-amber-400 mt-1 font-['JetBrains_Mono']">48+</div>
+        <div class="text-xs text-slate-500 mt-1">Colores, tipografías y sombras</div>
+      </div>
+    </div>
+
+    <!-- SCREENS GRID -->
+    <div>
+      <h2 class="text-xl font-bold font-['Plus_Jakarta_Sans'] text-white mb-6 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[#4cd7f6]">devices</span>
+        Colección Completa de Pantallas & Interfaces
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="group rounded-2xl bg-[#1c1f2a]/80 border border-[#262a35] hover:border-[#4cd7f6]/50 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(76,215,246,0.15)]">
+          <!-- Thumbnail Image -->
+          <div class="relative w-full h-56 bg-[#0a0e18] overflow-hidden border-b border-[#262a35]">
+            <img src="imagenes/01_kiosco_tactil_biometrico.png" alt="Erestor Asistencia - Kiosco Táctil Biométrico" class="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500">
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-bold uppercase tracking-wider text-[#4cd7f6]">
+              Pantalla 01 • Mobile / Kiosk
+            </div>
+            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-mono text-slate-400">
+              780x4450
+            </div>
+          </div>
+
+          <!-- Content Info -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-[11px] font-semibold text-[#4edea3] uppercase tracking-wider">Kiosk / Check-in</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#4cd7f6] transition-colors mt-1 font-['Plus_Jakarta_Sans']">
+                Erestor Asistencia - Kiosco Táctil Biométrico
+              </h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2">
+                Archivo: <code class="text-[#2fd9f4] font-mono">01_kiosco_tactil_biometrico.html</code>
+              </p>
+            </div>
+
+            <!-- Actions Buttons -->
+            <div class="pt-3 border-t border-[#262a35] flex items-center gap-2">
+              <a href="01_kiosco_tactil_biometrico.html" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs text-center hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                Abrir HTML
+              </a>
+              <a href="imagenes/01_kiosco_tactil_biometrico.png" target="_blank" class="py-2 px-3 rounded-xl bg-[#262a35] hover:bg-[#313540] text-slate-300 hover:text-white text-xs text-center border border-[#3d494c] transition-all flex items-center justify-center" title="Ver Captura Completa">
+                <span class="material-symbols-outlined text-[15px]">image</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group rounded-2xl bg-[#1c1f2a]/80 border border-[#262a35] hover:border-[#4cd7f6]/50 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(76,215,246,0.15)]">
+          <!-- Thumbnail Image -->
+          <div class="relative w-full h-56 bg-[#0a0e18] overflow-hidden border-b border-[#262a35]">
+            <img src="imagenes/02_control_auditoria_asistencia.png" alt="Erestor - Centro de Control y Auditoría de Asistencia" class="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500">
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-bold uppercase tracking-wider text-[#4cd7f6]">
+              Pantalla 02 • Desktop
+            </div>
+            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-mono text-slate-400">
+              2560x2048
+            </div>
+          </div>
+
+          <!-- Content Info -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-[11px] font-semibold text-[#4edea3] uppercase tracking-wider">Auditoría / Live Feed</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#4cd7f6] transition-colors mt-1 font-['Plus_Jakarta_Sans']">
+                Erestor - Centro de Control y Auditoría de Asistencia
+              </h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2">
+                Archivo: <code class="text-[#2fd9f4] font-mono">02_control_auditoria_asistencia.html</code>
+              </p>
+            </div>
+
+            <!-- Actions Buttons -->
+            <div class="pt-3 border-t border-[#262a35] flex items-center gap-2">
+              <a href="02_control_auditoria_asistencia.html" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs text-center hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                Abrir HTML
+              </a>
+              <a href="imagenes/02_control_auditoria_asistencia.png" target="_blank" class="py-2 px-3 rounded-xl bg-[#262a35] hover:bg-[#313540] text-slate-300 hover:text-white text-xs text-center border border-[#3d494c] transition-all flex items-center justify-center" title="Ver Captura Completa">
+                <span class="material-symbols-outlined text-[15px]">image</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group rounded-2xl bg-[#1c1f2a]/80 border border-[#262a35] hover:border-[#4cd7f6]/50 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(76,215,246,0.15)]">
+          <!-- Thumbnail Image -->
+          <div class="relative w-full h-56 bg-[#0a0e18] overflow-hidden border-b border-[#262a35]">
+            <img src="imagenes/03_planificador_asignaciones_drag_drop.png" alt="Erestor - Planificador & Asignaciones Drag & Drop" class="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500">
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-bold uppercase tracking-wider text-[#4cd7f6]">
+              Pantalla 03 • Desktop
+            </div>
+            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-mono text-slate-400">
+              2560x2048
+            </div>
+          </div>
+
+          <!-- Content Info -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-[11px] font-semibold text-[#4edea3] uppercase tracking-wider">Planificador / Drag & Drop</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#4cd7f6] transition-colors mt-1 font-['Plus_Jakarta_Sans']">
+                Erestor - Planificador & Asignaciones Drag & Drop
+              </h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2">
+                Archivo: <code class="text-[#2fd9f4] font-mono">03_planificador_asignaciones_drag_drop.html</code>
+              </p>
+            </div>
+
+            <!-- Actions Buttons -->
+            <div class="pt-3 border-t border-[#262a35] flex items-center gap-2">
+              <a href="03_planificador_asignaciones_drag_drop.html" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs text-center hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                Abrir HTML
+              </a>
+              <a href="imagenes/03_planificador_asignaciones_drag_drop.png" target="_blank" class="py-2 px-3 rounded-xl bg-[#262a35] hover:bg-[#313540] text-slate-300 hover:text-white text-xs text-center border border-[#3d494c] transition-all flex items-center justify-center" title="Ver Captura Completa">
+                <span class="material-symbols-outlined text-[15px]">image</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group rounded-2xl bg-[#1c1f2a]/80 border border-[#262a35] hover:border-[#4cd7f6]/50 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(76,215,246,0.15)]">
+          <!-- Thumbnail Image -->
+          <div class="relative w-full h-56 bg-[#0a0e18] overflow-hidden border-b border-[#262a35]">
+            <img src="imagenes/04_modal_detalle_voluntario.png" alt="Erestor - Asignaciones con Modal Detalle Voluntario" class="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500">
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-bold uppercase tracking-wider text-[#4cd7f6]">
+              Pantalla 04 • Desktop
+            </div>
+            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-mono text-slate-400">
+              2560x2048
+            </div>
+          </div>
+
+          <!-- Content Info -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-[11px] font-semibold text-[#4edea3] uppercase tracking-wider">Modal / Perfil</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#4cd7f6] transition-colors mt-1 font-['Plus_Jakarta_Sans']">
+                Erestor - Asignaciones con Modal Detalle Voluntario
+              </h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2">
+                Archivo: <code class="text-[#2fd9f4] font-mono">04_modal_detalle_voluntario.html</code>
+              </p>
+            </div>
+
+            <!-- Actions Buttons -->
+            <div class="pt-3 border-t border-[#262a35] flex items-center gap-2">
+              <a href="04_modal_detalle_voluntario.html" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs text-center hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                Abrir HTML
+              </a>
+              <a href="imagenes/04_modal_detalle_voluntario.png" target="_blank" class="py-2 px-3 rounded-xl bg-[#262a35] hover:bg-[#313540] text-slate-300 hover:text-white text-xs text-center border border-[#3d494c] transition-all flex items-center justify-center" title="Ver Captura Completa">
+                <span class="material-symbols-outlined text-[15px]">image</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group rounded-2xl bg-[#1c1f2a]/80 border border-[#262a35] hover:border-[#4cd7f6]/50 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(76,215,246,0.15)]">
+          <!-- Thumbnail Image -->
+          <div class="relative w-full h-56 bg-[#0a0e18] overflow-hidden border-b border-[#262a35]">
+            <img src="imagenes/05_modal_alerta_tardanza_conflicto.png" alt="Erestor - Modal Alerta de Tardanza y Conflicto" class="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500">
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-bold uppercase tracking-wider text-[#4cd7f6]">
+              Pantalla 05 • Desktop
+            </div>
+            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-mono text-slate-400">
+              2560x2048
+            </div>
+          </div>
+
+          <!-- Content Info -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-[11px] font-semibold text-[#4edea3] uppercase tracking-wider">Modal / Alerta</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#4cd7f6] transition-colors mt-1 font-['Plus_Jakarta_Sans']">
+                Erestor - Modal Alerta de Tardanza y Conflicto
+              </h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2">
+                Archivo: <code class="text-[#2fd9f4] font-mono">05_modal_alerta_tardanza_conflicto.html</code>
+              </p>
+            </div>
+
+            <!-- Actions Buttons -->
+            <div class="pt-3 border-t border-[#262a35] flex items-center gap-2">
+              <a href="05_modal_alerta_tardanza_conflicto.html" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs text-center hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                Abrir HTML
+              </a>
+              <a href="imagenes/05_modal_alerta_tardanza_conflicto.png" target="_blank" class="py-2 px-3 rounded-xl bg-[#262a35] hover:bg-[#313540] text-slate-300 hover:text-white text-xs text-center border border-[#3d494c] transition-all flex items-center justify-center" title="Ver Captura Completa">
+                <span class="material-symbols-outlined text-[15px]">image</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group rounded-2xl bg-[#1c1f2a]/80 border border-[#262a35] hover:border-[#4cd7f6]/50 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-lg hover:shadow-[0_0_25px_rgba(76,215,246,0.15)]">
+          <!-- Thumbnail Image -->
+          <div class="relative w-full h-56 bg-[#0a0e18] overflow-hidden border-b border-[#262a35]">
+            <img src="imagenes/06_resolucion_vacantes_ia.png" alt="Erestor - Resolución Masiva de Vacantes con IA" class="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500">
+            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-bold uppercase tracking-wider text-[#4cd7f6]">
+              Pantalla 06 • Desktop
+            </div>
+            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0a0e18]/80 backdrop-blur-md border border-[#3d494c] text-[10px] font-mono text-slate-400">
+              2560x2048
+            </div>
+          </div>
+
+          <!-- Content Info -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-[11px] font-semibold text-[#4edea3] uppercase tracking-wider">IA / Optimización</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#4cd7f6] transition-colors mt-1 font-['Plus_Jakarta_Sans']">
+                Erestor - Resolución Masiva de Vacantes con IA
+              </h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2">
+                Archivo: <code class="text-[#2fd9f4] font-mono">06_resolucion_vacantes_ia.html</code>
+              </p>
+            </div>
+
+            <!-- Actions Buttons -->
+            <div class="pt-3 border-t border-[#262a35] flex items-center gap-2">
+              <a href="06_resolucion_vacantes_ia.html" target="_blank" class="flex-1 py-2 px-3 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-black font-bold text-xs text-center hover:brightness-110 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                Abrir HTML
+              </a>
+              <a href="imagenes/06_resolucion_vacantes_ia.png" target="_blank" class="py-2 px-3 rounded-xl bg-[#262a35] hover:bg-[#313540] text-slate-300 hover:text-white text-xs text-center border border-[#3d494c] transition-all flex items-center justify-center" title="Ver Captura Completa">
+                <span class="material-symbols-outlined text-[15px]">image</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- DESIGN TOKENS & SYSTEM PREVIEW -->
+    <div class="p-8 rounded-3xl bg-[#1c1f2a]/60 border border-[#262a35] backdrop-blur-xl space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold text-white font-['Plus_Jakarta_Sans'] flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#4cd7f6]">palette</span>
+            Tokens de Color & Identidad (Aerospace Cyber-Glass)
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">Paleta oficial extraída directamente del archivo design.md de Stitch</p>
+        </div>
+        <a href="design.md" target="_blank" class="px-4 py-2 rounded-xl bg-[#0f131d] border border-[#3d494c] hover:border-[#4cd7f6] text-xs font-semibold text-slate-300 transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm text-[#4cd7f6]">file_open</span>
+          Ver Especificación Completa
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+        <div class="p-3 rounded-xl bg-[#0f131d] border border-[#262a35] space-y-2">
+          <div class="w-full h-10 rounded-lg bg-[#4cd7f6]"></div>
+          <div class="text-[11px] font-bold text-white">Primary Cyan</div>
+          <div class="text-[10px] font-mono text-slate-400">#4CD7F6</div>
+        </div>
+        <div class="p-3 rounded-xl bg-[#0f131d] border border-[#262a35] space-y-2">
+          <div class="w-full h-10 rounded-lg bg-[#06b6d4]"></div>
+          <div class="text-[11px] font-bold text-white">Primary Container</div>
+          <div class="text-[10px] font-mono text-slate-400">#06B6D4</div>
+        </div>
+        <div class="p-3 rounded-xl bg-[#0f131d] border border-[#262a35] space-y-2">
+          <div class="w-full h-10 rounded-lg bg-[#4edea3]"></div>
+          <div class="text-[11px] font-bold text-white">Secondary Emerald</div>
+          <div class="text-[10px] font-mono text-slate-400">#4EDEA3</div>
+        </div>
+        <div class="p-3 rounded-xl bg-[#0f131d] border border-[#262a35] space-y-2">
+          <div class="w-full h-10 rounded-lg bg-[#2fd9f4]"></div>
+          <div class="text-[11px] font-bold text-white">Tertiary Glow</div>
+          <div class="text-[10px] font-mono text-slate-400">#2FD9F4</div>
+        </div>
+        <div class="p-3 rounded-xl bg-[#0f131d] border border-[#262a35] space-y-2">
+          <div class="w-full h-10 rounded-lg bg-[#0f131d] border border-slate-700"></div>
+          <div class="text-[11px] font-bold text-white">Surface Abyss</div>
+          <div class="text-[10px] font-mono text-slate-400">#0F131D</div>
+        </div>
+        <div class="p-3 rounded-xl bg-[#0f131d] border border-[#262a35] space-y-2">
+          <div class="w-full h-10 rounded-lg bg-[#ffb4ab]"></div>
+          <div class="text-[11px] font-bold text-white">Error / Alert</div>
+          <div class="text-[10px] font-mono text-slate-400">#FFB4AB</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

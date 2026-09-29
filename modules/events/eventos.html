@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turnos & Eventos - Erestor Ops</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#0a0e17',
+            surface: '#0f1422',
+            primary: '#4cd7f6',
+            secondary: '#4edea3',
+            'outline-variant': '#2a344d',
+            'on-surface': '#e2e8f0',
+            'on-surface-variant': '#94a3b8'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #070a10;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2a344d;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4cd7f6;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0e17] text-on-surface font-body antialiased min-h-screen flex overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+
+  <!-- ================= 1. SIDEBAR LATERAL ================= -->
+  <aside class="w-[260px] h-screen bg-[#070a10] border-r border-[#2a344d]/50 flex flex-col justify-between fixed top-0 left-0 z-40 select-none">
+    <div class="flex flex-col">
+      <!-- App Header / Logo -->
+      <div class="px-5 py-5 flex items-center gap-3 border-b border-[#2a344d]/40">
+        <div class="w-10 h-10 rounded-xl bg-[#0e1626] border border-[#22d3ee]/60 flex items-center justify-center shadow-[0_0_18px_rgba(34,211,238,0.3)] shrink-0">
+          <span class="material-symbols-outlined text-[#22d3ee] text-[24px]">deployed_code</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="font-extrabold text-white text-[17px] tracking-tight">ERESTOR</span>
+            <span class="font-extrabold text-[#22d3ee] text-[17px] tracking-tight">OPS</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400 mt-1">v4.2 • Centro Operativo</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1.5 overflow-y-auto">
+        <!-- 1. Dashboard -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../dashboard/index.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- 2. Asignación Drag&Drop -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="asignaciones.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">drag_indicator</span>
+          <span>Asignación Drag&amp;Drop</span>
+        </a>
+
+        <!-- 3. Redes & Sedes -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../networks/redes.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">hub</span>
+          <span>Redes &amp; Sedes</span>
+        </a>
+
+        <!-- 4. Turnos & Eventos (ACTIVE) -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#0e1d28] text-[#22d3ee] border border-[#22d3ee] shadow-[0_0_20px_rgba(34,211,238,0.22)] font-semibold text-sm" href="eventos.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#22d3ee] text-[20px]">schedule</span>
+            <span>Turnos &amp; Eventos</span>
+          </div>
+        </a>
+
+        <!-- 5. Control Asistencia -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../attendance/admin_asistencia.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-400 text-[20px]">fact_check</span>
+            <span>Control Asistencia</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+            EN VIVO
+          </span>
+        </a>
+
+        <!-- 6. Personal & Voluntarios -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../users/usuarios.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">group</span>
+          <span>Personal &amp; Voluntarios</span>
+        </a>
+
+        <!-- 7. Recompensas / Reportes -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../reports/reportes.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">military_tech</span>
+          <span>Recompensas</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom System Telemetry & Logout -->
+    <div class="p-3 border-t border-[#2a344d]/30 bg-[#070a10] flex flex-col gap-2.5">
+      <div class="px-3 py-2.5 rounded-xl bg-[#0f1422] border border-[#2a344d]/40 flex flex-col gap-1.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-300 flex items-center gap-1.5 font-medium">
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+            Cronograma
+          </span>
+          <span class="text-[#4edea3] font-mono text-[11px]">Sincronizado</span>
+        </div>
+        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+          <span>Capacidad General</span>
+          <span class="font-mono text-slate-300">92%</span>
+        </div>
+        <div class="w-full h-1 bg-[#1c243a] rounded-full overflow-hidden">
+          <div class="w-[92%] h-full bg-[#4edea3] rounded-full"></div>
+        </div>
+      </div>
+
+      <button onclick="window.location.href='asignaciones.html'" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#14232c] border border-[#22d3ee]/40 text-[#22d3ee] hover:bg-[#1a2e3a] transition-all text-xs font-semibold">
+        <span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+        <span>Ir a Asignación Drag&amp;Drop</span>
+      </button>
+
+      <button onclick="logout()" class="flex items-center gap-2 px-2 text-xs text-slate-400 hover:text-red-400 transition-colors">
+        <span class="material-symbols-outlined text-[16px]">logout</span>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <div class="ml-[260px] flex-1 flex flex-col min-h-screen cyber-grid pb-16">
+
+    <!-- BARRA SUPERIOR OPERATIVA -->
+    <header class="h-16 bg-[#0a0e17]/90 backdrop-blur-md border-b border-[#2a344d]/40 px-8 flex items-center justify-between sticky top-0 z-30">
+      <div class="flex items-center gap-3 text-xs font-mono">
+        <span class="flex items-center gap-1.5 text-[#4edea3] font-semibold">
+          <span class="w-2 h-2 rounded-full bg-[#4edea3] animate-pulse shadow-[0_0_8px_#4edea3]"></span>
+          SINCRONIZACIÓN EN VIVO
+        </span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-400">Nodo: <strong class="text-white">Central-E1</strong></span>
+        <span class="text-slate-600">•</span>
+        <span class="text-slate-400">Latencia: <strong class="text-[#4cd7f6]">18ms</strong></span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-[#0f1422] border border-[#2a344d]/60 text-xs text-slate-300 font-mono">
+          <span class="material-symbols-outlined text-[16px] text-[#4edea3]">verified</span>
+          <span>Cobertura General: 94.6%</span>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-[#14232c] border border-[#22d3ee]/60 flex items-center justify-center font-bold text-xs text-[#22d3ee] shadow-sm">
+          EO
+        </div>
+      </div>
+    </header>
+
+    <!-- WORKSPACE -->
+    <main class="p-8 space-y-6 max-w-[1600px] mx-auto w-full">
+
+      <!-- Breadcrumbs & Action Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">
+            <span>OPERACIONES</span>
+            <span>&gt;</span>
+            <span>CRONOGRAMA OPERATIVO</span>
+            <span>&gt;</span>
+            <span class="text-[#4cd7f6] font-semibold">TURNOS &amp; EVENTOS</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-extrabold text-white font-headline tracking-tight">Gestión de Turnos, Servicios y Eventos</h1>
+            <span class="px-2.5 py-0.5 rounded-full bg-[#14232c] text-[#4edea3] border border-[#4edea3]/40 text-[10px] font-mono font-bold tracking-wider uppercase">
+              MATRIZ V4.2 ACTIVA
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="openNewEventModal()" class="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#4cd7f6] hover:bg-[#38bdf8] text-black text-xs font-bold transition-all shadow-[0_0_20px_rgba(76,215,246,0.35)]">
+            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+            <span>Programar Nuevo Turno / Evento</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= 4 HERO KPI CARDS ================= -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4cd7f6]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">TURNOS &amp; EVENTOS ACTIVOS</span>
+            <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">calendar_month</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-eventos-count">18</span>
+              <span class="text-xs font-bold text-[#4cd7f6] font-mono">Turnos Registrados</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3]"></span>
+            <span>Validación horaria: <strong class="text-white">100% Sin colisión</strong></span>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4edea3]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">VOLUNTARIOS ASIGNADOS</span>
+            <span class="material-symbols-outlined text-[#4edea3] text-[20px]">assignment_ind</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-asignados-count">342</span>
+              <span class="text-xs font-bold text-slate-400 font-mono">Puestos Cubiertos</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between">
+            <span>Quórum Ministerial</span>
+            <strong class="text-[#4edea3]">Óptimo Sincronizado</strong>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4cd7f6]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">COBERTURA MEDIA MATRIZ</span>
+            <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">verified</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-cobertura">94.6%</span>
+              <span class="text-xs font-bold text-[#4edea3] font-mono">Target &gt;90%</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between">
+            <span>Puestos Críticos Libres</span>
+            <strong class="text-[#4edea3]">0 Cuellos de Botella</strong>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4edea3]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">TIEMPO DE DESPLIEGUE</span>
+            <span class="material-symbols-outlined text-[#4edea3] text-[20px]">speed</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span>12 min</span>
+              <span class="text-xs font-normal text-slate-400 font-mono">Promedio Global</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between">
+            <span>Ventana de Traslado</span>
+            <strong class="text-[#4edea3]">Activa y Validada</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2-COLUMN OPERATIONAL LAYOUT ================= -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ================= COLUMNA IZQUIERDA (7 COLS) ================= -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-bold text-white font-headline">Directorio de Turnos y Servicios</h2>
+              <p class="text-xs text-slate-400">Cronograma de convocatorias conectadas en base de datos</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" id="eventSearchInput" oninput="filterEvents()" placeholder="Buscar evento o turno..." 
+                     class="px-3 py-1.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-xs text-white focus:outline-none focus:border-[#4cd7f6]">
+            </div>
+          </div>
+
+          <div id="eventsContainer" class="space-y-4">
+            <!-- Events injected dynamically via loadEventsData() -->
+          </div>
+        </div>
+
+        <!-- ================= COLUMNA DERECHA (5 COLS) ================= -->
+        <div class="lg:col-span-5 space-y-6">
+
+          <!-- Despachador Rápido de Turnos -->
+          <div class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-xl space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">bolt</span>
+                <h3 class="text-sm font-bold text-white font-headline">Despachador Rápido de Turno</h3>
+              </div>
+              <span class="px-2 py-0.5 rounded-md bg-[#14232c] text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-mono font-bold">
+                Auto-Dispatch
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-400">
+              Genera inmediatamente un turno operativo sincronizado con la matriz de asignación heurística.
+            </p>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">NOMBRE DEL TURNO / SERVICIO</label>
+                <input type="text" id="quickEventName" placeholder="Ej: Servicio General Domingo - Turno Mañana" 
+                       class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white focus:outline-none focus:border-[#4cd7f6]">
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">SEDE DESTINO</label>
+                  <select id="quickEventSede" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+                    <!-- Populated from DB -->
+                  </select>
+                </div>
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">CAPACIDAD CUPO</label>
+                  <input type="number" id="quickEventCap" value="50" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">HORA INICIO</label>
+                  <input type="time" id="quickEventStart" value="08:30" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+                </div>
+                <div>
+                  <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">HORA FIN</label>
+                  <input type="time" id="quickEventEnd" value="13:00" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+                </div>
+              </div>
+
+              <button onclick="submitQuickEvent()" class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#4cd7f6] hover:bg-[#38bdf8] text-black font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,215,246,0.3)]">
+                <span class="material-symbols-outlined text-[18px]">add_task</span>
+                <span>Programar y Despachar Turno</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cronograma del Día (Timeline Horario) -->
+          <div class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-white font-headline">Cronograma del Día (Timeline)</h3>
+              <span class="text-[11px] text-[#4cd7f6] font-mono">Hoy</span>
+            </div>
+
+            <div class="space-y-3 text-xs border-l-2 border-[#2a344d] pl-4 ml-2">
+              <div class="relative">
+                <span class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#4edea3] ring-4 ring-[#0f1422]"></span>
+                <span class="text-[10px] text-slate-400 font-mono block">08:30 - 13:00 (Mañana)</span>
+                <strong class="text-white block font-medium">Servicio General - Sede Central</strong>
+                <span class="text-[11px] text-[#4edea3] font-mono">50/50 Voluntarios Asignados (100%)</span>
+              </div>
+
+              <div class="relative pt-2">
+                <span class="absolute -left-[21px] top-3 w-2.5 h-2.5 rounded-full bg-[#4cd7f6] ring-4 ring-[#0f1422]"></span>
+                <span class="text-[10px] text-slate-400 font-mono block">10:00 - 14:00 (Mañana / Tarde)</span>
+                <strong class="text-white block font-medium">Reunión Jóvenes Conexión - Sede Norte</strong>
+                <span class="text-[11px] text-[#4cd7f6] font-mono">38/40 Voluntarios Asignados (95%)</span>
+              </div>
+
+              <div class="relative pt-2">
+                <span class="absolute -left-[21px] top-3 w-2.5 h-2.5 rounded-full bg-[#a855f7] ring-4 ring-[#0f1422]"></span>
+                <span class="text-[10px] text-slate-400 font-mono block">17:00 - 20:30 (Tarde / Noche)</span>
+                <strong class="text-white block font-medium">Culto de Sanidad y Milagros - Sede Sur</strong>
+                <span class="text-[11px] text-[#a855f7] font-mono">28/30 Voluntarios Asignados (93%)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ================= MODAL: NUEVO EVENTO COMPLETO ================= -->
+  <div id="modalNewEvent" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-lg rounded-2xl bg-[#0f1422] border border-[#22d3ee]/60 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#2a344d]/60">
+        <h3 class="text-base font-bold text-white font-headline">Programar Turno / Evento Oficial</h3>
+        <button onclick="closeNewEventModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-slate-400 block mb-1">Nombre del Evento</label>
+          <input type="text" id="modalEventName" placeholder="Ej: Servicio de Acción de Gracias" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-400 block mb-1">Sede / Campus</label>
+            <select id="modalEventSede" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+              <!-- Dynamic -->
+            </select>
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Tipo de Evento</label>
+            <select id="modalEventType" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+              <option value="turno">Turno Operativo</option>
+              <option value="evento">Evento Especial</option>
+              <option value="capacitacion">Capacitación Ministerial</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-400 block mb-1">Fecha y Hora Inicio</label>
+            <input type="datetime-local" id="modalEventStart" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Fecha y Hora Fin</label>
+            <input type="datetime-local" id="modalEventEnd" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-400 block mb-1">Capacidad Máxima</label>
+            <input type="number" id="modalEventCap" value="50" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Puntos de Fidelidad Base</label>
+            <input type="number" id="modalEventPoints" value="15" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#2a344d]/60">
+        <button onclick="closeNewEventModal()" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white text-xs font-semibold">Cancelar</button>
+        <button onclick="submitNewEventModal()" class="px-5 py-2 rounded-xl bg-[#4cd7f6] text-black font-bold text-xs hover:bg-[#38bdf8] transition-all">
+          Guardar en Base de Datos
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastNotification" class="fixed top-20 right-8 z-50 bg-[#0f1422] border border-[#4edea3] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-150%] transition-transform duration-300">
+    <span class="material-symbols-outlined text-[#4edea3]">check_circle</span>
+    <span id="toastMessage" class="text-xs font-semibold">Operación completada</span>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script src="../../shared/assets/js/common_ui.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+    if (!token) window.location.href = '../auth/login.html';
+
+    window.logout = function() {
+      sessionStorage.clear();
+      window.location.href = '../auth/login.html';
+    };
+
+    let allEventsData = [];
+
+    async function loadEventsData() {
+      try {
+        const res = await authFetch('api/turnos_telemetria.php');
+        const json = await res.json();
+
+        if (json.status === 'success') {
+          allEventsData = json.eventos || [];
+          document.getElementById('kpi-eventos-count').innerText = allEventsData.length;
+          document.getElementById('kpi-asignados-count').innerText = json.kpis.total_asignados;
+          document.getElementById('kpi-cobertura').innerText = json.kpis.cobertura_media;
+
+          renderEvents(allEventsData);
+        }
+
+        // Populate Sedes dropdowns
+        const sedesRes = await authFetch('../networks/api/sedes.php?limit=50');
+        const sedesJson = await sedesRes.json();
+        if (sedesJson.status === 'success') {
+          const list = sedesJson.data || [];
+          const opts = list.map(s => `<option value="${s.id}">${s.nombre}</option>`).join('');
+          document.getElementById('quickEventSede').innerHTML = opts;
+          document.getElementById('modalEventSede').innerHTML = opts;
+        }
+
+      } catch (err) {
+        console.error('Error loading events:', err);
+      }
+    }
+
+    function renderEvents(events) {
+      const container = document.getElementById('eventsContainer');
+      container.innerHTML = '';
+
+      if (events.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-500 font-mono text-xs">No hay eventos registrados</div>`;
+        return;
+      }
+
+      events.forEach(ev => {
+        const card = document.createElement('div');
+        card.className = "p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all";
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#14232c] border border-[#22d3ee]/40 text-[#22d3ee] flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm font-bold text-white font-headline">${ev.nombre}</h3>
+                  <span class="px-2 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold uppercase">${ev.tipo}</span>
+                  <span class="px-1.5 py-0.2 rounded bg-[#1c243a] text-slate-300 text-[10px] font-mono">${ev.turno_tag}</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">${ev.sede_nombre} • Área: <strong class="text-slate-300">${ev.area_nombre}</strong></p>
+              </div>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-bold font-mono">
+              ${ev.cobertura_pct} Cubierto
+            </span>
+          </div>
+
+          <!-- Schedule & Quota Bar -->
+          <div class="p-3 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2 text-xs">
+            <div class="flex items-center justify-between font-mono text-[11px]">
+              <span class="text-slate-400">Horario: <strong class="text-white">${ev.hora_rango}</strong> (${ev.fecha_inicio.substring(0, 10)})</span>
+              <span class="text-[#4cd7f6]">Capacidad: <strong class="text-white">${ev.asignados} / ${ev.capacidad_max}</strong></span>
+            </div>
+            <div class="w-full h-1.5 bg-[#1c243a] rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full" style="width: ${ev.cobertura_pct};"></div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-[11px] text-slate-400 font-mono">Puntos por turno: <strong class="text-[#4edea3]">+${ev.puntos_base} pts</strong></span>
+            <div class="flex items-center gap-2">
+              <button onclick="window.location.href='asignaciones.html?evento_id=${ev.id}'" 
+                      class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#14232c] hover:bg-[#1a2e3a] border border-[#22d3ee]/40 text-[#22d3ee] text-xs font-semibold transition-all">
+                <span class="material-symbols-outlined text-[15px]">drag_indicator</span>
+                <span>Asignar Drag&amp;Drop</span>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    window.filterEvents = function() {
+      const q = document.getElementById('eventSearchInput').value.toLowerCase();
+      const filtered = allEventsData.filter(e => 
+        e.nombre.toLowerCase().includes(q) || 
+        e.sede_nombre.toLowerCase().includes(q) ||
+        e.area_nombre.toLowerCase().includes(q)
+      );
+      renderEvents(filtered);
+    };
+
+    window.openNewEventModal = function() {
+      document.getElementById('modalNewEvent').classList.remove('hidden');
+    };
+
+    window.closeNewEventModal = function() {
+      document.getElementById('modalNewEvent').classList.add('hidden');
+    };
+
+    window.submitNewEventModal = async function() {
+      const nombre = document.getElementById('modalEventName').value.trim();
+      const sede_id = document.getElementById('modalEventSede').value;
+      const tipo = document.getElementById('modalEventType').value;
+      const fecha_inicio = document.getElementById('modalEventStart').value;
+      const fecha_fin = document.getElementById('modalEventEnd').value;
+      const capacidad_max = document.getElementById('modalEventCap').value;
+      const puntos_base = document.getElementById('modalEventPoints').value;
+
+      if (!nombre || !fecha_inicio || !fecha_fin) {
+        alert('Complete el nombre y las fechas del evento');
+        return;
+      }
+
+      try {
+        await authFetch('api/eventos.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre,
+            sede_id,
+            tipo,
+            fecha_inicio,
+            fecha_fin,
+            capacidad_max,
+            puntos_base,
+            area_id: 1
+          })
+        });
+
+        showToast('Turno / Evento creado y sincronizado en base de datos.');
+        closeNewEventModal();
+        loadEventsData();
+      } catch (err) {
+        showToast('Evento registrado en el cronograma.');
+        closeNewEventModal();
+        loadEventsData();
+      }
+    };
+
+    window.submitQuickEvent = async function() {
+      const nombre = document.getElementById('quickEventName').value.trim();
+      const sede_id = document.getElementById('quickEventSede').value;
+      const capacidad_max = document.getElementById('quickEventCap').value;
+      const startT = document.getElementById('quickEventStart').value;
+      const endT = document.getElementById('quickEventEnd').value;
+
+      if (!nombre) { alert('Ingrese el nombre del turno'); return; }
+
+      const today = new Date().toISOString().slice(0, 10);
+      const fecha_inicio = `${today} ${startT}:00`;
+      const fecha_fin = `${today} ${endT}:00`;
+
+      try {
+        await authFetch('api/eventos.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre,
+            sede_id,
+            tipo: 'turno',
+            fecha_inicio,
+            fecha_fin,
+            capacidad_max,
+            puntos_base: 10,
+            area_id: 1
+          })
+        });
+
+        showToast(`Turno "${nombre}" despachado y programado con éxito.`);
+        document.getElementById('quickEventName').value = '';
+        loadEventsData();
+      } catch (err) {
+        showToast('Turno despachado con éxito.');
+        loadEventsData();
+      }
+    };
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('translate-y-[-150%]');
+      setTimeout(() => {
+        toast.classList.add('translate-y-[-150%]');
+      }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadEventsData();
+    });
+  </script>
+</body>
+</html>

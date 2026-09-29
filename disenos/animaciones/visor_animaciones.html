@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visor de Animaciones - Erestor UI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="animaciones.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #dfe2f1; }
+    .bg-tech-grid {
+      background-image: linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+  </style>
+</head>
+<body class="bg-[#0b0f19] bg-tech-grid min-h-screen p-6 md:p-12">
+  <div class="max-w-6xl mx-auto space-y-8">
+    <header class="border-b border-[#262a35] pb-6 flex items-center justify-between">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[#4cd7f6] text-3xl">motion_mode</span>
+          <h1 class="text-3xl font-extrabold text-[#4cd7f6] font-['Plus_Jakarta_Sans']">Erestor - Laboratorio de Animaciones</h1>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">Efectos cinéticos, microinteracciones y escaneo láser extraídos del diseño oficial</p>
+      </div>
+      <a href="../index.html" class="px-4 py-2 rounded-xl bg-[#1c1f2a] border border-[#3d494c] hover:border-[#4cd7f6] text-xs font-semibold text-slate-300 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        Volver a Galería de Pantallas
+      </a>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- 1. Laser Sweep -->
+      <div class="p-6 rounded-2xl bg-[#1c1f2a]/80 border border-[#3d494c]/60 backdrop-blur-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-base">1. Escáner Láser Biométrico</h3>
+          <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">laserSweep</span>
+        </div>
+        <p class="text-xs text-slate-400">Haz láser cian de escaneo continuo con retículo de enfoque.</p>
+        
+        <div class="relative w-full h-48 rounded-xl bg-[#0a0e18] border border-cyan-500/30 overflow-hidden flex items-center justify-center scanner-glow">
+          <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#22d3ee] animate-laser"></div>
+          <span class="material-symbols-outlined text-5xl text-cyan-500/20">face</span>
+          
+          <!-- Reticle brackets -->
+          <div class="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
+          <div class="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
+          <div class="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
+          <div class="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
+        </div>
+      </div>
+
+      <!-- 2. Ambient Pulse Aura -->
+      <div class="p-6 rounded-2xl bg-[#1c1f2a]/80 border border-[#3d494c]/60 backdrop-blur-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-base">2. Aura Pulsante Sensor</h3>
+          <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">cyanAura</span>
+        </div>
+        <p class="text-xs text-slate-400">Brillo de respiración constante que denota sensor listo para lectura.</p>
+        
+        <div class="w-full h-48 rounded-xl bg-[#171b26] flex items-center justify-center">
+          <div class="w-24 h-24 rounded-2xl bg-cyan-500/10 border-2 border-cyan-400 flex items-center justify-center scanner-glow">
+            <span class="material-symbols-outlined text-4xl text-cyan-400">nfc</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Radar Telemetry Ping -->
+      <div class="p-6 rounded-2xl bg-[#1c1f2a]/80 border border-[#3d494c]/60 backdrop-blur-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-base">3. Pulso Radar / GPS</h3>
+          <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">pingRadar</span>
+        </div>
+        <p class="text-xs text-slate-400">Ondas esféricas que indican emisión de telemetría y socket activo.</p>
+        
+        <div class="w-full h-48 rounded-xl bg-[#171b26] flex flex-col items-center justify-center gap-3">
+          <div class="relative flex h-8 w-8 items-center justify-center">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 shadow-[0_0_12px_#10b981]"></span>
+          </div>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">En Línea • Socket OK</span>
+        </div>
+      </div>
+
+      <!-- 4. Success Burst -->
+      <div class="p-6 rounded-2xl bg-[#1c1f2a]/80 border border-[#3d494c]/60 backdrop-blur-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-base">4. Confirmación Éxito</h3>
+          <span class="text-xs px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">successBurst</span>
+        </div>
+        <p class="text-xs text-slate-400">Efecto expansivo al validar asistencia de voluntario.</p>
+        
+        <div class="w-full h-48 rounded-xl bg-[#171b26] flex items-center justify-center">
+          <div class="animate-success-burst px-6 py-4 rounded-2xl bg-emerald-950/70 border border-emerald-400 flex items-center gap-3 text-emerald-300">
+            <span class="material-symbols-outlined text-3xl text-emerald-400">verified</span>
+            <div>
+              <div class="text-sm font-bold text-white">¡Asistencia Validada!</div>
+              <div class="text-xs text-emerald-400/80">09:14:02 AM • 10 Puntos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Strobe Alert -->
+      <div class="p-6 rounded-2xl bg-[#1c1f2a]/80 border border-[#3d494c]/60 backdrop-blur-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-base">5. Estrobo Alerta Conflicto</h3>
+          <span class="text-xs px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-800">alertStrobe</span>
+        </div>
+        <p class="text-xs text-slate-400">Borde intermitente de alta prioridad ante conflictos o tardanzas graves.</p>
+        
+        <div class="w-full h-48 rounded-xl bg-[#171b26] flex items-center justify-center p-4">
+          <div class="animate-alert-strobe w-full p-4 rounded-xl bg-red-950/40 border border-red-500/40 flex items-center gap-3 text-red-200">
+            <span class="material-symbols-outlined text-2xl text-red-400">warning</span>
+            <div class="text-xs">
+              <span class="font-bold block text-red-300">Conflicto de Horario</span>
+              Asignado en Auditorio B a la misma hora
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Interactive Glass Lift -->
+      <div class="p-6 rounded-2xl bg-[#1c1f2a]/80 border border-[#3d494c]/60 backdrop-blur-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-white text-base">6. Microelevación Háptica</h3>
+          <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300">glass-interactive</span>
+        </div>
+        <p class="text-xs text-slate-400">Pasa el ratón sobre la tarjeta para apreciar el lift y glow en cian.</p>
+        
+        <div class="w-full h-48 rounded-xl bg-[#171b26] flex items-center justify-center p-4">
+          <div class="glass-interactive cursor-pointer w-full p-4 rounded-xl bg-[#1c1f2a] border border-[#3d494c] flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center font-bold text-cyan-300 text-xs">CR</div>
+              <div>
+                <div class="text-xs font-bold text-white">Carlos Rodriguez</div>
+                <div class="text-[11px] text-slate-400">Coordinador de Protocolo</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-slate-500 text-sm">drag_indicator</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

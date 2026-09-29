@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html class="dark" lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Erestor - Centro de Control y Auditoría de Asistencia</title>
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet">
+  <!-- SheetJS & jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="../../shared/assets/css/styles.css">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#0f131d",
+            "outline": "#869397",
+            "tertiary-fixed": "#a2eeff",
+            "on-tertiary-fixed-variant": "#004e5a",
+            "on-error-container": "#ffdad6",
+            "on-surface-variant": "#bcc9cd",
+            "surface": "#0f131d",
+            "on-primary-fixed-variant": "#004e5c",
+            "secondary-container": "#00a572",
+            "on-primary": "#003640",
+            "on-tertiary-fixed": "#001f25",
+            "surface-container": "#1c1f2a",
+            "on-secondary-fixed": "#002113",
+            "secondary-fixed-dim": "#4edea3",
+            "surface-container-high": "#262a35",
+            "surface-container-low": "#171b26",
+            "tertiary": "#2fd9f4",
+            "tertiary-container": "#00b7cf",
+            "on-secondary-fixed-variant": "#005236",
+            "on-secondary": "#003824",
+            "primary": "#4cd7f6",
+            "on-tertiary-container": "#00434d",
+            "secondary-fixed": "#6ffbbe",
+            "on-primary-fixed": "#001f26",
+            "surface-container-highest": "#313540",
+            "error-container": "#93000a",
+            "background": "#0f131d",
+            "surface-variant": "#313540",
+            "on-error": "#690005",
+            "error": "#ffb4ab",
+            "primary-container": "#06b6d4",
+            "surface-tint": "#4cd7f6",
+            "secondary": "#4edea3",
+            "on-secondary-container": "#00311f",
+            "on-background": "#dfe2f1",
+            "outline-variant": "#3d494c",
+            "primary-fixed-dim": "#4cd7f6",
+            "tertiary-fixed-dim": "#2fd9f4",
+            "surface-bright": "#353944",
+            "inverse-primary": "#00687a",
+            "on-primary-container": "#00424f",
+            "on-surface": "#dfe2f1",
+            "inverse-surface": "#dfe2f1",
+            "on-tertiary": "#00363e",
+            "inverse-on-surface": "#2c303b",
+            "primary-fixed": "#acedff",
+            "surface-container-lowest": "#0a0e18"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.5rem",
+            "md": "0.75rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "sm": "0.25rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "margin-tablet": "2rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "margin-kiosk": "3.5rem",
+            "gutter-kiosk": "2.5rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "title-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined[data-weight="fill"] {
+      font-variation-settings: 'FILL' 1;
+    }
+    @keyframes laserSweep {
+      0% { top: 0%; opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { top: 96%; opacity: 0.8; }
+    }
+    .laser-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #2fd9f4;
+      box-shadow: 0 0 12px #2fd9f4, 0 0 24px #06b6d4;
+      animation: laserSweep 2.8s ease-in-out infinite alternate;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+
+  <!-- ================= 1. SIDEBAR LATERAL (260px) ================= -->
+  <aside class="w-[260px] h-screen bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between fixed top-0 left-0 z-40 select-none">
+    <div class="flex flex-col">
+      <!-- App Header / Logo -->
+      <div class="px-4 py-4 flex items-center gap-3 border-b border-outline-variant/30 bg-[#0b101b]">
+        <a href="../dashboard/index.html" class="w-10 h-10 rounded-full bg-[#121d2a] border border-[#22d3ee]/50 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.25)] shrink-0" title="Dashboard">
+          <span class="material-symbols-outlined text-[#22d3ee] text-[22px]">sensors</span>
+        </a>
+        <div class="flex flex-col leading-tight">
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-white text-[16px] tracking-tight">Erestor</span>
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+          </div>
+          <span class="text-[12px] font-bold tracking-wider text-[#22d3ee] uppercase">KIOSK SENTINEL</span>
+          <span class="text-[11px] font-mono font-medium text-[#22d3ee]/80">V2.4</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-space-sm space-y-1.5 overflow-y-auto">
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../dashboard/index.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="dashboard">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-[#14232c] text-white border border-[#22d3ee]/60 shadow-[0_0_20px_rgba(34,211,238,0.18)] font-semibold text-sm" href="admin_asistencia.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#22d3ee] text-[20px]" data-icon="fact_check" data-weight="fill">fact_check</span>
+            <span class="text-white">Control Asistencia</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold tracking-wider uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+            EN VIVO
+          </span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="kiosco.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="sensors">sensors</span>
+          <span>Kiosco Biométrico</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="../events/asignaciones.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="drag_indicator">drag_indicator</span>
+          <span>Asignación Drag&amp;Drop</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="../events/resolucion_ia.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="psychology">psychology</span>
+          <span>Resolución con IA</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="../users/usuarios.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+          <span>Personal &amp; Voluntarios</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="../networks/redes.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="hub">hub</span>
+          <span>Redes &amp; Sedes</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="../events/eventos.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+          <span>Turnos &amp; Eventos</span>
+        </a>
+        <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="../reports/reportes.html">
+          <span class="material-symbols-outlined text-[20px]" data-icon="bar_chart">bar_chart</span>
+          <span>Reportes</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom System Telemetry & Logout -->
+    <div class="p-space-sm border-t border-outline-variant/20 bg-surface-container-lowest/80 flex flex-col gap-3">
+      <div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            Servidor Central
+          </span>
+          <span class="font-label-sm text-label-sm text-secondary font-bold">Óptimo</span>
+        </div>
+        <div class="space-y-1">
+          <div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+            <span>Storage NVMe</span>
+            <span class="font-semibold text-on-surface">84%</span>
+          </div>
+          <div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+            <div class="h-full bg-primary rounded-full w-[84%]"></div>
+          </div>
+        </div>
+      </div>
+      <button onclick="logout()" class="flex items-center gap-2 px-3 py-2 text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-lg transition-all font-label-md text-label-md w-full text-left">
+        <span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <div class="ml-[260px] mr-[420px] flex-1 min-h-screen flex flex-col bg-background cyber-grid relative">
+    
+    <!-- 2.1 HEADER SUPERIOR FIJO -->
+    <header class="sticky top-0 z-30 h-16 bg-surface-container-low/85 backdrop-blur-md border-b border-outline-variant/30 px-space-lg flex items-center justify-between gap-4">
+      <!-- Buscador Global -->
+      <div class="relative w-80">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" data-icon="search">search</span>
+        <input id="searchInput" class="w-full h-10 pl-9 pr-14 bg-surface-container-lowest border border-outline-variant/40 rounded-lg text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Buscar por DNI o nombre..." type="text">
+        <kbd class="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-surface-container-high border border-outline-variant/40 rounded font-label-sm text-label-sm text-on-surface-variant">Ctrl+K</kbd>
+      </div>
+
+      <!-- Center Telemetry & Filters -->
+      <div class="flex items-center gap-3">
+        <select id="eventFilter" class="px-3 py-2 bg-surface-container rounded-lg border border-outline-variant/30 text-on-surface font-label-md text-label-md cursor-pointer outline-none focus:border-primary">
+          <option value="all">Todos los Eventos</option>
+        </select>
+
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-secondary/30 shadow-[0_0_12px_rgba(78,222,163,0.12)]">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+          </span>
+          <span class="font-label-sm text-label-sm text-secondary font-semibold tracking-wide">Socket.IO Conectado · 0ms</span>
+        </div>
+      </div>
+
+      <!-- Right Fast Actions -->
+      <div class="flex items-center gap-2">
+        <button onclick="exportToExcel()" class="h-9 px-3 bg-surface-container-high/40 hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/50 text-on-surface rounded-lg font-label-md text-label-md flex items-center gap-1.5 transition-all">
+          <span class="material-symbols-outlined text-secondary text-[16px]" data-icon="table_view">table_view</span>
+          <span>Excel</span>
+        </button>
+        <button onclick="loadAttendance()" class="h-9 px-3 bg-primary-container hover:bg-primary text-on-primary-container rounded-lg font-label-md text-label-md font-bold flex items-center gap-1.5 shadow-[0_0_16px_rgba(6,182,212,0.35)] transition-all">
+          <span class="material-symbols-outlined text-[16px]" data-icon="sync">sync</span>
+          <span>Recargar</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2.2 CUERPO DE CONTENIDO -->
+    <main class="p-space-lg flex flex-col gap-6">
+      
+      <!-- Breadcrumbs & Status Bar -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+          <span>Operaciones</span>
+          <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+          <span>Centro de Control</span>
+          <span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+          <span class="text-primary font-semibold">Auditoría en Tiempo Real</span>
+        </div>
+        <div class="flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant">
+          <span class="material-symbols-outlined text-secondary text-[14px]" data-icon="sync">sync</span>
+          <span>Sincronización en vivo</span>
+        </div>
+      </div>
+
+      <!-- 2.3 BENTO GRID DE KPIs EJECUTIVOS -->
+      <section class="grid grid-cols-4 gap-4">
+        <!-- KPI 1 -->
+        <div class="p-4 rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden group hover:border-primary/40 transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-label-md text-label-md text-on-surface-variant font-medium">Asistencias Hoy</span>
+            <span class="p-1.5 rounded-lg bg-surface-container-high text-primary">
+              <span class="material-symbols-outlined text-[18px]" data-icon="how_to_reg">how_to_reg</span>
+            </span>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-baseline gap-2">
+                <span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight" id="kpi-total">0</span>
+                <span class="font-title-md text-title-md text-on-surface-variant">/ 310</span>
+              </div>
+              <div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-secondary">
+                <span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                <span>En tiempo real</span>
+              </div>
+            </div>
+            <div class="relative w-12 h-12 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                <path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+                <path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="91.6, 100" stroke-linecap="round" stroke-width="3.5"></path>
+              </svg>
+              <span class="absolute font-label-sm text-[10px] font-bold text-on-surface" id="kpi-rate-circle">91%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="p-4 rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden group hover:border-secondary/40 transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-label-md text-label-md text-on-surface-variant font-medium">Marcaciones Puntuales</span>
+            <span class="p-1.5 rounded-lg bg-surface-container-high text-secondary">
+              <span class="material-symbols-outlined text-[18px]" data-icon="verified">verified</span>
+            </span>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight" id="kpi-punctual">94.3%</span>
+              <span class="font-label-md text-label-md text-secondary font-bold bg-secondary/15 px-2 py-0.5 rounded-full border border-secondary/30">ÓPTIMO</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-on-surface-variant">
+              <span class="material-symbols-outlined text-[14px] text-secondary" data-icon="check_circle">check_circle</span>
+              <span>Tolerancia protocolar: &lt;10m</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="p-4 rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden group hover:border-amber-400/40 transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-label-md text-label-md text-on-surface-variant font-medium">Tardanzas / Pendientes</span>
+            <span class="p-1.5 rounded-lg bg-surface-container-high text-amber-400">
+              <span class="material-symbols-outlined text-[18px]" data-icon="alarm">alarm</span>
+            </span>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight" id="kpi-discrepancies">0</span>
+              <span class="font-label-sm text-label-sm text-amber-300 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">AUDITORÍA</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-amber-400">
+              <span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+              <span>Requieren validación</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="p-4 rounded-xl bg-surface-container/70 border border-primary/30 backdrop-blur-xl relative overflow-hidden shadow-[0_0_24px_rgba(6,182,212,0.15)] group">
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-label-md text-label-md text-on-surface-variant font-medium">Validación Biometría &amp; GPS</span>
+            <span class="p-1.5 rounded-lg bg-surface-container-high text-primary">
+              <span class="material-symbols-outlined text-[18px]" data-icon="fingerprint">fingerprint</span>
+            </span>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-2">
+              <span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight" id="kpi-gps">+/- 3.8m</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-secondary">
+              <span class="material-symbols-outlined text-[14px]" data-icon="security">security</span>
+              <span>Geocercas Sede Central Activas</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2.4 TABLA DE CONTROL EN VIVO Y AUDITORÍA -->
+      <section class="rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-md flex flex-col overflow-hidden">
+        <div class="p-4 border-b border-outline-variant/20 flex items-center justify-between gap-4 bg-surface-container-low/40">
+          <div class="flex items-center gap-1.5 bg-surface-container-lowest p-1 rounded-lg border border-outline-variant/20">
+            <button onclick="setStatusFilter('all')" id="tab-all" class="px-3 py-1.5 rounded-md bg-surface-container text-primary font-label-md text-label-md font-semibold border border-primary/30 shadow-sm">
+              Todos
+            </button>
+            <button onclick="setStatusFilter('validado')" id="tab-valid" class="px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">
+              Validados
+            </button>
+            <button onclick="setStatusFilter('pendiente')" id="tab-pending" class="px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">
+              Pendientes
+            </button>
+            <button onclick="setStatusFilter('rechazado')" id="tab-rejected" class="px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">
+              Rechazados
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm uppercase bg-surface-container-lowest/80">
+                <th class="py-3 px-4 font-semibold">Voluntario</th>
+                <th class="py-3 px-3 font-semibold">Puesto / Evento</th>
+                <th class="py-3 px-3 font-semibold">Hora Marcación</th>
+                <th class="py-3 px-3 font-semibold">Sede / Ubicación</th>
+                <th class="py-3 px-3 font-semibold">Certificación</th>
+                <th class="py-3 px-3 text-right font-semibold">Puntos</th>
+                <th class="py-3 px-4 text-center font-semibold">Auditar</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceTableBody" class="divide-y divide-outline-variant/20 font-body-sm text-body-sm">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-on-surface-variant font-mono">
+                  Sincronizando nómina y registros en tiempo real...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ================= 3. DRAWER LATERAL DERECHO (420px) ================= -->
+  <aside id="audit-drawer" class="w-[420px] h-screen bg-surface-container-low border-l border-outline-variant/30 fixed top-0 right-0 z-40 flex flex-col justify-between shadow-2xl backdrop-blur-2xl">
+    <!-- Header del Drawer -->
+    <div class="p-4 border-b border-outline-variant/25 bg-surface-container-lowest/80 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-[22px]" data-icon="policy">policy</span>
+        <div>
+          <h2 class="font-headline-md text-title-md font-bold text-on-surface leading-tight">Auditoría Forense</h2>
+          <span class="font-label-sm text-label-sm text-primary font-mono font-semibold" id="drawer-record-id">#TX-ASIST</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido Scrolleable -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+      <!-- Ficha de Identidad -->
+      <div class="p-3 rounded-xl bg-surface-container/70 border border-outline-variant/30 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-primary-container/20 border border-primary/50 flex items-center justify-center font-headline-md text-title-lg font-bold text-primary font-mono" id="drawer-avatar-initials">
+          VR
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <span class="font-headline-md text-title-md font-bold text-on-surface truncate" id="drawer-user-name">Voluntario</span>
+            <span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 font-label-sm text-[10px] font-bold" id="drawer-status-pill">Validado</span>
+          </div>
+          <p class="font-body-sm text-body-sm text-on-surface-variant truncate" id="drawer-event-role">Protocolo · Sede Central</p>
+          <div class="font-label-sm text-label-sm text-primary font-mono mt-0.5" id="drawer-dni">DNI --</div>
+        </div>
+      </div>
+
+      <!-- Evidencia Fotográfica y Láser HUD -->
+      <div class="rounded-xl bg-surface-container-lowest border border-primary/30 overflow-hidden relative shadow-[0_0_24px_rgba(6,182,212,0.12)]">
+        <div class="px-3 py-2 bg-surface-container-high/40 border-b border-outline-variant/20 flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-primary text-[16px]" data-icon="face">face</span>
+            <span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-on-surface">Captura Biometría</span>
+          </div>
+          <span class="font-label-sm text-label-sm font-mono text-secondary font-bold">99.8% Liveness Match</span>
+        </div>
+        <!-- Frame Láser -->
+        <div class="relative w-full h-48 bg-surface-container-lowest flex items-center justify-center overflow-hidden">
+          <div class="w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-bold text-3xl font-mono" id="drawer-laser-avatar">
+            VR
+          </div>
+          <div class="laser-line"></div>
+        </div>
+      </div>
+
+      <!-- Métricas GPS & Telemetría -->
+      <div class="grid grid-cols-2 gap-2 font-mono text-xs">
+        <div class="p-3 rounded-lg bg-surface-container border border-outline-variant/20">
+          <span class="text-slate-500 block text-[10px]">HORA ENTRADA</span>
+          <span class="text-white font-bold" id="drawer-time">--:--:--</span>
+        </div>
+        <div class="p-3 rounded-lg bg-surface-container border border-outline-variant/20">
+          <span class="text-slate-500 block text-[10px]">PRECISIÓN GPS</span>
+          <span class="text-secondary font-bold" id="drawer-gps">+/- 3.2m</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones Forenses -->
+    <div class="p-4 border-t border-outline-variant/20 bg-surface-container-lowest/90 flex flex-col gap-2">
+      <button id="drawer-btn-approve" class="w-full py-2.5 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-[0_0_16px_rgba(78,222,163,0.3)] hover:brightness-110 active:scale-[0.98] transition-all">
+        Aprobar y Certificar Registro
+      </button>
+      <button id="drawer-btn-reject" class="w-full py-2.5 rounded-lg bg-error/15 hover:bg-error/25 text-error border border-error/30 font-label-md text-label-md font-semibold transition-all">
+        Rechazar Marcación
+      </button>
+    </div>
+  </aside>
+
+  <script src="../../shared/assets/js/theme_switcher.js"></script>
+  <script>
+    let allAttendance = [];
+    let activeRecord = null;
+    let currentStatusFilter = 'all';
+
+    async function loadAttendance() {
+      try {
+        const res = await fetch('api/admin_list.php');
+        const data = await res.json();
+        allAttendance = data.data || [];
+
+        if (data.kpi) {
+          document.getElementById('kpi-total').innerText = data.kpi.total_hoy || allAttendance.length;
+          document.getElementById('kpi-punctual').innerText = (data.kpi.tasa_asistencia || 94.3) + '%';
+          document.getElementById('kpi-rate-circle').innerText = (data.kpi.tasa_asistencia || 91) + '%';
+          document.getElementById('kpi-gps').innerText = '+/- ' + (data.kpi.precision_promedio || 3.8) + 'm';
+          document.getElementById('kpi-discrepancies').innerText = data.kpi.discrepancias_activas || 0;
+        }
+
+        populateFilters();
+        renderTable();
+
+        if (allAttendance.length > 0 && !activeRecord) {
+          selectRecordForDrawer(allAttendance[0]);
+        }
+      } catch (err) {
+        console.warn('API error:', err);
+      }
+    }
+
+    function populateFilters() {
+      const sel = document.getElementById('eventFilter');
+      const events = [...new Set(allAttendance.map(a => a.evento_nombre).filter(Boolean))];
+      sel.innerHTML = '<option value="all">Todos los Eventos</option>';
+      events.forEach(ev => {
+        const opt = document.createElement('option');
+        opt.value = ev;
+        opt.textContent = ev;
+        sel.appendChild(opt);
+      });
+    }
+
+    function setStatusFilter(st) {
+      currentStatusFilter = st;
+      ['tab-all', 'tab-valid', 'tab-pending', 'tab-rejected'].forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors";
+      });
+      const activeBtnId = st === 'all' ? 'tab-all' : st === 'validado' ? 'tab-valid' : st === 'pendiente' ? 'tab-pending' : 'tab-rejected';
+      document.getElementById(activeBtnId).className = "px-3 py-1.5 rounded-md bg-surface-container text-primary font-label-md text-label-md font-semibold border border-primary/30 shadow-sm";
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('attendanceTableBody');
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const evF = document.getElementById('eventFilter').value;
+
+      const filtered = allAttendance.filter(a => {
+        const matchQ = (a.usuario_nombre && a.usuario_nombre.toLowerCase().includes(q)) ||
+                       (a.dni && a.dni.toLowerCase().includes(q));
+        const matchEv = (evF === 'all' || a.evento_nombre === evF);
+        const matchSt = (currentStatusFilter === 'all' || (a.estado || 'validado') === currentStatusFilter);
+        return matchQ && matchEv && matchSt;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-on-surface-variant font-mono">No se encontraron registros.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = '';
+      filtered.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-surface-container-high/30 transition-colors cursor-pointer";
+        tr.onclick = () => selectRecordForDrawer(r);
+
+        const initials = (r.usuario_nombre || 'VR').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+        const estado = r.estado || 'validado';
+
+        tr.innerHTML = `
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant/40 flex items-center justify-center font-bold font-mono text-primary text-xs">
+                ${initials}
+              </div>
+              <div>
+                <div class="font-title-md text-title-md font-bold text-on-surface">${r.usuario_nombre}</div>
+                <div class="font-label-sm text-label-sm text-on-surface-variant font-mono">DNI: ${r.dni || '--'}</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <span class="font-semibold text-on-surface block">${r.evento_nombre || 'Servicio'}</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">${r.area_nombre || 'General'}</span>
+          </td>
+          <td class="py-3 px-3">
+            <div class="font-mono font-bold text-on-surface text-[14px]">${r.hora_marcado || r.hora_entrada || '--:--'}</div>
+            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary">
+              <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Puntual
+            </span>
+          </td>
+          <td class="py-3 px-3">
+            <span class="text-on-surface font-medium block">${r.sede_nombre || 'Sede Central'}</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant font-mono">+/- ${r.precision_gps ? Number(r.precision_gps).toFixed(1) + 'm' : '3.2m'}</span>
+          </td>
+          <td class="py-3 px-3">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-label-sm text-label-sm font-semibold">
+              <span class="material-symbols-outlined text-[14px]" data-icon="face">face</span>
+              <span>${estado.toUpperCase()}</span>
+            </span>
+          </td>
+          <td class="py-3 px-3 text-right">
+            <span class="font-mono font-bold text-secondary text-[14px]">+10 Pts</span>
+          </td>
+          <td class="py-3 px-4 text-center">
+            <button class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-primary hover:border-primary/40 font-label-md text-label-md font-medium transition-all mx-auto">
+              Auditar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function selectRecordForDrawer(r) {
+      activeRecord = r;
+      const initials = (r.usuario_nombre || 'VR').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+
+      document.getElementById('drawer-record-id').innerText = `#TX-${r.id}-ASIST`;
+      document.getElementById('drawer-avatar-initials').innerText = initials;
+      document.getElementById('drawer-laser-avatar').innerText = initials;
+      document.getElementById('drawer-user-name').innerText = r.usuario_nombre || 'Voluntario';
+      document.getElementById('drawer-dni').innerText = `DNI ${r.dni || '--'} · ID #${r.id}`;
+      document.getElementById('drawer-event-role').innerText = `${r.evento_nombre || 'Servicio'} · ${r.sede_nombre || 'Sede Central'}`;
+      document.getElementById('drawer-time').innerText = r.hora_marcado || r.hora_entrada || '--:--:--';
+      document.getElementById('drawer-gps').innerText = `+/- ${r.precision_gps ? Number(r.precision_gps).toFixed(1) + 'm' : '3.2m'}`;
+
+      const st = r.estado || 'validado';
+      const pill = document.getElementById('drawer-status-pill');
+      pill.innerText = st.toUpperCase();
+      pill.className = `px-2 py-0.5 rounded-full font-label-sm text-[10px] font-bold ${
+        st === 'validado' ? 'bg-secondary/15 text-secondary border border-secondary/30' :
+        st === 'pendiente' ? 'bg-amber-400/15 text-amber-400 border border-amber-400/30' :
+        'bg-error/15 text-error border border-error/30'
+      }`;
+
+      document.getElementById('drawer-btn-approve').onclick = () => validateRecord(r.id, 'validado');
+      document.getElementById('drawer-btn-reject').onclick = () => validateRecord(r.id, 'rechazado');
+    }
+
+    async function validateRecord(id, estado) {
+      try {
+        const res = await fetch('api/validar.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, estado })
+        });
+        const rec = allAttendance.find(a => a.id == id);
+        if (rec) {
+          rec.estado = estado;
+          selectRecordForDrawer(rec);
+        }
+        renderTable();
+      } catch (err) {
+        console.error('Error validating record:', err);
+      }
+    }
+
+    function exportToExcel() {
+      if (allAttendance.length === 0) return alert('No hay datos para exportar.');
+      const ws = XLSX.utils.json_to_sheet(allAttendance);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Auditoria");
+      XLSX.writeFile(wb, `Erestor_Auditoria_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', renderTable);
+    document.getElementById('eventFilter').addEventListener('change', renderTable);
+
+    loadAttendance();
+  </script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal & Voluntarios - Erestor Sentinel</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#0a0e17',
+            'surface-container-lowest': '#070a10',
+            'surface-container-low': '#0f1422',
+            'surface-container': '#151b2d',
+            'surface-container-high': '#1c243a',
+            'surface-container-highest': '#252f4a',
+            primary: '#4cd7f6',
+            secondary: '#4edea3',
+            'outline-variant': '#2a344d',
+            'on-surface': '#e2e8f0',
+            'on-surface-variant': '#94a3b8',
+            error: '#f87171'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0e17] text-on-surface font-body antialiased min-h-screen flex overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+
+  <!-- ================= 1. SIDEBAR LATERAL (260px) ================= -->
+  <aside class="w-[260px] h-screen bg-[#070a10] border-r border-[#2a344d]/50 flex flex-col justify-between fixed top-0 left-0 z-40 select-none">
+    <div class="flex flex-col">
+      <!-- App Header / Logo -->
+      <div class="px-5 py-4 flex items-center gap-3 border-b border-[#2a344d]/40 bg-[#0b101b]">
+        <div class="w-10 h-10 rounded-full bg-[#121d2a] border border-[#22d3ee]/50 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.25)] shrink-0">
+          <span class="material-symbols-outlined text-[#22d3ee] text-[22px]">sensors</span>
+        </div>
+        <div class="flex flex-col leading-tight">
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-white text-[16px] tracking-tight">Erestor</span>
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+          </div>
+          <span class="text-[12px] font-bold tracking-wider text-[#22d3ee] uppercase">KIOSK SENTINEL</span>
+          <span class="text-[11px] font-mono font-medium text-[#22d3ee]/80">V2.4</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1.5 overflow-y-auto">
+        <!-- 1. Dashboard -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../dashboard/index.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="dashboard">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- 2. Control Asistencia -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../attendance/admin_asistencia.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="fact_check">fact_check</span>
+            <span>Control Asistencia</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold tracking-wider uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+            EN VIVO
+          </span>
+        </a>
+
+        <!-- 3. Kiosco Biométrico -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../attendance/kiosco.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="sensors">sensors</span>
+          <span>Kiosco Biométrico</span>
+        </a>
+
+        <!-- 4. Asignación Drag&Drop -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../events/asignaciones.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="drag_indicator">drag_indicator</span>
+          <span>Asignación Drag&amp;Drop</span>
+        </a>
+
+        <!-- 5. Resolución con IA -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../events/resolucion_ia.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="psychology">psychology</span>
+          <span>Resolución con IA</span>
+        </a>
+
+        <!-- 6. Personal & Voluntarios (ACTIVE) -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-[#14232c] text-white border border-[#22d3ee]/60 shadow-[0_0_20px_rgba(34,211,238,0.18)] font-semibold text-sm" href="usuarios.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#22d3ee] text-[20px]" data-icon="group">group</span>
+            <span class="text-white">Personal &amp; Voluntarios</span>
+          </div>
+        </a>
+
+        <!-- 7. Redes & Sedes -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../networks/redes.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="hub">hub</span>
+          <span>Redes &amp; Sedes</span>
+        </a>
+
+        <!-- 8. Turnos & Eventos -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../events/eventos.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="calendar_month">calendar_month</span>
+          <span>Turnos &amp; Eventos</span>
+        </a>
+
+        <!-- 9. Reportes -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../reports/reportes.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="bar_chart">bar_chart</span>
+          <span>Reportes</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom System Telemetry & Logout -->
+    <div class="p-3 border-t border-[#2a344d]/30 bg-[#070a10]/80 flex flex-col gap-2">
+      <div class="p-2.5 rounded-xl bg-[#0f1422] border border-[#2a344d]/40 flex flex-col gap-2 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+            Directorio Activo
+          </span>
+          <span class="text-[#4edea3] font-semibold font-mono">100% Sincronizado</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between px-1 text-xs">
+        <span class="text-slate-500 font-mono">v2.4 Sentinel</span>
+        <button onclick="logout()" class="text-slate-400 hover:text-red-400 flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span class="text-[11px]">Salir</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <main class="ml-[260px] flex-1 flex flex-col min-h-screen cyber-grid pb-12">
+
+    <!-- BARRA SUPERIOR -->
+    <header class="h-20 bg-[#0a0e17]/80 backdrop-blur-md border-b border-[#2a344d]/40 px-8 flex items-center justify-between sticky top-0 z-30">
+      <div>
+        <h1 class="text-xl font-bold font-headline text-white flex items-center gap-2">
+          Personal &amp; Voluntarios
+        </h1>
+        <p class="text-xs text-slate-400">Padrón oficial de servidores, credenciales biométricas y asignaciones</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="resetModalForNew()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#4edea3] text-black font-semibold text-xs shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:brightness-110 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          <span>Nuevo Servidor / Voluntario</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- WORKSPACE BODY -->
+    <div class="p-8 space-y-6 max-w-7xl mx-auto w-full">
+
+      <!-- 4 KPI SUMMARY CARDS -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Total Registrados</span>
+            <div class="text-2xl font-bold font-headline text-white" id="count-total">0</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#4cd7f6]/10 text-[#4cd7f6] flex items-center justify-center">
+            <span class="material-symbols-outlined">group</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Voluntarios Activos</span>
+            <div class="text-2xl font-bold font-headline text-[#4edea3]" id="count-activos">0</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#4edea3]/10 text-[#4edea3] flex items-center justify-center">
+            <span class="material-symbols-outlined">verified</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Líderes &amp; Supervisores</span>
+            <div class="text-2xl font-bold font-headline text-[#a855f7]" id="count-lideres">0</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#a855f7]/10 text-[#a855f7] flex items-center justify-center">
+            <span class="material-symbols-outlined">badge</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Enrolamiento Biométrico</span>
+            <div class="text-2xl font-bold font-headline text-[#38bdf8]">98.5%</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] flex items-center justify-center">
+            <span class="material-symbols-outlined">face</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEARCH & FILTER BAR -->
+      <section class="p-4 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md flex flex-col md:flex-row gap-3 items-center justify-between">
+        <div class="relative flex-1 w-full">
+          <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[18px]">search</span>
+          <input type="text" id="searchInput" placeholder="Buscar por Nombre, DNI, Correo, Red o Rol..." 
+                 class="w-full pl-10 pr-4 py-2 rounded-xl bg-[#070a10] border border-[#2a344d]/60 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#4cd7f6] transition-colors">
+        </div>
+
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <select id="roleFilter" onchange="applyFilters()" class="px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d]/60 text-slate-300 text-xs focus:outline-none focus:border-[#4cd7f6]">
+            <option value="">Todos los Roles</option>
+            <option value="superadmin">Superadmin</option>
+            <option value="admin">Administrador</option>
+            <option value="coordinador">Coordinador</option>
+            <option value="supervisor">Supervisor</option>
+            <option value="usuario">Usuario Estándar</option>
+          </select>
+
+          <select id="statusFilter" onchange="applyFilters()" class="px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d]/60 text-slate-300 text-xs focus:outline-none focus:border-[#4cd7f6]">
+            <option value="">Todos los Estados</option>
+            <option value="1">Activos</option>
+            <option value="0">Inactivos</option>
+          </select>
+
+          <button onclick="handleSearch()" class="px-4 py-2 rounded-xl bg-[#1c243a] text-white hover:bg-[#252f4a] border border-[#2a344d]/60 text-xs font-semibold transition-all">
+            Buscar
+          </button>
+        </div>
+      </section>
+
+      <!-- DIRECTORY DATA TABLE -->
+      <section class="rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="text-[11px] text-slate-400 uppercase bg-[#070a10] border-b border-[#2a344d]/40">
+              <tr>
+                <th class="py-3.5 px-5">ID</th>
+                <th class="py-3.5 px-5">Personal &amp; Documento</th>
+                <th class="py-3.5 px-5">Contacto</th>
+                <th class="py-3.5 px-5">Rol / Área</th>
+                <th class="py-3.5 px-5">Red Ministerial</th>
+                <th class="py-3.5 px-5 text-center">Estado</th>
+                <th class="py-3.5 px-5 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody" class="divide-y divide-[#2a344d]/30 text-slate-300">
+              <tr>
+                <td colspan="7" class="py-12 text-center text-slate-500 font-mono">
+                  <span class="inline-block animate-spin mr-2">⟳</span> Cargando directorio de servidores...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="px-6 py-4 border-t border-[#2a344d]/40 flex items-center justify-between text-xs text-slate-400 bg-[#070a10]/50">
+          <span id="pageInfo">Mostrando 0 - 0 de 0 registros</span>
+          <div class="flex items-center gap-2" id="paginationControls">
+            <button id="btnPrev" onclick="changePage(-1)" class="px-3 py-1 rounded-lg bg-[#1c243a] hover:bg-[#252f4a] text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed">Anterior</button>
+            <span id="currentPageSpan" class="px-3 py-1 rounded-lg bg-[#0f1422] font-mono text-[#4cd7f6] font-bold">1</span>
+            <button id="btnNext" onclick="changePage(1)" class="px-3 py-1 rounded-lg bg-[#1c243a] hover:bg-[#252f4a] text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed">Siguiente</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= MODAL: NUEVO / EDITAR USUARIO ================= -->
+  <div id="modalUser" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+    <div class="w-full max-w-2xl bg-[#0f1422] border border-[#2a344d] rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-[#2a344d]/60 bg-[#0b101b] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#4cd7f6]" id="modalIcon">person_add</span>
+          <h3 class="text-base font-bold text-white font-headline" id="modalUserTitle">Nuevo Personal / Voluntario</h3>
+        </div>
+        <button onclick="closeUserModal()" class="w-8 h-8 rounded-lg bg-[#1c243a] text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body Form -->
+      <form id="formUser" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4">
+        <input type="hidden" id="user_id" value="">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Nombre Completo -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">Nombre Completo *</label>
+            <input type="text" id="n_name" required placeholder="Ej: David García Ruiz" 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs focus:outline-none focus:border-[#4cd7f6]">
+          </div>
+
+          <!-- DNI / Documento -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">DNI / Cédula de Identidad *</label>
+            <input type="text" id="n_dni" required placeholder="8 dígitos" 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs font-mono focus:outline-none focus:border-[#4cd7f6]">
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">Correo Electrónico *</label>
+            <input type="email" id="n_email" required placeholder="correo@ejemplo.com" 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs focus:outline-none focus:border-[#4cd7f6]">
+          </div>
+
+          <!-- Teléfono -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">Teléfono / WhatsApp</label>
+            <input type="tel" id="n_phone" placeholder="+51 987 654 321" 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs font-mono focus:outline-none focus:border-[#4cd7f6]">
+          </div>
+
+          <!-- Contraseña Provisional -->
+          <div id="pass_group">
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium" id="pass_label">Contraseña Provisional</label>
+            <input type="password" id="n_pass" placeholder="••••••••" 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs font-mono focus:outline-none focus:border-[#4cd7f6]">
+          </div>
+
+          <!-- Rol -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">Rol en el Sistema *</label>
+            <select id="n_role" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs focus:outline-none focus:border-[#4cd7f6]">
+              <option value="usuario">Usuario Estándar</option>
+              <option value="supervisor">Supervisor</option>
+              <option value="coordinador">Coordinador</option>
+              <option value="admin">Administrador</option>
+              <option value="superadmin">Superadmin</option>
+            </select>
+          </div>
+
+          <!-- Red Ministerial -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">Red Ministerial *</label>
+            <select id="n_red" required class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs focus:outline-none focus:border-[#4cd7f6]">
+              <option value="">Cargando redes...</option>
+            </select>
+          </div>
+
+          <!-- Área de Servicio -->
+          <div>
+            <label class="block text-xs text-slate-400 mb-1.5 font-medium">Área de Servicio</label>
+            <select id="n_area" class="w-full px-3.5 py-2.5 rounded-xl bg-[#070a10] border border-[#2a344d] text-white text-xs focus:outline-none focus:border-[#4cd7f6]">
+              <option value="">Sin Área</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="pt-4 border-t border-[#2a344d]/60 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeUserModal()" class="px-4 py-2 rounded-xl bg-[#1c243a] text-slate-300 hover:bg-[#252f4a] text-xs font-medium transition-colors">
+            Cancelar
+          </button>
+          <button type="submit" id="btnSaveUser" class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#4edea3] text-black font-semibold text-xs shadow-md hover:brightness-110 active:scale-95 transition-all">
+            Guardar Servidor
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CREDENCIAL / FICHA BIOMÉTRICA ================= -->
+  <div id="modalBadge" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm hidden p-4">
+    <div class="w-full max-w-sm bg-[#0f1422] border border-[#4cd7f6]/40 rounded-3xl shadow-[0_0_30px_rgba(76,215,246,0.2)] overflow-hidden text-center p-6 space-y-4">
+      <div class="flex justify-between items-center text-slate-400">
+        <span class="text-[10px] font-mono tracking-widest text-[#4cd7f6] uppercase">CREDENCIAL SENTINEL V2.4</span>
+        <button onclick="closeBadgeModal()" class="hover:text-white">&times;</button>
+      </div>
+
+      <div class="w-24 h-24 mx-auto rounded-2xl bg-gradient-to-tr from-[#06b6d4] to-[#4edea3] p-1 shadow-lg">
+        <div class="w-full h-full bg-[#070a10] rounded-xl flex items-center justify-center text-3xl font-bold font-headline text-white" id="badge-avatar">
+          --
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-base font-bold text-white font-headline" id="badge-name">Nombre</h4>
+        <p class="text-xs text-[#4cd7f6] font-mono font-semibold" id="badge-role">ROL</p>
+      </div>
+
+      <div class="p-3 bg-[#070a10] rounded-xl border border-[#2a344d]/60 text-xs text-left space-y-1.5 font-mono">
+        <div class="flex justify-between text-slate-400"><span>DNI:</span> <strong class="text-white" id="badge-dni">---</strong></div>
+        <div class="flex justify-between text-slate-400"><span>RED:</span> <strong class="text-white" id="badge-red">---</strong></div>
+        <div class="flex justify-between text-slate-400"><span>BIOMETRÍA:</span> <strong class="text-[#4edea3]">ENROLADO</strong></div>
+      </div>
+
+      <div class="py-2">
+        <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl flex items-center justify-center shadow-inner">
+          <img id="badge-qr" src="" alt="Código QR" class="w-full h-full object-contain">
+        </div>
+        <span class="text-[10px] text-slate-500 font-mono mt-1 block">Escaneo rápido en Kiosco Sentinel</span>
+      </div>
+
+      <button onclick="window.print()" class="w-full py-2 rounded-xl bg-[#1c243a] text-slate-300 hover:text-white border border-[#2a344d] text-xs font-semibold transition-all">
+        Imprimir Credencial
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CONFIRMAR ELIMINACIÓN ================= -->
+  <div id="modalConfirm" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm hidden p-4">
+    <div class="w-full max-w-sm bg-[#0f1422] border border-red-500/40 rounded-2xl shadow-[0_0_30px_rgba(239,68,68,0.2)] p-6 text-center space-y-4">
+      <div class="w-12 h-12 rounded-full bg-red-500/10 text-red-400 mx-auto flex items-center justify-center">
+        <span class="material-symbols-outlined text-[28px]">delete_forever</span>
+      </div>
+      <div>
+        <h4 class="text-base font-bold text-white">¿Eliminar Servidor?</h4>
+        <p class="text-xs text-slate-400 mt-1" id="confirmMsg">Esta acción deshabilitará el acceso y registro del voluntario.</p>
+      </div>
+      <div class="flex items-center justify-center gap-3 pt-2">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-xl bg-[#1c243a] text-slate-300 hover:bg-[#252f4a] text-xs font-medium">
+          Cancelar
+        </button>
+        <button id="btnConfirmDelete" class="px-4 py-2 rounded-xl bg-red-500/80 hover:bg-red-500 text-white text-xs font-semibold transition-colors">
+          Sí, Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMON UTILS & USERS LOGIC -->
+  <script src="../../shared/assets/js/common_ui.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+    if (!token) window.location.href = '../auth/login.html';
+
+    window.logout = function() {
+      sessionStorage.clear();
+      window.location.href = '../auth/login.html';
+    };
+
+    let currentPage = 1;
+    const limit = 10;
+    let allUsers = [];
+    let userToDeleteId = null;
+
+    // Cargar Directorio de Usuarios
+    async function fetchUsers(page = 1) {
+      currentPage = page;
+      const search = document.getElementById('searchInput').value.trim();
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="py-12 text-center text-slate-500 font-mono">
+            <span class="inline-block animate-spin mr-2">⟳</span> Sincronizando directorio...
+          </td>
+        </tr>
+      `;
+
+      try {
+        let url = `api/usuarios.php?page=${page}&limit=${limit}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+
+        const res = await authFetch(url);
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          allUsers = data.data || [];
+          renderUsersTable(allUsers);
+          updatePagination(data.total || allUsers.length, page, limit);
+          updateSummaryMetrics(data.total || allUsers.length, allUsers);
+        } else {
+          tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-400">${data.error || 'Error cargando usuarios'}</td></tr>`;
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-red-400">Error de conexión al servidor</td></tr>`;
+      }
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('usersTableBody');
+      if (!users || users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-12 text-center text-slate-500">No se encontraron registros.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => {
+        const initials = (u.name || 'US').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        const isActive = u.activo == 1;
+
+        let roleBadge = `<span class="px-2 py-0.5 rounded-full bg-slate-500/15 text-slate-400 border border-slate-500/30 text-[10px] font-mono uppercase font-semibold">${u.role}</span>`;
+        if (u.role === 'admin' || u.role === 'superadmin') {
+          roleBadge = `<span class="px-2 py-0.5 rounded-full bg-[#4cd7f6]/15 text-[#4cd7f6] border border-[#4cd7f6]/40 text-[10px] font-mono uppercase font-semibold">${u.role}</span>`;
+        } else if (u.role === 'coordinador') {
+          roleBadge = `<span class="px-2 py-0.5 rounded-full bg-[#a855f7]/15 text-[#a855f7] border border-[#a855f7]/40 text-[10px] font-mono uppercase font-semibold">Coordinador</span>`;
+        } else if (u.role === 'supervisor') {
+          roleBadge = `<span class="px-2 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/40 text-[10px] font-mono uppercase font-semibold">Supervisor</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-[#151b2d]/60 transition-colors">
+            <td class="py-3 px-5 font-mono text-slate-400 text-[11px]">#${u.id}</td>
+            <td class="py-3 px-5">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1c243a] to-[#252f4a] border border-[#2a344d] flex items-center justify-center font-bold text-xs text-white">
+                  ${initials}
+                </div>
+                <div>
+                  <div class="font-semibold text-white">${u.name}</div>
+                  <div class="text-[11px] text-slate-400 font-mono">DNI: <span class="text-[#4cd7f6] font-semibold">${u.dni || '---'}</span></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-5">
+              <div class="text-slate-300 font-medium">${u.email}</div>
+              <div class="text-[11px] text-slate-400 font-mono">${u.phone || 'Sin tel.'}</div>
+            </td>
+            <td class="py-3 px-5">
+              <div>${roleBadge}</div>
+              <div class="text-[11px] text-slate-400 mt-1">${u.area_nombre || 'Sin Área asignada'}</div>
+            </td>
+            <td class="py-3 px-5">
+              <span class="inline-flex items-center gap-1 text-slate-300 font-medium">
+                <span class="w-2 h-2 rounded-full bg-[#a855f7]"></span>
+                ${u.red_codigo ? u.red_codigo + ' - ' : ''}${u.red_nombre || 'Sin Red'}
+              </span>
+              <div class="text-[10px] text-slate-500">${u.red_lider ? 'Líder: ' + u.red_lider : ''}</div>
+            </td>
+            <td class="py-3 px-5 text-center">
+              <button onclick="toggleUserStatus(${u.id}, ${u.activo})" 
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold font-mono transition-all ${isActive ? 'bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 hover:bg-[#4edea3]/25' : 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25'}">
+                <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-[#4edea3] animate-pulse' : 'bg-red-400'}"></span>
+                ${isActive ? 'ACTIVO' : 'INACTIVO'}
+              </button>
+            </td>
+            <td class="py-3 px-5 text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <button onclick="openBadgeModal(${u.id})" title="Ver Credencial QR" class="w-8 h-8 rounded-lg bg-[#1c243a] text-[#4cd7f6] hover:bg-[#252f4a] flex items-center justify-center transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">qr_code</span>
+                </button>
+                <button onclick="openEditModal(${u.id})" title="Editar Servidor" class="w-8 h-8 rounded-lg bg-[#1c243a] text-slate-300 hover:text-white hover:bg-[#252f4a] flex items-center justify-center transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">edit</span>
+                </button>
+                <button onclick="openDeleteModal(${u.id}, '${u.name}')" title="Eliminar" class="w-8 h-8 rounded-lg bg-[#1c243a] text-slate-400 hover:text-red-400 hover:bg-[#252f4a] flex items-center justify-center transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updatePagination(total, page, limit) {
+      const totalPages = Math.ceil(total / limit) || 1;
+      document.getElementById('pageInfo').innerText = `Mostrando ${Math.min((page - 1) * limit + 1, total)} - ${Math.min(page * limit, total)} de ${total} registros`;
+      document.getElementById('currentPageSpan').innerText = `${page} / ${totalPages}`;
+      document.getElementById('btnPrev').disabled = page <= 1;
+      document.getElementById('btnNext').disabled = page >= totalPages;
+    }
+
+    function changePage(delta) {
+      fetchUsers(currentPage + delta);
+    }
+
+    function handleSearch() {
+      fetchUsers(1);
+    }
+
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleSearch();
+    });
+
+    function applyFilters() {
+      const role = document.getElementById('roleFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      let filtered = [...allUsers];
+      if (role) filtered = filtered.filter(u => u.role === role);
+      if (status !== '') filtered = filtered.filter(u => String(u.activo) === status);
+      renderUsersTable(filtered);
+    }
+
+    function updateSummaryMetrics(total, users) {
+      document.getElementById('count-total').innerText = total;
+      const activos = users.filter(u => u.activo == 1).length;
+      document.getElementById('count-activos').innerText = activos;
+      const lideres = users.filter(u => ['admin', 'superadmin', 'coordinador', 'supervisor'].includes(u.role)).length;
+      document.getElementById('count-lideres').innerText = lideres;
+    }
+
+    // Toggle Status
+    window.toggleUserStatus = async function(id, currentStatus) {
+      const newStatus = currentStatus == 1 ? 0 : 1;
+      try {
+        const res = await authFetch('api/usuarios.php', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, activo: newStatus })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          fetchUsers(currentPage);
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (e) {
+        alert('Error conectando al servidor');
+      }
+    };
+
+    // Modal Crear / Editar
+    window.resetModalForNew = function() {
+      document.getElementById('modalUserTitle').innerText = 'Nuevo Personal / Voluntario';
+      document.getElementById('modalIcon').innerText = 'person_add';
+      document.getElementById('formUser').reset();
+      document.getElementById('user_id').value = '';
+      document.getElementById('n_email').disabled = false;
+      document.getElementById('pass_label').innerText = 'Contraseña Provisional *';
+      document.getElementById('n_pass').value = '123456';
+      document.getElementById('n_pass').setAttribute('required', 'true');
+      document.getElementById('modalUser').classList.remove('hidden');
+    };
+
+    window.openEditModal = function(id) {
+      const u = allUsers.find(x => x.id == id);
+      if (!u) return;
+
+      document.getElementById('modalUserTitle').innerText = 'Editar Datos de Servidor';
+      document.getElementById('modalIcon').innerText = 'edit_note';
+      document.getElementById('user_id').value = u.id;
+      document.getElementById('n_name').value = u.name;
+      document.getElementById('n_dni').value = u.dni || '';
+      document.getElementById('n_email').value = u.email;
+      document.getElementById('n_email').disabled = true;
+      document.getElementById('n_phone').value = u.phone || '';
+      document.getElementById('pass_label').innerText = 'Cambiar Contraseña (opcional)';
+      document.getElementById('n_pass').value = '';
+      document.getElementById('n_pass').removeAttribute('required');
+      document.getElementById('n_role').value = u.role || 'usuario';
+      document.getElementById('n_red').value = u.red_id || '';
+      document.getElementById('n_area').value = u.area_id || '';
+
+      document.getElementById('modalUser').classList.remove('hidden');
+    };
+
+    window.closeUserModal = function() {
+      document.getElementById('modalUser').classList.add('hidden');
+    };
+
+    // Form Submit
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const userId = document.getElementById('user_id').value;
+      const isEdit = userId !== '';
+
+      const payload = {
+        name: document.getElementById('n_name').value,
+        dni: document.getElementById('n_dni').value,
+        phone: document.getElementById('n_phone').value,
+        role: document.getElementById('n_role').value,
+        red_id: document.getElementById('n_red').value,
+        sede_id: 1,
+        area_id: document.getElementById('n_area').value || null
+      };
+
+      if (!isEdit) {
+        payload.email = document.getElementById('n_email').value;
+        payload.password = document.getElementById('n_pass').value;
+      } else {
+        payload.id = userId;
+        const pass = document.getElementById('n_pass').value;
+        if (pass) payload.password = pass;
+      }
+
+      try {
+        const res = await authFetch('api/usuarios.php', {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          closeUserModal();
+          fetchUsers(currentPage);
+        } else {
+          alert('Error: ' + (data.error || 'Operación fallida'));
+        }
+      } catch (err) {
+        alert('Error al procesar solicitud');
+      }
+    }
+
+    // Modal Eliminar
+    window.openDeleteModal = function(id, name) {
+      userToDeleteId = id;
+      document.getElementById('confirmMsg').innerText = `¿Está seguro de eliminar a ${name}?`;
+      document.getElementById('modalConfirm').classList.remove('hidden');
+    };
+
+    window.closeConfirmModal = function() {
+      userToDeleteId = null;
+      document.getElementById('modalConfirm').classList.add('hidden');
+    };
+
+    document.getElementById('btnConfirmDelete').addEventListener('click', async () => {
+      if (!userToDeleteId) return;
+      try {
+        const res = await authFetch(`api/usuarios.php?id=${userToDeleteId}`, { method: 'DELETE' });
+        const data = await res.json();
+        closeConfirmModal();
+        if (data.status === 'success') {
+          fetchUsers(currentPage);
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (e) {
+        alert('Error al eliminar');
+      }
+    });
+
+    // Modal Credencial / QR
+    window.openBadgeModal = function(id) {
+      const u = allUsers.find(x => x.id == id);
+      if (!u) return;
+
+      document.getElementById('badge-name').innerText = u.name;
+      document.getElementById('badge-role').innerText = u.role.toUpperCase();
+      document.getElementById('badge-dni').innerText = u.dni || '---';
+      document.getElementById('badge-red').innerText = u.red_nombre || 'CENTRAL';
+      document.getElementById('badge-avatar').innerText = u.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+
+      const qrPayload = encodeURIComponent(`ERESTOR:${u.dni || u.id}:${u.name}`);
+      document.getElementById('badge-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrPayload}`;
+
+      document.getElementById('modalBadge').classList.remove('hidden');
+    };
+
+    window.closeBadgeModal = function() {
+      document.getElementById('modalBadge').classList.add('hidden');
+    };
+
+    // Cargar Selectores de Redes y Áreas
+    async function loadSelectors() {
+      try {
+        const [resRedes, resAreas] = await Promise.all([
+          authFetch('../networks/api/selectors.php'),
+          authFetch('../networks/api/areas.php')
+        ]);
+        const dataRedes = await resRedes.json();
+        const dataAreas = await resAreas.json();
+
+        const redSelect = document.getElementById('n_red');
+        if (dataRedes.status === 'success') {
+          redSelect.innerHTML = '<option value="">Seleccione Red Ministerial...</option>' + 
+            dataRedes.data.map(r => `<option value="${r.id}">${r.codigo ? r.codigo + ' - ' : ''}${r.nombre}</option>`).join('');
+        }
+
+        const areaSelect = document.getElementById('n_area');
+        if (dataAreas.status === 'success') {
+          areaSelect.innerHTML = '<option value="">Sin Área Específica</option>' + 
+            dataAreas.data.map(a => `<option value="${a.id}">${a.nombre}</option>`).join('');
+        }
+      } catch (e) {
+        console.error('Error cargando selectores', e);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchUsers(1);
+      loadSelectors();
+    });
+  </script>
+</body>
+</html>

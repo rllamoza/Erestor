@@ -1,0 +1,864 @@
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Erestor - Centro de Control y Auditoría de Asistencia en Tiempo Real</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS & Theme Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary": "#003640",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed-dim": "#4edea3",
+            "on-background": "#dfe2f1",
+            "primary-container": "#06b6d4",
+            "primary": "#4cd7f6",
+            "on-surface": "#dfe2f1",
+            "on-secondary-fixed": "#002113",
+            "tertiary-container": "#00b7cf",
+            "surface-tint": "#4cd7f6",
+            "secondary-container": "#00a572",
+            "on-secondary-container": "#00311f",
+            "on-error": "#690005",
+            "surface-bright": "#353944",
+            "primary-fixed-dim": "#4cd7f6",
+            "outline": "#869397",
+            "primary-fixed": "#acedff",
+            "on-tertiary-container": "#00434d",
+            "secondary": "#4edea3",
+            "error-container": "#93000a",
+            "secondary-fixed": "#6ffbbe",
+            "on-primary-fixed": "#001f26",
+            "surface-container-low": "#171b26",
+            "on-tertiary-fixed-variant": "#004e5a",
+            "on-primary-fixed-variant": "#004e5c",
+            "inverse-primary": "#00687a",
+            "inverse-surface": "#dfe2f1",
+            "outline-variant": "#3d494c",
+            "on-surface-variant": "#bcc9cd",
+            "surface-container-high": "#262a35",
+            "tertiary-fixed-dim": "#2fd9f4",
+            "on-secondary-fixed-variant": "#005236",
+            "inverse-on-surface": "#2c303b",
+            "tertiary": "#2fd9f4",
+            "surface-dim": "#0f131d",
+            "surface-container": "#1c1f2a",
+            "tertiary-fixed": "#a2eeff",
+            "surface-container-lowest": "#0a0e18",
+            "surface-variant": "#313540",
+            "error": "#ffb4ab",
+            "background": "#0f131d",
+            "on-secondary": "#003824",
+            "surface-container-highest": "#313540",
+            "on-tertiary-fixed": "#001f25",
+            "on-tertiary": "#00363e",
+            "on-primary-container": "#00424f",
+            "surface": "#0f131d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "margin-kiosk": "3.5rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "gutter-kiosk": "2.5rem",
+            "margin-tablet": "2rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "fontWeight": "700" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "800" }],
+            "headline-xl-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined[data-weight="fill"] {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Subtle custom telemetry laser sweep animation */
+    @keyframes laserSweep {
+      0% { top: 0%; opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { top: 96%; opacity: 0.8; }
+    }
+    .laser-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #2fd9f4;
+      box-shadow: 0 0 12px #2fd9f4, 0 0 24px #06b6d4;
+      animation: laserSweep 2.8s ease-in-out infinite alternate;
+    }
+    /* Grid background */
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- ========================================================================= -->
+<!-- 1. SIDEBAR LATERAL (260px fijo a la izquierda) -->
+<!-- ========================================================================= -->
+<aside class="w-[260px] h-screen bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between fixed top-0 left-0 z-40 select-none">
+<!-- Top Branding & Navigation -->
+<div class="flex flex-col">
+<!-- App Header / Logo -->
+<div class="h-16 px-space-md flex items-center gap-space-sm border-b border-outline-variant/20 bg-surface-container-low/50">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center border border-primary/40 shadow-[0_0_15px_rgba(76,215,246,0.18)]">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="sensors">sensors</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-md text-title-lg font-bold text-on-surface tracking-tight">Erestor</span>
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse shadow-[0_0_8px_#4edea3]"></span>
+</div>
+<span class="font-label-sm text-label-sm text-primary tracking-wider uppercase font-semibold">Kiosk Sentinel v2.4 / Ops Hub</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="p-space-sm space-y-1 overflow-y-auto">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Control Asistencia (ACTIVO) -->
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container text-primary border border-primary/30 shadow-[0_0_16px_rgba(6,182,212,0.15)] font-label-md text-label-md font-semibold" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="fact_check" data-weight="fill">fact_check</span>
+<span class="text-on-surface">Control Asistencia</span>
+</div>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-[9px] font-bold tracking-wider uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+            EN VIVO
+          </span>
+</a>
+<!-- Personal & Voluntarios -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span>Personal &amp; Voluntarios</span>
+</a>
+<!-- Redes & Sedes -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="hub">hub</span>
+<span>Redes &amp; Sedes</span>
+</a>
+<!-- Turnos & Eventos -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+<span>Turnos &amp; Eventos</span>
+</a>
+<!-- Asignación Drag&Drop -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="drag_indicator">drag_indicator</span>
+<span>Asignación Drag&amp;Drop</span>
+</a>
+<!-- Recompensas -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="military_tech">military_tech</span>
+<span>Recompensas</span>
+</a>
+<!-- Reportes -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high/40 transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bar_chart">bar_chart</span>
+<span>Reportes</span>
+</a>
+</nav>
+</div>
+<!-- Bottom System Telemetry & Logout -->
+<div class="p-space-sm border-t border-outline-variant/20 bg-surface-container-lowest/80 flex flex-col gap-3">
+<!-- Status Card -->
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+            Servidor Central
+          </span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">Óptimo</span>
+</div>
+<!-- Storage Meter -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Storage NVMe</span>
+<span class="font-semibold text-on-surface">84%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[84%]"></div>
+</div>
+</div>
+</div>
+<!-- Logout Button -->
+<button class="flex items-center gap-2 px-3 py-2 text-on-surface-variant hover:text-error hover:bg-error-container/20 rounded-lg transition-all font-label-md text-label-md w-full text-left">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+<span>Cerrar Sesión</span>
+</button>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- 2. CONTENIDO PRINCIPAL (Margen izquierdo 260px, margen derecho 420px por drawer) -->
+<!-- ========================================================================= -->
+<div class="ml-[260px] mr-[420px] flex-1 min-h-screen flex flex-col bg-background cyber-grid relative">
+<!-- 2.1 HEADER SUPERIOR FIJO (Continuo horizontal) -->
+<header class="sticky top-0 z-30 h-16 bg-surface-container-low/85 backdrop-blur-md border-b border-outline-variant/30 px-space-lg flex items-center justify-between gap-4">
+<!-- Buscador Global -->
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" data-icon="search">search</span>
+<input class="w-full h-10 pl-9 pr-14 bg-surface-container-lowest border border-outline-variant/40 rounded-lg text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Buscar voluntario por DNI, nombre o código..." type="text">
+<kbd class="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-surface-container-high border border-outline-variant/40 rounded font-label-sm text-label-sm text-on-surface-variant">Ctrl+K</kbd>
+</div>
+<!-- Center Telemetry & Filters -->
+<div class="flex items-center gap-3">
+<!-- Sede Dropdown -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-lg border border-outline-variant/30 text-on-surface font-label-md text-label-md cursor-pointer hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="apartment">apartment</span>
+<span class="font-semibold max-w-[140px] truncate">Sede Central</span>
+<span class="material-symbols-outlined text-outline text-[16px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Evento Dropdown -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container rounded-lg border border-outline-variant/30 text-on-surface font-label-md text-label-md cursor-pointer hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="church">church</span>
+<span class="font-semibold max-w-[160px] truncate">Servicio General Domingo</span>
+<span class="material-symbols-outlined text-outline text-[16px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Fecha -->
+<div class="flex items-center gap-1.5 px-2.5 py-1.5 bg-surface-container-lowest rounded-lg border border-outline-variant/20 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="today">today</span>
+<span>Hoy, 26 Oct 2025</span>
+</div>
+<!-- WebSocket Live Telemetry Pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest border border-secondary/30 shadow-[0_0_12px_rgba(78,222,163,0.12)]">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold tracking-wide">Socket.IO Conectado · 0ms</span>
+</div>
+</div>
+<!-- Right Fast Actions & Supervisor Profile -->
+<div class="flex items-center gap-3">
+<!-- Export Excel -->
+<button class="h-9 px-3 bg-surface-container-high/40 hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/50 text-on-surface rounded-lg font-label-md text-label-md flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="table_view">table_view</span>
+<span>Excel</span>
+</button>
+<!-- Official Report PDF A4 -->
+<button class="h-9 px-3.5 bg-primary-container hover:bg-primary text-on-primary-container rounded-lg font-label-md text-label-md font-bold flex items-center gap-1.5 shadow-[0_0_16px_rgba(6,182,212,0.35)] transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span>Reporte PDF A4</span>
+</button>
+<!-- Supervisor Info -->
+<div class="pl-2 border-l border-outline-variant/30 flex items-center gap-2.5">
+<div class="relative">
+<img class="w-9 h-9 rounded-full object-cover border border-primary/50" data-alt="Close-up professional studio portrait of Ing. Lucía Vargas, a high-level operations supervisor in her late 30s with hair pulled back neatly, wearing a dark technical executive uniform. Deep midnight-blue background with subtle cyan lighting rim accentuating her features. High-tech, focused, and authoritative atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKLegHA-zBZAElQRLJ0aUa4bDdB7Q0MzfBMYkBzswuhf4ekmNQLvl08i6_BYzeWUUVhQj6O2BpMH8UYccART1iXzcIBiruWLmuhkNlhOmliUVUIiMXMbMxzbha7Att2VMwkG_u3p74oU0PqbKv-F_220FIKgf7o0b1W5dzn3fDma8IgtmPPtuMq9zVoXJSYETDHCn6OdiNmNG4ywM-yXGgBGeJDoDBKN5NCOrSmtB2LQeBCCrZUs-72Oa5V5oz5VDoVFKmbhUxTPo">
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary border-2 border-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col text-left leading-tight">
+<span class="font-label-md text-label-md font-bold text-on-surface">Ing. Lucía Vargas</span>
+<span class="font-label-sm text-label-sm text-primary">Supervisora General Ops</span>
+</div>
+</div>
+</div>
+</header>
+<!-- 2.2 CUERPO DE CONTENIDO -->
+<main class="p-space-lg flex flex-col gap-6">
+<!-- Breadcrumbs & Status Bar -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span>Operaciones</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span>Centro de Control</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-semibold">Auditoría en Tiempo Real</span>
+</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary text-[14px]" data-icon="sync">sync</span>
+<span>Último sync de hardware hace <strong class="text-on-surface">3 segundos</strong></span>
+</div>
+</div>
+<!-- 2.3 BENTO GRID DE KPIs EJECUTIVOS EN TIEMPO REAL -->
+<section class="grid grid-cols-4 gap-4">
+<!-- KPI 1: Asistencias Hoy -->
+<div class="p-4 rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden group hover:border-primary/40 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Asistencias Hoy</span>
+<span class="p-1.5 rounded-lg bg-surface-container-high text-primary">
+<span class="material-symbols-outlined text-[18px]" data-icon="how_to_reg">how_to_reg</span>
+</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">284</span>
+<span class="font-title-md text-title-md text-on-surface-variant">/ 310</span>
+</div>
+<div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+<span>+18 vs domingo pasado</span>
+</div>
+</div>
+<!-- Progress Radial Widget -->
+<div class="relative w-12 h-12 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="91.6, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-label-sm text-[10px] font-bold text-on-surface">91.6%</span>
+</div>
+</div>
+</div>
+<!-- KPI 2: Marcaciones Puntuales -->
+<div class="p-4 rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden group hover:border-secondary/40 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Marcaciones Puntuales</span>
+<span class="p-1.5 rounded-lg bg-surface-container-high text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified">verified</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">268</span>
+<span class="font-label-md text-label-md text-secondary font-bold bg-secondary/15 px-2 py-0.5 rounded-full border border-secondary/30">94.3%</span>
+</div>
+<div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-secondary" data-icon="check_circle">check_circle</span>
+<span>Tolerancia protocolar: &lt;10m</span>
+</div>
+</div>
+</div>
+<!-- KPI 3: Tardanzas Registradas -->
+<div class="p-4 rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden group hover:border-amber-400/40 transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Tardanzas Registradas</span>
+<span class="p-1.5 rounded-lg bg-surface-container-high text-amber-400">
+<span class="material-symbols-outlined text-[18px]" data-icon="alarm">alarm</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">16</span>
+<span class="font-label-sm text-label-sm text-amber-300 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">5.7%</span>
+</div>
+<div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-amber-400">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span>
+<span>Promedio de exceso: +14 min</span>
+</div>
+</div>
+</div>
+<!-- KPI 4: Biometría & Geocerca -->
+<div class="p-4 rounded-xl bg-surface-container/70 border border-primary/30 backdrop-blur-xl relative overflow-hidden shadow-[0_0_24px_rgba(6,182,212,0.15)] group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Validación Biometría &amp; GPS</span>
+<span class="p-1.5 rounded-lg bg-surface-container-high text-primary">
+<span class="material-symbols-outlined text-[18px]" data-icon="fingerprint">fingerprint</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">100%</span>
+<span class="font-title-md text-title-md text-on-surface-variant">284 / 284</span>
+</div>
+<div class="flex items-center gap-1.5 mt-1 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[14px]" data-icon="security">security</span>
+<span>Foto IA + Geocerca Hardware Activa</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2.4 TABLA DE CONTROL EN VIVO Y AUDITORÍA -->
+<section class="rounded-xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-md flex flex-col overflow-hidden">
+<!-- Controles Superiores de la Tabla -->
+<div class="p-4 border-b border-outline-variant/20 flex items-center justify-between gap-4 bg-surface-container-low/40">
+<!-- Pestañas de filtrado -->
+<div class="flex items-center gap-1.5 bg-surface-container-lowest p-1 rounded-lg border border-outline-variant/20">
+<button class="px-3 py-1.5 rounded-md bg-surface-container text-primary font-label-md text-label-md font-semibold border border-primary/30 shadow-sm">
+              Todos (284)
+            </button>
+<button class="px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">
+              Puntuales (268)
+            </button>
+<button class="px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">
+              Tardanzas (16)
+            </button>
+<button class="px-3 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1">
+<span>En Revisión</span>
+<span class="px-1.5 py-0.2 bg-amber-500/20 text-amber-300 rounded-full text-[10px] font-bold">3</span>
+</button>
+</div>
+<!-- Tabla Quick-Search & Auto-Scroll Switch -->
+<div class="flex items-center gap-4">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px]" data-icon="filter_list">filter_list</span>
+<input class="w-full h-8 pl-8 pr-3 bg-surface-container-lowest border border-outline-variant/30 rounded text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:border-primary" placeholder="Filtrar por red o turno..." type="text">
+</div>
+<!-- Auto-scroll switch -->
+<label class="flex items-center gap-2 cursor-pointer font-label-sm text-label-sm text-on-surface-variant select-none">
+<span>Auto-scroll en vivo</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-8 h-4.5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-primary-container"></div>
+</div>
+</label>
+</div>
+</div>
+<!-- Tabla Estructurada -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/20 bg-surface-container-lowest/60 text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-4">Voluntario / Identidad</th>
+<th class="py-3 px-3">Turno / Servicio</th>
+<th class="py-3 px-3">Timestamp Marcación</th>
+<th class="py-3 px-3">Sede / Red</th>
+<th class="py-3 px-3">Validación Forense</th>
+<th class="py-3 px-3 text-right">Puntos</th>
+<th class="py-3 px-4 text-center">Acción</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/15 font-body-sm text-body-sm">
+<!-- FILA 1: SELECCIONADA PARA AUDITORÍA -->
+<tr class="bg-surface-container-high/60 border-l-4 border-l-primary relative transition-all">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-primary shadow-[0_0_12px_rgba(76,215,246,0.3)]" data-alt="Digital biometric portrait of Carlos Mendoza, a 24-year-old male volunteer with a warm smile, wearing a sharp navy volunteer polo shirt. Crisp cyan facial recognition bounding box overlay highlighting geometric landmark nodes on face. Dark minimalist backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2SoJv200UXgNhhYMvc1KPyF9he1HLc7aaSrhQyXLCH5bvfgM0j8A6j_F5lel-04dzSSQ-3SapLCzk4xqy463t_3me6yqSPaIG1740mIKAz7vR_jKN92dlEjCDr2eski4LNu-5NLq73COp36bEpywyatxNb4AWUrmuAW18Avwpkct8xK3qgd1Ty9s3tAn2ShSWEdkU0RY2_BKgjRldlGCJQnNesho1ShEVTd_COweRzS18WTwiqU_vF3EP6xq4gPNNLvL9C_88jjY">
+<span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-secondary border-2 border-surface-container-lowest"></span>
+</div>
+<div>
+<div class="font-headline-md text-title-md font-bold text-on-surface flex items-center gap-1.5">
+<span>Carlos Mendoza</span>
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="verified_user" data-weight="fill">verified_user</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-mono">
+                        DNI: 74829104 · <span class="text-primary font-semibold">#VOL-2025-089</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-semibold text-on-surface block">Servicio Matutino #01</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Protocolo &amp; Bienvenida</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-mono font-bold text-on-surface text-[14px]">08:45:12 AM</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Puntual (-15m)
+                  </span>
+</td>
+<td class="py-3 px-3">
+<span class="text-on-surface font-medium block">Sede Central</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Jóvenes Zona Norte</span>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="face">face</span>
+<span>Verificado Foto + GPS</span>
+</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="font-mono font-bold text-secondary text-[14px]">+150 Pts</span>
+</td>
+<td class="py-3 px-4 text-center">
+<button class="px-3 py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-bold shadow-[0_0_12px_rgba(6,182,212,0.3)] flex items-center gap-1.5 mx-auto">
+<span class="material-symbols-outlined text-[16px]" data-icon="visibility">visibility</span>
+<span>Auditar Detalle</span>
+</button>
+</td>
+</tr>
+<!-- FILA 2 -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Digital profile photograph of Valeria Quispe, a 28-year-old woman with braided hair and gentle expression, wearing an audio tech volunteer badge and charcoal lanyard. Clean dark studio background with subtle cool illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7aXwkGhaDgWP4_D_s6JhLlJOkaKre0BqZts7dYrNfOTDTNXudsSShf0i2yDLw_9NuMTMMBNzfvRpuGtjlG245eLReQ0fpG2YYU3w2H_dwLZBT7sDe_6YxrFf_tIY2GKGwv9KrTxwjjT8F2HwMbw0IqN5IxAfmCaIX3ckDbEZzxIVIrgDc8XKIvMmBJeuaFTcPuv9SWYJzigZ83nkX3DHXxdmyogzeDs5F79yL2KiePRRRMtOOdBXHRSFl-zzgP1ndnsYxb6O8aX4">
+<div>
+<div class="font-title-md text-title-md font-bold text-on-surface">Valeria Quispe</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-mono">DNI: 72194821</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-semibold text-on-surface block">Servicio Matutino #01</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Red Alabanza &amp; Coro</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-mono font-bold text-on-surface text-[14px]">08:49:05 AM</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Puntual (-11m)
+                  </span>
+</td>
+<td class="py-3 px-3">
+<span class="text-on-surface font-medium block">Sede Central</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Alabanza Principal</span>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="face">face</span>
+<span>Verificado Foto + GPS</span>
+</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="font-mono font-bold text-secondary text-[14px]">+150 Pts</span>
+</td>
+<td class="py-3 px-4 text-center">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-primary hover:border-primary/40 font-label-md text-label-md font-medium transition-all mx-auto">
+                    Auditar
+                  </button>
+</td>
+</tr>
+<!-- FILA 3: TARDANZA -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-amber-500/40" data-alt="Digital headshot of Jorge Huaman, a 35-year-old security team volunteer with short cropped hair and focused look, wearing a high-visibility security jacket. Cool dark environment with subtle amber edge light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHu2yPiMJedk2YhK23alb6s9xJVTCtob5smk7VWyMwVRR6k3C3p8aX16ccu0aWrm1nY0ZMQBbv55gqooAmA2zXh-FHT6K2odz_8QpKKk6BnLMHuykZEq6E-rPnEPU9VsLTUYwD6eZMjatNVlexrDDlu9CPdKsQy-hmTyRxdxiYu1phzlE1_KNVOPMkJi43wlrKxZQAe-XPKjTZiho051nA5EHO2pywXyzRAjkCvidj7Rx-b9D0nVZGF8w58_UezIRh0FtbntFrJpw">
+<div>
+<div class="font-title-md text-title-md font-bold text-on-surface">Jorge Huamán</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-mono">DNI: 45812903</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-semibold text-on-surface block">Servicio Matutino #01</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Seguridad y Acomodación</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-mono font-bold text-amber-300 text-[14px]">09:12:40 AM</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-400">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    Tardanza (+12 min)
+                  </span>
+</td>
+<td class="py-3 px-3">
+<span class="text-on-surface font-medium block">Sede Central</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Seguridad Perimetral</span>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="photo_camera">photo_camera</span>
+<span>Tardanza Registrada</span>
+</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="font-mono font-bold text-amber-400 text-[14px]">+50 Pts</span>
+</td>
+<td class="py-3 px-4 text-center">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-primary hover:border-primary/40 font-label-md text-label-md font-medium transition-all mx-auto">
+                    Auditar
+                  </button>
+</td>
+</tr>
+<!-- FILA 4 -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Biometric registration photo of Ana Sofia Beltran, a 22-year-old preschool volunteer with glasses and friendly demeanor, wearing a teal uniform polo shirt. Soft dark background with modern digital clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbdtcQF87bIqiozDlWgPx_R1fUgyLX-hJ5mgb_0JpmEqBqrWAvD2uK1--o4dp27HaDAfskJG6E4CrIJDweC7kEaPGSZP1WBQIsQZdRcusjo0MVgzQ_iJkzXOt_jZa2QyaKLUfLeZ5catd9xLR_1NXwzLUo4Z569UyLdPeUN8KxgYa9uZOoiAm04lARsuH0espqbh9wF9XT1KkvypjFfPm-UJukH4Jawy5G7XpVIdwRFYbnQ_yhUfcMsdPqnSPaOPRwqU3CQfnBwyU">
+<div>
+<div class="font-title-md text-title-md font-bold text-on-surface">Ana Sofía Beltrán</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-mono">DNI: 70394182</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-semibold text-on-surface block">Servicio Matutino #01</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cuna &amp; Niños (Infantil)</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-mono font-bold text-on-surface text-[14px]">08:52:19 AM</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Puntual (-8m)
+                  </span>
+</td>
+<td class="py-3 px-3">
+<span class="text-on-surface font-medium block">Sede Central</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Módulo Cuna B</span>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="face">face</span>
+<span>Verificado Foto + GPS</span>
+</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="font-mono font-bold text-secondary text-[14px]">+150 Pts</span>
+</td>
+<td class="py-3 px-4 text-center">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-primary hover:border-primary/40 font-label-md text-label-md font-medium transition-all mx-auto">
+                    Auditar
+                  </button>
+</td>
+</tr>
+<!-- FILA 5 -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/40" data-alt="Digital biometric photo of Mateo Rivas, a 26-year-old male volunteer in broadcasting with headphones resting around his neck and technical badge visible. Sharp facial clarity with clean dark background and cyan edge glow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDefaWDSb_no3qR7OPFwD2G4ZnCKfXTmX6IW-XeW4hFJEX5TP-0pHehep8qqsMpdHZm7D_nS5KWxH4XN32q9idRJve1o2-IZYp8yUix7nLiLRFFK_EX-9I9jo0CuW7E8fxOHujfQ28lfwFM0AapGdXYFkQLiAjLlEOkZWx2M4g1whAzEggNHRPAxVoATm1cL9DD5hf0p2q4sRkNz0x5UoOAGYTwa4OOu1dmXG77RfLiyWEbTXeZ9t1Sk10Jn3XMMcjulIfxRrCbJJ0">
+<div>
+<div class="font-title-md text-title-md font-bold text-on-surface">Mateo Rivas</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant font-mono">DNI: 71209348</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-semibold text-on-surface block">Servicio Matutino #01</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Medios y Transmisión TV</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-mono font-bold text-on-surface text-[14px]">08:40:02 AM</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Puntual (-20m)
+                  </span>
+</td>
+<td class="py-3 px-3">
+<span class="text-on-surface font-medium block">Sede Central</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cabina Master Streaming</span>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="face">face</span>
+<span>Verificado Foto + GPS</span>
+</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="font-mono font-bold text-secondary text-[14px]">+150 Pts</span>
+</td>
+<td class="py-3 px-4 text-center">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-primary hover:border-primary/40 font-label-md text-label-md font-medium transition-all mx-auto">
+                    Auditar
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer de la Tabla / Paginación -->
+<div class="p-3 border-t border-outline-variant/20 flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant bg-surface-container-lowest/60">
+<div>Mostrando 1 a 5 de 284 registros procesados</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-surface-container border border-outline-variant/30 text-on-surface disabled:opacity-40">Anterior</button>
+<span class="px-2 py-1 rounded bg-primary-container text-on-primary-container font-bold">1</span>
+<button class="px-2 py-1 rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:border-primary/40">2</button>
+<button class="px-2 py-1 rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:border-primary/40">3</button>
+<span>...</span>
+<button class="px-2 py-1 rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:border-primary/40">57</button>
+<button class="px-2.5 py-1 rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:border-primary/40">Siguiente</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- ========================================================================= -->
+<!-- 3. DRAWER LATERAL DERECHO DESPLEGADO (420px Fijo de Auditoría Forense) -->
+<!-- ========================================================================= -->
+<aside class="w-[420px] h-screen bg-surface-container-low border-l border-outline-variant/30 fixed top-0 right-0 z-40 flex flex-col justify-between shadow-2xl backdrop-blur-2xl">
+<!-- Header del Drawer -->
+<div class="p-4 border-b border-outline-variant/25 bg-surface-container-lowest/80 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="policy">policy</span>
+<div>
+<h2 class="font-headline-md text-title-md font-bold text-on-surface leading-tight">Auditoría Forense</h2>
+<span class="font-label-sm text-label-sm text-primary font-mono font-semibold">#TX-89210-ASIST</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg bg-surface-container-high/60 hover:bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="close">close</span>
+</button>
+</div>
+<!-- Contenido Scrolleable de Auditoría Forense -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Ficha de Identidad del Voluntario -->
+<div class="p-3 rounded-xl bg-surface-container/70 border border-outline-variant/30 flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-primary-container/20 border border-primary/50 flex items-center justify-center font-headline-md text-title-lg font-bold text-primary">
+          CM
+        </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-title-md font-bold text-on-surface truncate">Carlos Mendoza</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 font-label-sm text-[10px] font-bold">Activo</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Protocolo &amp; Bienvenida · Sede Central</p>
+<div class="font-label-sm text-label-sm text-primary font-mono mt-0.5">DNI 74829104 · ID #VOL-2025-089</div>
+</div>
+</div>
+<!-- Evidencia Fotográfica Biométrica en Vivo con Bounding Box -->
+<div class="rounded-xl bg-surface-container-lowest border border-primary/30 overflow-hidden relative shadow-[0_0_24px_rgba(6,182,212,0.12)]">
+<div class="px-3 py-2 bg-surface-container-high/40 border-b border-outline-variant/20 flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="biometrics">csv</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-on-surface">Captura Facial Hardware</span>
+</div>
+<span class="font-label-sm text-label-sm font-mono text-secondary font-bold">99.8% Liveness Match</span>
+</div>
+<!-- Frame con fotografía y HUD biométrico -->
+<div class="relative w-full h-56 bg-surface-container-lowest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="High resolution forensic kiosk snapshot of Carlos Mendoza captured at check-in terminal. Natural lighting with telemetry bounding box around face and feature vector crosshairs. Ultra clean high-tech forensic security interface aesthetic with dark tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGaEBuhYUT5Nsgi-lVuVErocxFBbrkSzDHhnPbbH-BgIG8lfiRk0ygHWnRIoMl4GvyERa9GFiaJBgLdE1Ub2CTgFOmjVG8Ru5dLcgVnExjSiKgOevKWXJhZtEn-DPW5QsQD2d8IGI-MmB8YyHVcvVzWnOq7723B1dst9sUid-OSa2r3nENuoXAB1BExieNbGlWxn_bCFMKIFCejFotM9L-9wkO1XXLDAGplBGYBMpOD_OJUc-KDly_TH5Jvu77b6nxGfJ7RN8cQtU">
+<!-- Telemetry Laser Scanline -->
+<div class="laser-line"></div>
+<!-- Bounding Box Overlay -->
+<div class="absolute w-36 h-44 border-2 border-primary/90 rounded-lg pointer-events-none shadow-[0_0_15px_rgba(76,215,246,0.4)]">
+<!-- Corner Ticks -->
+<span class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-secondary"></span>
+<span class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-secondary"></span>
+<span class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-secondary"></span>
+<span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-secondary"></span>
+<div class="absolute bottom-1 left-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded text-[9px] font-mono text-primary font-bold">
+              ID_FACE_OK: 0.998
+            </div>
+</div>
+<!-- Timestamp Badge -->
+<div class="absolute bottom-2 right-2 px-2 py-1 rounded bg-surface-container-lowest/80 backdrop-blur-md border border-outline-variant/40 text-[10px] font-mono text-on-surface">
+            26/10/2025 · 08:45:12.482
+          </div>
+</div>
+<div class="p-2.5 bg-surface-container-high/30 flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-[14px]" data-icon="check_circle">check_circle</span>
+            Sin suplantación detectada (Anti-spoofing)
+          </span>
+<span class="text-primary font-mono">TensorFlow Edge v3</span>
+</div>
+</div>
+<!-- Georreferenciación & Geocerca de Sede -->
+<div class="rounded-xl bg-surface-container/70 border border-outline-variant/30 overflow-hidden">
+<div class="px-3 py-2 bg-surface-container-high/40 border-b border-outline-variant/20 flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="location_on">location_on</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-on-surface">Validación Geocerca GPS</span>
+</div>
+<a class="font-label-sm text-label-sm text-primary hover:underline flex items-center gap-0.5" href="#">
+<span>Maps</span>
+<span class="material-symbols-outlined text-[12px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<!-- Render visual esquemático de Geocerca -->
+<div class="relative h-36 bg-surface-container-lowest flex items-center justify-center p-3 overflow-hidden">
+<!-- Radar / Geofence schematic circle -->
+<div class="absolute w-44 h-44 rounded-full border border-primary/40 bg-primary/5 flex items-center justify-center animate-pulse">
+<div class="w-28 h-28 rounded-full border border-dashed border-primary/50"></div>
+</div>
+<!-- Central Venue Marker -->
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-secondary-container/80 border-2 border-secondary flex items-center justify-center shadow-[0_0_15px_#4edea3]">
+<span class="material-symbols-outlined text-on-secondary-container text-[18px]" data-icon="person_pin_circle">person_pin_circle</span>
+</div>
+<span class="mt-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 border border-outline-variant/30 font-label-sm text-[10px] text-secondary font-bold">
+              Desvío: 3.2m (Permitido &lt;25m)
+            </span>
+</div>
+<!-- Perímetro label -->
+<span class="absolute top-2 left-2 font-mono text-[9px] text-outline">Geocerca Radio: 120m</span>
+<span class="absolute bottom-2 left-2 font-mono text-[9px] text-secondary font-semibold">Dentro del perímetro</span>
+</div>
+<div class="p-2.5 bg-surface-container-high/30 font-label-sm text-label-sm text-on-surface-variant space-y-1">
+<div class="flex justify-between">
+<span>Coordenadas:</span>
+<span class="font-mono text-on-surface">-12.08542, -77.03418</span>
+</div>
+<div class="flex justify-between">
+<span>Precisión GNSS:</span>
+<span class="font-mono text-secondary font-semibold">± 2.4 metros (14 Satélites)</span>
+</div>
+</div>
+</div>
+<!-- Metadatos de Dispositivo y Red (Forense) -->
+<div class="rounded-xl bg-surface-container/70 border border-outline-variant/30 p-3 space-y-2">
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline block">
+          Telemetría de Dispositivo &amp; Bloque
+        </span>
+<div class="grid grid-cols-2 gap-2 font-label-sm text-label-sm">
+<div class="p-2 rounded bg-surface-container-lowest border border-outline-variant/20">
+<span class="text-outline block text-[10px]">DIRECCIÓN IP</span>
+<span class="font-mono text-on-surface font-semibold">190.236.45.112</span>
+<span class="text-[10px] text-secondary block">LAN WiFi Auditorio</span>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest border border-outline-variant/20">
+<span class="text-outline block text-[10px]">HARDWARE CLIENTE</span>
+<span class="font-mono text-on-surface font-semibold truncate block">iPhone 15 Pro</span>
+<span class="text-[10px] text-on-surface-variant block">iOS / Safari 18.1</span>
+</div>
+</div>
+<!-- Hash SHA256 Inmutable -->
+<div class="p-2 rounded bg-surface-container-lowest border border-outline-variant/20 flex flex-col">
+<span class="text-outline text-[10px] uppercase font-semibold">Hash Criptográfico de Auditoría</span>
+<div class="flex items-center justify-between mt-0.5">
+<span class="font-mono text-[11px] text-primary truncate max-w-[280px]">SHA256: e8f4c93a219bc01a...b912</span>
+<span class="material-symbols-outlined text-outline hover:text-primary text-[14px] cursor-pointer" data-icon="content_copy">content_copy</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Barra de Acciones del Auditor Forense (Bottom docked) -->
+<div class="p-4 border-t border-outline-variant/30 bg-surface-container-lowest/95 flex flex-col gap-2">
+<!-- Botón Primario: Aprobar Marcación -->
+<button class="w-full h-11 bg-secondary-container hover:bg-secondary text-on-secondary-container rounded-xl font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(78,222,163,0.3)] transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified">verified</span>
+<span>Aprobar y Confirmar Marcación</span>
+</button>
+<!-- Botones Secundarios -->
+<div class="grid grid-cols-2 gap-2">
+<button class="h-9 px-2 bg-surface-container border border-amber-500/40 text-amber-300 hover:bg-amber-500/10 rounded-lg font-label-md text-label-md font-medium flex items-center justify-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="report_problem">report_problem</span>
+<span class="truncate">Marcar Incidencia</span>
+</button>
+<button class="h-9 px-2 bg-surface-container border border-outline-variant/40 text-on-surface-variant hover:text-on-surface hover:border-primary/40 rounded-lg font-label-md text-label-md font-medium flex items-center justify-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span>
+<span class="truncate">Reasignar Puntos</span>
+</button>
+</div>
+</div>
+</aside>
+</body></html>

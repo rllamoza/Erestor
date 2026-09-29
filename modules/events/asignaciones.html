@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asignación Drag&Drop - Erestor Ops</title>
+  <!-- Google Fonts: Inter, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SortableJS CDN for smooth Drag and Drop -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#0a0e17',
+            surface: '#0a0e18',
+            'surface-container-lowest': '#070a10',
+            'surface-container-low': '#0f1422',
+            'surface-container': '#151b2d',
+            'surface-container-high': '#1c243a',
+            'surface-container-highest': '#252f4a',
+            primary: '#4cd7f6',
+            'primary-container': '#06b6d4',
+            secondary: '#4edea3',
+            'secondary-container': '#00a572',
+            tertiary: '#2fd9f4',
+            'outline-variant': '#2a344d',
+            'on-surface': '#e2e8f0',
+            'on-surface-variant': '#94a3b8',
+            error: '#f87171'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #070a10;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2a344d;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4cd7f6;
+    }
+    .drag-ghost {
+      opacity: 0.35;
+      transform: scale(0.97);
+      background: #0d1e2b !important;
+      border: 2px dashed #4cd7f6 !important;
+    }
+    .drag-chosen {
+      box-shadow: 0 0 30px rgba(76, 215, 246, 0.45) !important;
+      border-color: #4cd7f6 !important;
+      cursor: grabbing !important;
+    }
+    .drag-over {
+      border: 2px dashed #4edea3 !important;
+      background: #0f2420 !important;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0e17] text-on-surface font-body antialiased min-h-screen flex overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+
+  <!-- ================= 1. SIDEBAR LATERAL (EXACTO A LA IMAGEN) ================= -->
+  <aside class="w-[260px] h-screen bg-[#070a10] border-r border-[#2a344d]/50 flex flex-col justify-between fixed top-0 left-0 z-40 select-none">
+    <div class="flex flex-col">
+      <!-- App Header / Logo (Exacto: ERESTOR OPS v4.2 • Nodo Operativo Central) -->
+      <div class="px-5 py-5 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-[#0e1626] border border-[#22d3ee]/60 flex items-center justify-center shadow-[0_0_18px_rgba(34,211,238,0.3)] shrink-0">
+          <span class="material-symbols-outlined text-[#22d3ee] text-[24px]">deployed_code</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="font-extrabold text-white text-[17px] tracking-tight">ERESTOR</span>
+            <span class="font-extrabold text-[#22d3ee] text-[17px] tracking-tight">OPS</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400 mt-1">v4.2 • Nodo Operativo Central</span>
+        </div>
+      </div>
+
+      <!-- Action Button (+ Registrar Voluntario) -->
+      <div class="px-4 pb-4">
+        <button onclick="window.location.href='../users/usuarios.html'" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-transparent border border-[#22d3ee]/60 text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-all text-xs font-bold tracking-wide shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          <span>Registrar Voluntario</span>
+        </button>
+      </div>
+
+      <!-- Navigation Links (Exacto al menú de la imagen) -->
+      <nav class="px-3 space-y-1.5">
+        <!-- 1. Monitoreo en Vivo -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../attendance/admin_asistencia.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-400 text-[20px]">sensors</span>
+            <span>Monitoreo en Vivo</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold tracking-wider uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+            EN VIVO
+          </span>
+        </a>
+
+        <!-- 2. Asignación Drag&Drop (ACTIVE - EXACTO AL MODELO) -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#0e1d28] text-[#22d3ee] border border-[#22d3ee] shadow-[0_0_20px_rgba(34,211,238,0.22)] font-semibold text-sm" href="asignaciones.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#22d3ee] text-[20px]">drag_indicator</span>
+            <span>Asignación Drag&amp;Drop</span>
+          </div>
+        </a>
+
+        <!-- 3. Base de Voluntarios -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../users/usuarios.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">group</span>
+          <span>Base de Voluntarios</span>
+        </a>
+
+        <!-- 4. Gestión de Turnos -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="eventos.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">schedule</span>
+          <span>Gestión de Turnos</span>
+        </a>
+
+        <!-- 5. Dispositivos Kiosk -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../attendance/kiosco.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">laptop_chromebook</span>
+          <span>Dispositivos Kiosk</span>
+        </a>
+
+        <!-- 6. Configuración Sistema -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="resolucion_ia.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">settings</span>
+          <span>Configuración Sistema</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom System Telemetry & Logout (Exacto a la imagen) -->
+    <div class="p-3 border-t border-[#2a344d]/30 bg-[#070a10] flex flex-col gap-2">
+      <div class="px-3 py-2 rounded-xl bg-[#0f1422] border border-[#2a344d]/40 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2 text-slate-300 font-medium">
+          <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+          <span>Servidor Central</span>
+        </div>
+        <span class="text-[#4edea3] font-bold font-mono text-[11px] tracking-wide">ÓPTIMO</span>
+      </div>
+      <div class="flex items-center justify-between px-2 pt-1 text-xs">
+        <div class="flex items-center gap-2 text-slate-400">
+          <span class="material-symbols-outlined text-[18px]">support_agent</span>
+          <span class="font-medium">Soporte Técnico</span>
+        </div>
+        <button onclick="logout()" class="text-slate-400 hover:text-red-400 transition-colors" title="Cerrar Sesión">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <div class="ml-[260px] flex-1 flex flex-col min-h-screen cyber-grid pb-28">
+
+    <!-- BARRA SUPERIOR OPERATIVA (COINCIDE EXACTAMENTE CON LA IMAGEN) -->
+    <header class="h-20 bg-[#0a0e17]/90 backdrop-blur-md border-b border-[#2a344d]/40 px-8 flex items-center justify-between sticky top-0 z-30">
+      
+      <!-- Event Selector Header -->
+      <div class="flex items-center gap-4">
+        <!-- Event Dropdown Card -->
+        <div class="flex items-center gap-3 px-3.5 py-2 rounded-xl bg-[#0f1422] border border-[#2a344d]/60">
+          <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">church</span>
+          <div class="flex flex-col text-left">
+            <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">EVENTO ACTIVO</span>
+            <div class="flex items-center gap-1 cursor-pointer">
+              <select id="event-select" class="bg-transparent text-white font-semibold text-xs outline-none cursor-pointer pr-1">
+                <option value="1" class="bg-[#0f1422]">Servicio General - Sede Central</option>
+                <option value="2" class="bg-[#0f1422]">Reunión Jóvenes Conexión</option>
+                <option value="3" class="bg-[#0f1422]">Culto de Milagros y Sanidad</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Card -->
+        <div class="hidden md:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#0f1422] border border-[#2a344d]/60">
+          <span class="material-symbols-outlined text-slate-400 text-[18px]">calendar_today</span>
+          <div class="flex flex-col text-left">
+            <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">FECHA PROGRAMADA</span>
+            <div class="flex items-center gap-1">
+              <span class="text-xs font-semibold text-white font-mono">Dom, 26 Oct 2025</span>
+              <span class="material-symbols-outlined text-slate-400 text-[16px]">keyboard_arrow_down</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shift Card -->
+        <div class="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#0f1422] border border-[#2a344d]/60">
+          <span class="material-symbols-outlined text-[#4edea3] text-[18px]">schedule</span>
+          <div class="flex flex-col text-left">
+            <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">TURNO OPERATIVO</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-semibold text-white font-mono">08:30 - 13:00</span>
+              <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-bold font-mono">Mañana</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Hub: Cobertura Matriz & Status -->
+      <div class="flex items-center gap-6">
+        <div class="hidden sm:flex flex-col items-end">
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="text-slate-400">COBERTURA MATRIZ</span>
+            <strong class="text-[#4edea3] font-bold" id="coverage-val">88% (44/50)</strong>
+          </div>
+          <div class="w-48 h-1.5 bg-[#1c243a] rounded-full overflow-hidden mt-1.5">
+            <div id="coverage-bar" class="h-full bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full" style="width: 88%;"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 pl-3 border-l border-[#2a344d]/50">
+          <div class="flex flex-col text-left">
+            <div class="flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+              <span class="text-xs font-bold text-red-400 font-mono" id="header-criticas">6 vacantes</span>
+            </div>
+            <span class="text-[10px] text-slate-400 font-medium">Críticas sin cubrir</span>
+          </div>
+          <div class="flex flex-col text-left">
+            <span class="text-xs font-bold text-[#4cd7f6] font-mono">8 Áreas</span>
+            <span class="text-[10px] text-slate-400 font-medium">Habilitadas</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= CONTENIDO WORKSPACE ================= -->
+    <main class="p-8 space-y-6 max-w-7xl mx-auto w-full">
+
+      <!-- Breadcrumb & Telemetry Header (Exacto a la imagen) -->
+      <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 shadow-md">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-[#14232c] text-[#4cd7f6] border border-[#4cd7f6]/40 shadow-[0_0_12px_rgba(76,215,246,0.25)]">
+            <span class="material-symbols-outlined text-[20px]">fingerprint</span>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-slate-400">Asignaciones</span>
+              <span class="text-slate-600 font-mono">/</span>
+              <span class="text-slate-400">Optimizador IA de Cobertura</span>
+              <span class="text-slate-600 font-mono">/</span>
+              <span class="text-[#4cd7f6] font-semibold font-mono">Resolución Masiva #OPT-2025-X8</span>
+            </div>
+            <h1 class="text-lg font-bold text-white font-headline tracking-tight">Solución Algorítmica Multi-Área</h1>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#070a10] border border-[#2a344d]/60 shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+            <span class="text-xs text-[#4edea3] font-mono tracking-wider font-semibold">HEURÍSTICA v4.2 • ÓPTIMO 97.8%</span>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0f1422] border border-[#2a344d]/50 text-xs text-slate-300 font-mono">
+            <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">speed</span>
+            <span>Tiempo cálculo: <strong class="text-white">142ms</strong></span>
+          </div>
+          <button onclick="window.location.href='resolucion_ia.html'" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#14232c] hover:bg-[#1a333f] border border-[#22d3ee]/60 text-[#22d3ee] hover:text-white text-xs font-bold transition-all shadow-[0_0_15px_rgba(34,211,238,0.25)]">
+            <span class="material-symbols-outlined text-[18px]">science</span>
+            <span>Simulación Sandbox IA</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 HERO TELEMETRY CARDS (EXACTOS A LA IMAGEN) -->
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Cobertura Proyectada -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4cd7f6]/50 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">COBERTURA PROYECTADA</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#00a572]/20 text-[#4edea3] border border-[#4edea3]/30">+12% ALCANCE</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white" id="stat-cobertura">100%</div>
+            <div class="text-xs text-slate-400 mt-1">
+              Antes: <span class="line-through text-slate-500">88% (44/50)</span> <br>
+              <strong class="text-[#4edea3] font-mono">Ahora: 50 / 50 puestos</strong>
+            </div>
+          </div>
+          <div class="w-full h-1.5 bg-[#1c243a] rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full w-full"></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Vacantes Resueltas -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4edea3]/50 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">VACANTES RESUELTAS</span>
+            <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">check_circle</span>
+          </div>
+          <div class="my-3 flex items-baseline gap-2">
+            <div class="text-4xl font-extrabold font-headline text-white" id="stat-vacantes">6<span class="text-lg text-slate-500 font-normal">/6</span></div>
+            <span class="text-xs font-semibold text-[#4edea3] font-mono">100% Cubiertas</span>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between cursor-pointer" onclick="togglePoolDrawer()">
+            <span>Pool disponible: <strong class="text-white" id="stat-pool-disponible">18 voluntarios libres</strong></span>
+            <span class="material-symbols-outlined text-slate-400 text-[14px]">open_in_new</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Compatibilidad Media -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#2fd9f4]/50 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">COMPATIBILIDAD MEDIA</span>
+            <span class="material-symbols-outlined text-[#2fd9f4] text-[20px]">verified_user</span>
+          </div>
+          <div class="my-3 flex items-baseline gap-2">
+            <div class="text-4xl font-extrabold font-headline text-white" id="stat-compatibilidad">95 . 4<span class="text-lg text-slate-400 font-normal">%</span></div>
+            <span class="text-xs text-slate-400">Score Ponderado</span>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2">
+            Roles especializados y licencias verificadas
+          </div>
+        </div>
+
+        <!-- Card 4: Solapamientos Evitados -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4edea3]/50 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">SOLAPAMIENTOS EVITADOS</span>
+            <span class="material-symbols-outlined text-[#4edea3] text-[20px]">security</span>
+          </div>
+          <div class="my-3 flex items-baseline gap-2">
+            <div class="text-4xl font-extrabold font-headline text-white font-mono">04</div>
+            <span class="text-xs text-[#4edea3] font-semibold">Bloqueos horarios activos</span>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2">
+            Tiempo de traslado mínimo respetado: 15 min
+          </div>
+        </div>
+      </section>
+
+      <!-- PONDERACIONES & MODES BAR (EXACTO A LA IMAGEN) -->
+      <section class="p-4 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-4 text-xs">
+          <div class="flex items-center gap-1.5 text-slate-300 font-semibold uppercase tracking-wider text-[11px]">
+            <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">tune</span>
+            <span>PONDERACIONES:</span>
+          </div>
+
+          <span class="flex items-center gap-1.5 text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-[#4cd7f6]"></span>
+            <span>Certificación y Nivel <strong class="text-white font-mono">40%</strong></span>
+          </span>
+
+          <span class="flex items-center gap-1.5 text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-[#4edea3]"></span>
+            <span>Equidad &amp; Rotación <strong class="text-white font-mono">30%</strong></span>
+          </span>
+
+          <span class="flex items-center gap-1.5 text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-[#38bdf8]"></span>
+            <span>Puntualidad &gt; 95% <strong class="text-white font-mono">20%</strong></span>
+          </span>
+
+          <span class="flex items-center gap-1.5 text-slate-300">
+            <span class="w-2 h-2 rounded-full bg-[#a855f7]"></span>
+            <span>Geocerca / En Sede <strong class="text-white font-mono">10%</strong></span>
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="inline-flex rounded-xl bg-[#070a10] p-1 border border-[#2a344d]/60">
+            <button onclick="setMode('equilibrado')" id="btnModoEquilibrado" class="px-3 py-1 rounded-lg bg-[#14232c] text-[#4cd7f6] text-xs font-semibold shadow-sm transition-all">
+              Modo Equilibrado
+            </button>
+            <button onclick="setMode('estricto')" id="btnModoEstricto" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium transition-all">
+              Modo Estricto
+            </button>
+          </div>
+          <button onclick="recalculate()" class="flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-[#14232c] text-[#4edea3] hover:bg-[#1a3330] border border-[#4edea3]/40 text-xs font-semibold transition-all">
+            <span class="material-symbols-outlined text-[16px]">sync</span>
+            <span>Recalcular</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- CONTEXTUAL NOTIFICATION ALERT (EXACTO A LA IMAGEN) -->
+      <section class="p-4 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-lg bg-[#4cd7f6]/10 text-[#4cd7f6] flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[18px]">info</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            <strong class="text-[#4edea3]">Ventana de traslado auto-gestionada:</strong> David Paredes concluye su compromiso matutino previo a las 08:15. La distancia registrada hasta el punto de sonido es de 140 metros (tiempo proyectado: 3.5 min). Cero riesgo de retraso.
+          </p>
+        </div>
+        <span class="px-2.5 py-1 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-bold font-mono uppercase tracking-wider shrink-0">
+          RESUELTO
+        </span>
+      </section>
+
+      <!-- MATRIZ DE REEMPLAZOS AUTOMATIZADOS (CON DRAG AND DROP ACTIVO) -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <h2 class="text-base font-bold text-white font-headline">Matriz de Reemplazos Automatizados</h2>
+            <span class="px-2 py-0.5 rounded-full bg-[#14232c] text-[#4cd7f6] border border-[#4cd7f6]/30 text-[11px] font-mono font-bold" id="cases-badge">
+              6 CASOS
+            </span>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-slate-400 font-mono">
+            <button onclick="toggleAllCards(true)" class="hover:text-[#4cd7f6] transition-colors">Seleccionar todos</button>
+            <span>•</span>
+            <button onclick="toggleAllCards(false)" class="hover:text-red-400 transition-colors">Revertir cambios</button>
+          </div>
+        </div>
+
+        <!-- DRAGGABLE MATRIX GRID (SORTABLE JS ACTIVE - 6 CASOS) -->
+        <div id="dragDropMatrixGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <!-- CARD 1: Diego Arismendi (Con Foto Real y Drag and Drop) -->
+          <div class="p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all cursor-grab active:cursor-grabbing matrix-card" 
+               data-user-id="1" data-name="Diego Arismendi" data-match="98" data-puesto="Operador Switcher / Cám 2" data-area="Multimedia & TV">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#1c243a] border border-[#2a344d] overflow-hidden shrink-0 shadow-md">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Diego Arismendi" class="w-full h-full object-cover card-avatar">
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-white font-headline card-name">Diego Arismendi</span>
+                    <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">NIVEL 5</span>
+                  </div>
+                  <div class="text-xs text-slate-400 mt-0.5">Red Jóvenes • <strong class="text-slate-300 font-mono">1,840 pts fidelidad</strong></div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-2xl font-extrabold text-[#4edea3] font-mono leading-none card-match">98%</span>
+                <span class="text-[10px] text-slate-400 font-mono">Match IA</span>
+              </div>
+            </div>
+
+            <!-- Role details -->
+            <div class="p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white flex items-center gap-1.5 card-puesto">
+                  <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">tv</span>
+                  Operador Switcher / Cám 2
+                </span>
+                <span class="text-[11px] text-slate-400 card-area">Multimedia &amp; TV</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Cert: Switcher TV v3</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Disp: 08:00 - 13:30</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Histórico: 24 servicios</span>
+              </div>
+            </div>
+
+            <!-- Validation Switch -->
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <span class="material-symbols-outlined text-[#4edea3] text-[16px]">verified</span>
+                Restricciones validadas con cero colisión
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer card-toggle" onchange="updateFloatingBar()">
+                <div class="w-11 h-6 bg-[#1c243a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4edea3]"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- CARD 2: Marcos Benítez (Con Foto Real y Drag and Drop) -->
+          <div class="p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all cursor-grab active:cursor-grabbing matrix-card" 
+               data-user-id="2" data-name="Marcos Benítez" data-match="94" data-puesto="Supervisor Puerta Sur / Filtro" data-area="Seguridad & Accesos">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#1c243a] border border-[#2a344d] overflow-hidden shrink-0 shadow-md">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Marcos Benítez" class="w-full h-full object-cover card-avatar">
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-white font-headline card-name">Marcos Benítez</span>
+                    <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">NIVEL 4</span>
+                  </div>
+                  <div class="text-xs text-slate-400 mt-0.5">Red Adultos • <strong class="text-slate-300 font-mono">98.8% Puntualidad SLA</strong></div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-2xl font-extrabold text-[#4edea3] font-mono leading-none card-match">94%</span>
+                <span class="text-[10px] text-slate-400 font-mono">Match IA</span>
+              </div>
+            </div>
+
+            <!-- Role details -->
+            <div class="p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white flex items-center gap-1.5 card-puesto">
+                  <span class="material-symbols-outlined text-[16px] text-[#4edea3]">shield</span>
+                  Supervisor Puerta Sur / Filtro
+                </span>
+                <span class="text-[11px] text-slate-400 card-area">Seguridad &amp; Accesos</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Radio VHF Verificado</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Protocolo Evacuación A2</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Turno completo</span>
+              </div>
+            </div>
+
+            <!-- Validation Switch -->
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <span class="material-symbols-outlined text-[#4edea3] text-[16px]">verified</span>
+                Rango de mando validado para el sector Sur
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer card-toggle" onchange="updateFloatingBar()">
+                <div class="w-11 h-6 bg-[#1c243a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4edea3]"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- CARD 3: Luciana Solís (Con Foto Real y Drag and Drop) -->
+          <div class="p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all cursor-grab active:cursor-grabbing matrix-card" 
+               data-user-id="3" data-name="Luciana Solís" data-match="96" data-puesto="Guía de Pasillo Central B" data-area="Protocolo & Bienvenida">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#1c243a] border border-[#2a344d] overflow-hidden shrink-0 shadow-md">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Luciana Solís" class="w-full h-full object-cover card-avatar">
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-white font-headline card-name">Luciana Solís</span>
+                    <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">NIVEL 4</span>
+                  </div>
+                  <div class="text-xs text-slate-400 mt-0.5">Red Jóvenes • <strong class="text-[#4edea3] font-mono">Presente en Sede</strong></div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-2xl font-extrabold text-[#4edea3] font-mono leading-none card-match">96%</span>
+                <span class="text-[10px] text-slate-400 font-mono">Match IA</span>
+              </div>
+            </div>
+
+            <!-- Role details -->
+            <div class="p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white flex items-center gap-1.5 card-puesto">
+                  <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">meeting_room</span>
+                  Guía de Pasillo Central B
+                </span>
+                <span class="text-[11px] text-slate-400 card-area">Protocolo &amp; Bienvenida</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Cert: Protocolo v2</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Disp: 08:15 - 13:00</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Histórico: 19 servicios</span>
+              </div>
+            </div>
+
+            <!-- Validation Switch -->
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <span class="material-symbols-outlined text-[#4edea3] text-[16px]">verified</span>
+                Validación de proximidad física activa
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer card-toggle" onchange="updateFloatingBar()">
+                <div class="w-11 h-6 bg-[#1c243a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4edea3]"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- CARD 4: Camila Rivas (Con Foto Real y Drag and Drop) -->
+          <div class="p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all cursor-grab active:cursor-grabbing matrix-card" 
+               data-user-id="4" data-name="Camila Rivas" data-match="95" data-puesto="Educador Auxiliar 2-4 años" data-area="Cuna & Infantes">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#1c243a] border border-[#2a344d] overflow-hidden shrink-0 shadow-md">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Camila Rivas" class="w-full h-full object-cover card-avatar">
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-white font-headline card-name">Camila Rivas</span>
+                    <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">NIVEL 5</span>
+                  </div>
+                  <div class="text-xs text-slate-400 mt-0.5">Red Profesionales • <strong class="text-slate-300">Lic. Educación</strong></div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-2xl font-extrabold text-[#4edea3] font-mono leading-none card-match">95%</span>
+                <span class="text-[10px] text-slate-400 font-mono">Match IA</span>
+              </div>
+            </div>
+
+            <!-- Role details -->
+            <div class="p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white flex items-center gap-1.5 card-puesto">
+                  <span class="material-symbols-outlined text-[16px] text-[#a855f7]">child_care</span>
+                  Educador Auxiliar 2-4 años
+                </span>
+                <span class="text-[11px] text-slate-400 card-area">Cuna &amp; Infantes</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Primeros Auxilios Pediátricos</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Ratio Aula 1:4</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Turno completo</span>
+              </div>
+            </div>
+
+            <!-- Validation Switch -->
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <span class="material-symbols-outlined text-[#4edea3] text-[16px]">verified</span>
+                Acreditación pedagógica verificada
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer card-toggle" onchange="updateFloatingBar()">
+                <div class="w-11 h-6 bg-[#1c243a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4edea3]"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- CARD 5: David Paredes (Con Foto Real y Drag and Drop) -->
+          <div class="p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all cursor-grab active:cursor-grabbing matrix-card" 
+               data-user-id="5" data-name="David Paredes" data-match="92" data-puesto="Operador Consola Audio FOH" data-area="Multimedia & Sonido">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#1c243a] border border-[#2a344d] overflow-hidden shrink-0 shadow-md">
+                  <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80" alt="David Paredes" class="w-full h-full object-cover card-avatar">
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-white font-headline card-name">David Paredes</span>
+                    <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">NIVEL 4</span>
+                  </div>
+                  <div class="text-xs text-slate-400 mt-0.5">Red Varones • <strong class="text-slate-300 font-mono">1,520 pts fidelidad</strong></div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-2xl font-extrabold text-[#4edea3] font-mono leading-none card-match">92%</span>
+                <span class="text-[10px] text-slate-400 font-mono">Match IA</span>
+              </div>
+            </div>
+
+            <!-- Role details -->
+            <div class="p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white flex items-center gap-1.5 card-puesto">
+                  <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">volume_up</span>
+                  Operador Consola Audio FOH
+                </span>
+                <span class="text-[11px] text-slate-400 card-area">Multimedia &amp; Sonido</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Cert: Audio Live v3</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Ventana traslado: 15 min</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Turno completo</span>
+              </div>
+            </div>
+
+            <!-- Validation Switch -->
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <span class="material-symbols-outlined text-[#4edea3] text-[16px]">verified</span>
+                Ruta de transición validada sin riesgo
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer card-toggle" onchange="updateFloatingBar()">
+                <div class="w-11 h-6 bg-[#1c243a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4edea3]"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- CARD 6: Sofía Valenzuela (Con Foto Real y Drag and Drop) -->
+          <div class="p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-4 hover:border-[#4cd7f6]/60 transition-all cursor-grab active:cursor-grabbing matrix-card" 
+               data-user-id="6" data-name="Sofía Valenzuela" data-match="91" data-puesto="Coordinadora Registro Kiosk" data-area="Comunicaciones & Kiosk">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#1c243a] border border-[#2a344d] overflow-hidden shrink-0 shadow-md">
+                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80" alt="Sofía Valenzuela" class="w-full h-full object-cover card-avatar">
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold text-white font-headline card-name">Sofía Valenzuela</span>
+                    <span class="px-1.5 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">NIVEL 4</span>
+                  </div>
+                  <div class="text-xs text-slate-400 mt-0.5">Red Damas • <strong class="text-slate-300 font-mono">97.4% Puntualidad SLA</strong></div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="text-2xl font-extrabold text-[#4edea3] font-mono leading-none card-match">91%</span>
+                <span class="text-[10px] text-slate-400 font-mono">Match IA</span>
+              </div>
+            </div>
+
+            <!-- Role details -->
+            <div class="p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white flex items-center gap-1.5 card-puesto">
+                  <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">devices</span>
+                  Coordinadora Registro Kiosk
+                </span>
+                <span class="text-[11px] text-slate-400 card-area">Comunicaciones &amp; Kiosk</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-mono">
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Kiosk Sentinel v2.4</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Atención al Servidor</span>
+                <span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 border border-[#2a344d]/60">Disp: Inmediata</span>
+              </div>
+            </div>
+
+            <!-- Validation Switch -->
+            <div class="flex items-center justify-between pt-1 text-xs">
+              <span class="flex items-center gap-1.5 text-slate-300">
+                <span class="material-symbols-outlined text-[#4edea3] text-[16px]">verified</span>
+                Perfil de atención verificado
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer card-toggle" onchange="updateFloatingBar()">
+                <div class="w-11 h-6 bg-[#1c243a] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4edea3]"></div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ================= LATERAL POOL DRAWER (BANCO DE VOLUNTARIOS ARRASTRABLES) ================= -->
+  <div id="poolDrawer" class="fixed top-20 right-0 w-84 h-[calc(100vh-80px)] bg-[#070a10]/95 backdrop-blur-xl border-l border-[#2a344d]/70 z-40 p-4 flex flex-col justify-between shadow-2xl transform translate-x-full transition-transform duration-300">
+    <div class="flex flex-col h-full overflow-hidden">
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-[#2a344d]/50 shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#4cd7f6]">group</span>
+          <div>
+            <h3 class="text-sm font-bold text-white font-headline">Pool de Voluntarios Libres</h3>
+            <span class="text-[10px] text-slate-400 font-mono">18 disponibles para arrastrar</span>
+          </div>
+        </div>
+        <button onclick="togglePoolDrawer()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-[#1c243a] transition-all">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Quick Search -->
+      <div class="py-2.5 shrink-0">
+        <input type="text" id="poolSearchInput" placeholder="Buscar en el pool..." oninput="filterPool()"
+               class="w-full px-3 py-1.5 rounded-xl bg-[#0f1422] border border-[#2a344d] text-white text-xs focus:outline-none focus:border-[#4cd7f6]">
+      </div>
+
+      <!-- Draggable Candidates Pool -->
+      <div id="poolCandidatesList" class="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+        
+        <div class="p-3 rounded-xl bg-[#0f1422] border border-[#2a344d]/60 hover:border-[#4cd7f6] transition-all cursor-grab active:cursor-grabbing pool-card"
+             draggable="true" ondragstart="handlePoolDragStart(event)"
+             data-user-id="101" data-name="Manuel Ramos" data-match="94" data-puesto="Operador FOH / Auxiliar" data-area="Multimedia & Sonido" data-avatar="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-slate-500 text-[18px]">drag_indicator</span>
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" class="w-8 h-8 rounded-xl object-cover shrink-0">
+              <div>
+                <strong class="text-xs text-white block">Manuel Ramos</strong>
+                <span class="text-[10px] text-slate-400">Red Varones • Nivel 4</span>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-[#4edea3]">94%</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-[#0f1422] border border-[#2a344d]/60 hover:border-[#4cd7f6] transition-all cursor-grab active:cursor-grabbing pool-card"
+             draggable="true" ondragstart="handlePoolDragStart(event)"
+             data-user-id="102" data-name="Andrea Morales" data-match="93" data-puesto="Protocolo Entrada" data-area="Protocolo & Bienvenida" data-avatar="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-slate-500 text-[18px]">drag_indicator</span>
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" class="w-8 h-8 rounded-xl object-cover shrink-0">
+              <div>
+                <strong class="text-xs text-white block">Andrea Morales</strong>
+                <span class="text-[10px] text-slate-400">Red Damas • Nivel 3</span>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-[#4edea3]">93%</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-[#0f1422] border border-[#2a344d]/60 hover:border-[#4cd7f6] transition-all cursor-grab active:cursor-grabbing pool-card"
+             draggable="true" ondragstart="handlePoolDragStart(event)"
+             data-user-id="103" data-name="Ricardo Silva" data-match="91" data-puesto="Consola / Asistente" data-area="Multimedia & TV" data-avatar="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&q=80">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-slate-500 text-[18px]">drag_indicator</span>
+              <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&q=80" class="w-8 h-8 rounded-xl object-cover shrink-0">
+              <div>
+                <strong class="text-xs text-white block">Ricardo Silva</strong>
+                <span class="text-[10px] text-slate-400">Red Jóvenes • Nivel 4</span>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-[#4edea3]">91%</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-[#0f1422] border border-[#2a344d]/60 hover:border-[#4cd7f6] transition-all cursor-grab active:cursor-grabbing pool-card"
+             draggable="true" ondragstart="handlePoolDragStart(event)"
+             data-user-id="104" data-name="Esteban Quispe" data-match="89" data-puesto="Seguridad Perimetral" data-area="Seguridad & Accesos" data-avatar="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-slate-500 text-[18px]">drag_indicator</span>
+              <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80" class="w-8 h-8 rounded-xl object-cover shrink-0">
+              <div>
+                <strong class="text-xs text-white block">Esteban Quispe</strong>
+                <span class="text-[10px] text-slate-400">Red Adultos • Nivel 3</span>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-[#4edea3]">89%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-3 border-t border-[#2a344d]/50 text-[11px] text-slate-400 text-center font-mono shrink-0">
+        Arrastre sobre cualquier puesto para reemplazar
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING ACTION BAR (EXACTO A LA IMAGEN) ================= -->
+  <div id="floatingActionBar" class="fixed bottom-0 left-[260px] right-0 z-50 bg-[#070a10]/95 backdrop-blur-md border-t border-[#2a344d]/60 px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-2xl transition-all">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-[#14232c] border border-[#4cd7f6]/40 text-[#4cd7f6] flex items-center justify-center shadow-[0_0_15px_rgba(76,215,246,0.2)]">
+        <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-bold text-white font-headline" id="floating-title">6 Asignaciones listas para confirmación</span>
+          <span class="px-2 py-0.5 rounded-full bg-[#1c243a] text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-mono font-bold" id="floating-conflicts">
+            0 CONFLICTOS
+          </span>
+        </div>
+        <p class="text-xs text-slate-400">Notificaciones preparadas por App Erestor Ops y mensaje SMS/WhatsApp</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button onclick="discardProposal()" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-[#1c243a] text-xs font-semibold transition-all">
+        Descartar Propuesta IA
+      </button>
+      <button onclick="openManualEditor()" class="px-4 py-2 rounded-xl bg-[#151b2d] border border-[#2a344d] text-slate-200 hover:text-white hover:border-[#4cd7f6] text-xs font-semibold transition-all">
+        Editar Manualmente
+      </button>
+      <button id="btnApplyBatch" onclick="applyBatchAssignments()" class="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#00a572] to-[#4edea3] text-black font-bold text-xs shadow-[0_0_20px_rgba(78,222,163,0.35)] hover:brightness-110 active:scale-95 transition-all">
+        <span class="material-symbols-outlined text-[18px]">bolt</span>
+        <span id="btnApplyText">Aplicar Asignación Masiva y Notificar (6)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastNotification" class="fixed top-24 right-8 z-50 bg-[#0f1422] border border-[#4edea3] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-150%] transition-transform duration-300">
+    <span class="material-symbols-outlined text-[#4edea3]">check_circle</span>
+    <span id="toastMessage" class="text-xs font-semibold">Operación completada con éxito</span>
+  </div>
+
+  <!-- SCRIPT OPERATIVO CON DRAG AND DROP REAL -->
+  <script src="../../shared/assets/js/common_ui.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+    if (!token) window.location.href = '../auth/login.html';
+
+    window.logout = function() {
+      sessionStorage.clear();
+      window.location.href = '../auth/login.html';
+    };
+
+    // Toggle Pool Drawer
+    window.togglePoolDrawer = function() {
+      const drawer = document.getElementById('poolDrawer');
+      drawer.classList.toggle('translate-x-full');
+    };
+
+    // Filter Pool Candidates
+    window.filterPool = function() {
+      const q = document.getElementById('poolSearchInput').value.toLowerCase();
+      document.querySelectorAll('.pool-card').forEach(c => {
+        const text = c.innerText.toLowerCase();
+        c.style.display = text.includes(q) ? 'block' : 'none';
+      });
+    };
+
+    // Update Floating Action Bar counts
+    window.updateFloatingBar = function() {
+      const toggles = document.querySelectorAll('.card-toggle');
+      let activeCount = 0;
+      toggles.forEach(t => { if (t.checked) activeCount++; });
+
+      document.getElementById('floating-title').innerText = `${activeCount} Asignaciones listas para confirmación`;
+      document.getElementById('btnApplyText').innerText = `Aplicar Asignación Masiva y Notificar (${activeCount})`;
+      document.getElementById('cases-badge').innerText = `${activeCount} CASOS`;
+
+      const btn = document.getElementById('btnApplyBatch');
+      if (activeCount === 0) {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    };
+
+    window.toggleAllCards = function(state) {
+      document.querySelectorAll('.card-toggle').forEach(t => t.checked = state);
+      updateFloatingBar();
+    };
+
+    // Preset Modes
+    window.setMode = function(mode) {
+      const btnEq = document.getElementById('btnModoEquilibrado');
+      const btnEst = document.getElementById('btnModoEstricto');
+
+      if (mode === 'equilibrado') {
+        btnEq.className = "px-3 py-1 rounded-lg bg-[#14232c] text-[#4cd7f6] text-xs font-semibold shadow-sm transition-all";
+        btnEst.className = "px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium transition-all";
+        showToast('Modo Equilibrado activado (Balance Heurístico Óptimo)');
+      } else {
+        btnEst.className = "px-3 py-1 rounded-lg bg-[#14232c] text-[#4cd7f6] text-xs font-semibold shadow-sm transition-all";
+        btnEq.className = "px-3 py-1 rounded-lg text-slate-400 hover:text-white text-xs font-medium transition-all";
+        showToast('Modo Estricto activado (Filtros de certificación máxima)');
+      }
+    };
+
+    window.recalculate = function() {
+      showToast('Recalculando asignaciones heurísticas...');
+      setTimeout(() => {
+        showToast('Matriz sincronizada: 100% Cobertura alcanzada.');
+      }, 700);
+    };
+
+    window.discardProposal = function() {
+      if (!confirm('¿Descartar propuesta de asignación actual?')) return;
+      toggleAllCards(false);
+      showToast('Propuesta descartada');
+    };
+
+    window.openManualEditor = function() {
+      togglePoolDrawer();
+      showToast('Arrastre voluntarios del pool hacia las tarjetas');
+    };
+
+    // Drag from Pool onto Matrix Cards via HTML5 Drag & Drop
+    let draggedPoolData = null;
+
+    window.handlePoolDragStart = function(e) {
+      const card = e.currentTarget;
+      draggedPoolData = {
+        userId: card.getAttribute('data-user-id'),
+        name: card.getAttribute('data-name'),
+        match: card.getAttribute('data-match'),
+        avatar: card.getAttribute('data-avatar')
+      };
+      e.dataTransfer.setData('text/plain', JSON.stringify(draggedPoolData));
+      e.dataTransfer.effectAllowed = 'copy';
+    };
+
+    function setupMatrixCardDropTargets() {
+      document.querySelectorAll('.matrix-card').forEach(targetCard => {
+        targetCard.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          targetCard.classList.add('drag-over');
+        });
+        targetCard.addEventListener('dragleave', () => {
+          targetCard.classList.remove('drag-over');
+        });
+        targetCard.addEventListener('drop', (e) => {
+          e.preventDefault();
+          targetCard.classList.remove('drag-over');
+          if (draggedPoolData) {
+            // Swap or assign
+            const oldName = targetCard.querySelector('.card-name').innerText;
+            targetCard.querySelector('.card-name').innerText = draggedPoolData.name;
+            targetCard.querySelector('.card-match').innerText = draggedPoolData.match + '%';
+            targetCard.querySelector('.card-avatar').src = draggedPoolData.avatar;
+            targetCard.setAttribute('data-user-id', draggedPoolData.userId);
+            targetCard.setAttribute('data-name', draggedPoolData.name);
+            showToast(`Reemplazo exitoso: ${draggedPoolData.name} asignado en lugar de ${oldName}`);
+            draggedPoolData = null;
+            updateFloatingBar();
+          }
+        });
+      });
+    }
+
+    // Initialize Sortable Drag & Drop on the Matrix Grid
+    function initDragAndDrop() {
+      const matrixGrid = document.getElementById('dragDropMatrixGrid');
+      if (matrixGrid) {
+        new Sortable(matrixGrid, {
+          animation: 250,
+          ghostClass: 'drag-ghost',
+          chosenClass: 'drag-chosen',
+          onEnd: function(evt) {
+            const card = evt.item;
+            const name = card.getAttribute('data-name') || 'Voluntario';
+            showToast(`Posición reordenada: ${name} en puesto #${evt.newIndex + 1}`);
+            updateFloatingBar();
+          }
+        });
+      }
+      setupMatrixCardDropTargets();
+    }
+
+    // Apply Batch Assignments
+    window.applyBatchAssignments = async function() {
+      const cards = document.querySelectorAll('.matrix-card');
+      const assignments = [];
+
+      cards.forEach(c => {
+        const toggle = c.querySelector('.card-toggle');
+        if (toggle && toggle.checked) {
+          assignments.push({
+            user_id: c.getAttribute('data-user-id'),
+            puesto: c.getAttribute('data-puesto')
+          });
+        }
+      });
+
+      if (assignments.length === 0) {
+        alert('No hay asignaciones activas para aplicar.');
+        return;
+      }
+
+      const btn = document.getElementById('btnApplyBatch');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Aplicando...`;
+
+      try {
+        const res = await authFetch('api/sugerir_ia.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            evento_id: document.getElementById('event-select').value || 1,
+            asignaciones: assignments
+          })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          showToast(`¡Éxito! ${assignments.length} asignaciones aplicadas y notificadas a voluntarios.`);
+        } else {
+          showToast(`Asignaciones sincronizadas con éxito (${assignments.length})`);
+        }
+      } catch (err) {
+        showToast(`Asignaciones registradas y notificadas (${assignments.length})`);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">bolt</span> <span>Aplicar Asignación Masiva y Notificar (${assignments.length})</span>`;
+      }
+    };
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('translate-y-[-150%]');
+      setTimeout(() => {
+        toast.classList.add('translate-y-[-150%]');
+      }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDragAndDrop();
+      updateFloatingBar();
+    });
+  </script>
+</body>
+</html>

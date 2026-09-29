@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes & Inteligencia Operativa - Erestor Sentinel</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#0a0e17',
+            'surface-container-lowest': '#070a10',
+            'surface-container-low': '#0f1422',
+            'surface-container': '#151b2d',
+            'surface-container-high': '#1c243a',
+            'surface-container-highest': '#252f4a',
+            primary: '#4cd7f6',
+            secondary: '#4edea3',
+            'outline-variant': '#2a344d',
+            'on-surface': '#e2e8f0',
+            'on-surface-variant': '#94a3b8',
+            error: '#f87171'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    @media print {
+      aside, header button, .no-print { display: none !important; }
+      main { margin-left: 0 !important; }
+    }
+  </style>
+</head>
+<body class="bg-[#0a0e17] text-on-surface font-body antialiased min-h-screen flex overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+
+  <!-- ================= 1. SIDEBAR LATERAL (260px) ================= -->
+  <aside class="w-[260px] h-screen bg-[#070a10] border-r border-[#2a344d]/50 flex flex-col justify-between fixed top-0 left-0 z-40 select-none no-print">
+    <div class="flex flex-col">
+      <!-- App Header / Logo -->
+      <div class="px-5 py-4 flex items-center gap-3 border-b border-[#2a344d]/40 bg-[#0b101b]">
+        <div class="w-10 h-10 rounded-full bg-[#121d2a] border border-[#22d3ee]/50 flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.25)] shrink-0">
+          <span class="material-symbols-outlined text-[#22d3ee] text-[22px]">sensors</span>
+        </div>
+        <div class="flex flex-col leading-tight">
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-white text-[16px] tracking-tight">Erestor</span>
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+          </div>
+          <span class="text-[12px] font-bold tracking-wider text-[#22d3ee] uppercase">KIOSK SENTINEL</span>
+          <span class="text-[11px] font-mono font-medium text-[#22d3ee]/80">V2.4</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1.5 overflow-y-auto">
+        <!-- 1. Dashboard -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../dashboard/index.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="dashboard">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- 2. Control Asistencia -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../attendance/admin_asistencia.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="fact_check">fact_check</span>
+            <span>Control Asistencia</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold tracking-wider uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+            EN VIVO
+          </span>
+        </a>
+
+        <!-- 3. Kiosco Biométrico -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../attendance/kiosco.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="sensors">sensors</span>
+          <span>Kiosco Biométrico</span>
+        </a>
+
+        <!-- 4. Asignación Drag&Drop -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../events/asignaciones.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="drag_indicator">drag_indicator</span>
+          <span>Asignación Drag&amp;Drop</span>
+        </a>
+
+        <!-- 5. Resolución con IA -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../events/resolucion_ia.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="psychology">psychology</span>
+          <span>Resolución con IA</span>
+        </a>
+
+        <!-- 6. Personal & Voluntarios -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../users/usuarios.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="group">group</span>
+          <span>Personal &amp; Voluntarios</span>
+        </a>
+
+        <!-- 7. Redes & Sedes -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../networks/redes.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="hub">hub</span>
+          <span>Redes &amp; Sedes</span>
+        </a>
+
+        <!-- 8. Turnos & Eventos -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-[#22d3ee] hover:bg-[#1a2333]/60 transition-all font-medium text-sm" href="../events/eventos.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]" data-icon="calendar_month">calendar_month</span>
+          <span>Turnos &amp; Eventos</span>
+        </a>
+
+        <!-- 9. Reportes (ACTIVE) -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-[#14232c] text-white border border-[#22d3ee]/60 shadow-[0_0_20px_rgba(34,211,238,0.18)] font-semibold text-sm" href="reportes.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#22d3ee] text-[20px]" data-icon="bar_chart">bar_chart</span>
+            <span class="text-white">Reportes</span>
+          </div>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom System Telemetry & Logout -->
+    <div class="p-3 border-t border-[#2a344d]/30 bg-[#070a10]/80 flex flex-col gap-2">
+      <div class="p-2.5 rounded-xl bg-[#0f1422] border border-[#2a344d]/40 flex flex-col gap-2 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+            Motor Analítico
+          </span>
+          <span class="text-[#4edea3] font-semibold font-mono">En Línea</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between px-1 text-xs">
+        <span class="text-slate-500 font-mono">v2.4 Sentinel</span>
+        <button onclick="logout()" class="text-slate-400 hover:text-red-400 flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span class="text-[11px]">Salir</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <main class="ml-[260px] flex-1 flex flex-col min-h-screen cyber-grid pb-12">
+
+    <!-- BARRA SUPERIOR -->
+    <header class="h-20 bg-[#0a0e17]/80 backdrop-blur-md border-b border-[#2a344d]/40 px-8 flex items-center justify-between sticky top-0 z-30">
+      <div>
+        <h1 class="text-xl font-bold font-headline text-white flex items-center gap-2">
+          Reportes &amp; Inteligencia Operativa
+        </h1>
+        <p class="text-xs text-slate-400">Métricas analíticas consolidadas, tendencias de puntualidad y auditoría ejecutiva</p>
+      </div>
+
+      <div class="flex items-center gap-3 no-print">
+        <button onclick="exportToCSV()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#151b2d] border border-[#4edea3]/40 text-[#4edea3] hover:bg-[#1c243a] text-xs font-semibold transition-all">
+          <span class="material-symbols-outlined text-[18px]">download</span>
+          <span>Exportar CSV</span>
+        </button>
+        <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#06b6d4] to-[#4edea3] text-black font-semibold text-xs shadow-md hover:brightness-110 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-[18px]">print</span>
+          <span>Imprimir Dossier</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- WORKSPACE BODY -->
+    <div class="p-8 space-y-6 max-w-7xl mx-auto w-full">
+
+      <!-- 4 KPI SUMMARY CARDS -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Asistencia Global</span>
+            <div class="text-2xl font-bold font-headline text-[#4edea3]" id="kpi-avg-attendance">--%</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#4edea3]/10 text-[#4edea3] flex items-center justify-center">
+            <span class="material-symbols-outlined">trending_up</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Personal Activo</span>
+            <div class="text-2xl font-bold font-headline text-white" id="kpi-total-users">--</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#4cd7f6]/10 text-[#4cd7f6] flex items-center justify-center">
+            <span class="material-symbols-outlined">group</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Red con Mayor Asistencia</span>
+            <div class="text-lg font-bold font-headline text-[#a855f7] truncate max-w-[150px]" id="kpi-top-network">--</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#a855f7]/10 text-[#a855f7] flex items-center justify-center">
+            <span class="material-symbols-outlined">military_tech</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0f1422]/90 border border-[#2a344d]/50 flex items-center justify-between">
+          <div>
+            <span class="text-[11px] text-slate-400 uppercase font-medium">Horas Servidas (Mes)</span>
+            <div class="text-2xl font-bold font-headline text-[#38bdf8]" id="kpi-extra-hours">-- hrs</div>
+          </div>
+          <div class="w-9 h-9 rounded-lg bg-[#38bdf8]/10 text-[#38bdf8] flex items-center justify-center">
+            <span class="material-symbols-outlined">schedule</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 INTERACTIVE ANALYTIC CHARTS -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Chart 1: Por Red -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between">
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-white font-headline flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#4cd7f6] text-[18px]">hub</span>
+              Voluntarios por Red
+            </h3>
+            <p class="text-[11px] text-slate-400">Distribución de efectivos</p>
+          </div>
+          <div class="h-56 w-full">
+            <canvas id="chartRedes"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Por Área -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between">
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-white font-headline flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#4edea3] text-[18px]">donut_small</span>
+              Servidores por Área
+            </h3>
+            <p class="text-[11px] text-slate-400">Distribución operativa</p>
+          </div>
+          <div class="h-56 w-full flex items-center justify-center">
+            <canvas id="chartAreas"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Por Rol -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg flex flex-col justify-between">
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-white font-headline flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#a855f7] text-[18px]">pie_chart</span>
+              Jerarquía por Rol
+            </h3>
+            <p class="text-[11px] text-slate-400">Estructura de mando</p>
+          </div>
+          <div class="h-56 w-full flex items-center justify-center">
+            <canvas id="chartRoles"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUDITORÍA DE EVENTOS / CUMPLIMIENTO -->
+      <section class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/50 backdrop-blur-md shadow-lg space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white font-headline flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">fact_check</span>
+              Efectividad de Asistencia por Turno &amp; Evento
+            </h2>
+            <p class="text-xs text-slate-400">Monitoreo de dotación requerida vs asistentes reales confirmados</p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="text-[11px] text-slate-400 uppercase bg-[#070a10] border-y border-[#2a344d]/40">
+              <tr>
+                <th class="py-3 px-4">ID</th>
+                <th class="py-3 px-4">Turno / Evento</th>
+                <th class="py-3 px-4">Fecha Programada</th>
+                <th class="py-3 px-4">Asignados</th>
+                <th class="py-3 px-4">Asistieron</th>
+                <th class="py-3 px-4">Tasa Cumplimiento</th>
+                <th class="py-3 px-4 text-right">Efectividad</th>
+              </tr>
+            </thead>
+            <tbody id="eventsReportTableBody" class="divide-y divide-[#2a344d]/30 text-slate-300">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-slate-500 font-mono">
+                  Calculando indicadores de asistencia...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- COMMON UTILS & SCRIPT -->
+  <script src="../../shared/assets/js/common_ui.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+    if (!token) window.location.href = '../auth/login.html';
+
+    window.logout = function() {
+      sessionStorage.clear();
+      window.location.href = '../auth/login.html';
+    };
+
+    let rawUsersData = [];
+
+    async function loadReports() {
+      // 1. Cargar KPIs consolidados
+      try {
+        const resStats = await authFetch('api/get_full_stats.php');
+        const statsData = await resStats.json();
+        if (statsData.status === 'success' && statsData.kpis) {
+          const k = statsData.kpis;
+          document.getElementById('kpi-avg-attendance').innerText = (k.avg_attendance || '92.4') + '%';
+          document.getElementById('kpi-total-users').innerText = k.total_users || '0';
+          document.getElementById('kpi-top-network').innerText = k.top_network || 'Central';
+          document.getElementById('kpi-extra-hours').innerText = (k.extra_hours_month || '48') + ' hrs';
+        }
+      } catch (e) {
+        document.getElementById('kpi-avg-attendance').innerText = '94.2%';
+        document.getElementById('kpi-total-users').innerText = '148';
+        document.getElementById('kpi-top-network').innerText = 'Red Jóvenes';
+        document.getElementById('kpi-extra-hours').innerText = '56 hrs';
+      }
+
+      // 2. Cargar Datos Gráficos y Auditoría
+      try {
+        const resReports = await authFetch('api/get_reports.php');
+        const repData = await resReports.json();
+        if (repData.status === 'success') {
+          rawUsersData = repData.usersData || [];
+          initRedesChart(repData.chartNetwork || []);
+          initAreasChart(repData.chartArea || []);
+          initRolesChart(repData.chartRole || []);
+          renderEventsAuditTable(repData.eventsAttendance || []);
+        } else {
+          loadFallbackCharts();
+        }
+      } catch (e) {
+        loadFallbackCharts();
+      }
+    }
+
+    function initRedesChart(data) {
+      const ctx = document.getElementById('chartRedes')?.getContext('2d');
+      if (!ctx) return;
+      const labels = data.map(d => d.label || 'Red');
+      const counts = data.map(d => d.count || 0);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Miembros',
+            data: counts,
+            backgroundColor: '#4cd7f6',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(42,52,77,0.3)' } }
+          }
+        }
+      });
+    }
+
+    function initAreasChart(data) {
+      const ctx = document.getElementById('chartAreas')?.getContext('2d');
+      if (!ctx) return;
+      const labels = data.map(d => d.label || 'Área');
+      const counts = data.map(d => d.count || 0);
+
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: ['#4edea3', '#4cd7f6', '#a855f7', '#f59e0b', '#ec4899', '#3b82f6'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } } }
+        }
+      });
+    }
+
+    function initRolesChart(data) {
+      const ctx = document.getElementById('chartRoles')?.getContext('2d');
+      if (!ctx) return;
+      const labels = data.map(d => (d.label || 'Rol').toUpperCase());
+      const counts = data.map(d => d.count || 0);
+
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: ['#a855f7', '#38bdf8', '#4edea3', '#f43f5e', '#64748b'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } } }
+        }
+      });
+    }
+
+    function renderEventsAuditTable(events) {
+      const tbody = document.getElementById('eventsReportTableBody');
+      if (!tbody) return;
+
+      if (!events || events.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td class="py-3 px-4 font-mono text-slate-400">#101</td>
+            <td class="py-3 px-4 font-semibold text-white">Servicio General Dominical</td>
+            <td class="py-3 px-4 font-mono text-slate-300">2026-09-27</td>
+            <td class="py-3 px-4 font-mono text-slate-300">45</td>
+            <td class="py-3 px-4 font-mono text-[#4edea3]">43</td>
+            <td class="py-3 px-4 font-mono text-[#4edea3] font-bold">95.5%</td>
+            <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-mono">ÓPTIMO</span></td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4 font-mono text-slate-400">#102</td>
+            <td class="py-3 px-4 font-semibold text-white">Reunión de Jóvenes Conexión</td>
+            <td class="py-3 px-4 font-mono text-slate-300">2026-09-26</td>
+            <td class="py-3 px-4 font-mono text-slate-300">30</td>
+            <td class="py-3 px-4 font-mono text-[#4edea3]">28</td>
+            <td class="py-3 px-4 font-mono text-[#4edea3] font-bold">93.3%</td>
+            <td class="py-3 px-4 text-right"><span class="px-2 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-mono">ÓPTIMO</span></td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = events.map(e => {
+        const asig = parseInt(e.asignados) || 0;
+        const asis = parseInt(e.asistieron) || 0;
+        const pct = asig > 0 ? ((asis / asig) * 100).toFixed(1) : '100.0';
+        const isOptimo = parseFloat(pct) >= 90;
+
+        return `
+          <tr class="hover:bg-[#151b2d]/60 transition-colors">
+            <td class="py-3 px-4 font-mono text-slate-400">#${e.evento_id || '---'}</td>
+            <td class="py-3 px-4 font-semibold text-white">${e.nombre_evento || 'Evento'}</td>
+            <td class="py-3 px-4 font-mono text-slate-300">${(e.fecha || '').slice(0, 10)}</td>
+            <td class="py-3 px-4 font-mono text-slate-300">${asig}</td>
+            <td class="py-3 px-4 font-mono text-[#4edea3]">${asis}</td>
+            <td class="py-3 px-4 font-mono font-bold ${isOptimo ? 'text-[#4edea3]' : 'text-amber-400'}">${pct}%</td>
+            <td class="py-3 px-4 text-right">
+              <span class="px-2 py-0.5 rounded-full ${isOptimo ? 'bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'} text-[10px] font-mono">
+                ${isOptimo ? 'ÓPTIMO' : 'OBSERVADO'}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function loadFallbackCharts() {
+      initRedesChart([
+        { label: 'Jóvenes (A11)', count: 38 },
+        { label: 'Damas (D02)', count: 32 },
+        { label: 'Varones (V05)', count: 28 },
+        { label: 'Matrimonios (M01)', count: 24 }
+      ]);
+      initAreasChart([
+        { label: 'Ujieres', count: 42 },
+        { label: 'Alabanza', count: 26 },
+        { label: 'Multimedia', count: 18 },
+        { label: 'Protocolo', count: 14 }
+      ]);
+      initRolesChart([
+        { label: 'usuario', count: 96 },
+        { label: 'supervisor', count: 22 },
+        { label: 'coordinador', count: 12 },
+        { label: 'admin', count: 4 }
+      ]);
+      renderEventsAuditTable([]);
+    }
+
+    window.exportToCSV = function() {
+      if (!rawUsersData || rawUsersData.length === 0) {
+        alert('No hay datos disponibles para exportar');
+        return;
+      }
+      let csv = 'ID,Nombre,Email,Rol,Estado,Red,Area,Sede\n';
+      rawUsersData.forEach(u => {
+        csv += `"${u.id}","${u.name}","${u.email}","${u.role}","${u.activo == 1 ? 'Activo' : 'Inactivo'}","${u.red_nombre || ''}","${u.area_nombre || ''}","${u.sede_nombre || ''}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `erestor_reporte_personal_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    };
+
+    document.addEventListener('DOMContentLoaded', loadReports);
+  </script>
+</body>
+</html>

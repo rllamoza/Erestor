@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Erestor Ops - Planificador &amp; Asignaciones Drag&amp;Drop</title>
+<!-- Google Fonts: Inter & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-container": "#00424f",
+            "primary": "#4cd7f6",
+            "on-tertiary-fixed-variant": "#004e5a",
+            "secondary-fixed": "#6ffbbe",
+            "surface-tint": "#4cd7f6",
+            "outline": "#869397",
+            "surface": "#0f131d",
+            "secondary-container": "#00a572",
+            "primary-fixed": "#acedff",
+            "primary-container": "#06b6d4",
+            "tertiary-fixed": "#a2eeff",
+            "on-surface": "#dfe2f1",
+            "secondary-fixed-dim": "#4edea3",
+            "tertiary": "#2fd9f4",
+            "surface-bright": "#353944",
+            "inverse-primary": "#00687a",
+            "error-container": "#93000a",
+            "tertiary-container": "#00b7cf",
+            "secondary": "#4edea3",
+            "on-surface-variant": "#bcc9cd",
+            "on-primary": "#003640",
+            "surface-container-lowest": "#0a0e18",
+            "surface-container-highest": "#313540",
+            "on-secondary-fixed": "#002113",
+            "on-error": "#690005",
+            "inverse-on-surface": "#2c303b",
+            "on-tertiary-container": "#00434d",
+            "inverse-surface": "#dfe2f1",
+            "surface-container-high": "#262a35",
+            "tertiary-fixed-dim": "#2fd9f4",
+            "on-background": "#dfe2f1",
+            "surface-container": "#1c1f2a",
+            "outline-variant": "#3d494c",
+            "on-tertiary-fixed": "#001f25",
+            "on-secondary-container": "#00311f",
+            "surface-container-low": "#171b26",
+            "on-error-container": "#ffdad6",
+            "on-tertiary": "#00363e",
+            "on-secondary-fixed-variant": "#005236",
+            "surface-variant": "#313540",
+            "background": "#0f131d",
+            "primary-fixed-dim": "#4cd7f6",
+            "surface-dim": "#0f131d",
+            "on-secondary": "#003824",
+            "on-primary-fixed-variant": "#004e5c",
+            "on-primary-fixed": "#001f26",
+            "error": "#ffb4ab"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-kiosk": "2.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-tablet": "2rem",
+            "margin": "1rem",
+            "gutter": "1.5rem",
+            "margin-kiosk": "3.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "title-lg": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "title-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-xl": ["48px", { "lineHeight": "56px", "fontWeight": "800" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "fontWeight": "700" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 19px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0a0e18;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #262a35;
+      border-radius: 4px;
+      border: 1px solid #3d494c;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4cd7f6;
+    }
+    /* Subtle grid background simulation */
+    .cyber-grid {
+      background-image: linear-gradient(to right, rgba(76, 215, 246, 0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(76, 215, 246, 0.02) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+<meta content="web_dashboard" name="shell-type"/></head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex overflow-hidden cyber-grid select-none">
+<!-- ========================================================================= -->
+<!-- 1. BARRA LATERAL IZQUIERDA (SideNavBar Shared Component)                 -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 z-40 flex flex-col justify-between p-4 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant dark:border-outline-variant">
+<!-- Top Branding / Header -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-surface-container-highest border border-primary/40 shadow-[0_0_15px_rgba(76,215,246,0.2)]">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="deployed_code">deployed_code</span>
+<span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface-container-low animate-pulse"></span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-md text-headline-md tracking-wider text-primary dark:text-primary uppercase font-bold text-[18px] leading-5">ERESTOR OPS</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            v4.2 • Nodo Operativo Central
+          </span>
+</div>
+</div>
+<!-- Quick Action / CTA -->
+<button class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-primary-container/20 border border-primary/30 text-primary font-label-md text-label-md hover:bg-primary-container/30 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[16px]" data-icon="person_add">person_add</span>
+<span>Registrar Voluntario</span>
+</button>
+<!-- Navigation Tabs (from JSON & active status) -->
+<nav class="flex flex-col gap-1 mt-1">
+<!-- Tab 1: Monitoreo en Vivo -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="radar">radar</span>
+<span>Monitoreo en Vivo</span>
+</div>
+<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-secondary/15 text-secondary border border-secondary/30">EN VIVO</span>
+</a>
+<!-- Tab 2: Asignación Drag&Drop (ACTIVE MATCH) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-high dark:bg-surface-container-high text-primary dark:text-primary font-label-md text-label-md border-l-2 border-primary shadow-[0_0_12px_rgba(76,215,246,0.15)] active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-semibold">Asignación Drag&amp;Drop</span>
+</a>
+<!-- Tab 3: Base de Voluntarios -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="group">group</span>
+<span>Base de Voluntarios</span>
+</a>
+<!-- Tab 4: Gestión de Turnos -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="schedule">schedule</span>
+<span>Gestión de Turnos</span>
+</a>
+<!-- Tab 5: Dispositivos Kiosk -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="nest_display">nest_display</span>
+<span>Dispositivos Kiosk</span>
+</a>
+<!-- Tab 6: Configuración Sistema -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container hover:text-on-surface transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="settings">settings</span>
+<span>Configuración Sistema</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="flex flex-col gap-2 pt-3 border-t border-outline-variant">
+<!-- Central Server Telemetry Ping -->
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/60">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4edea3]"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Servidor Central</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-mono">ÓPTIMO</span>
+</div>
+<!-- Support & Logout from JSON -->
+<div class="flex items-center justify-between px-1">
+<a class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors py-1" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="contact_support">contact_support</span>
+<span>Soporte Técnico</span>
+</a>
+<a class="text-on-surface-variant hover:text-error transition-colors p-1" href="#" title="Cerrar Sesión">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CONTAINER (Offset by 256px for Sidebar)                     -->
+<!-- ========================================================================= -->
+<div class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- ======================================================================= -->
+<!-- 2. BARRA SUPERIOR OPERATIVA (TopNavBar & Contextual Mission Bar)        -->
+<!-- ======================================================================= -->
+<header class="h-20 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant px-6 flex items-center justify-between shrink-0 z-30">
+<!-- Left Filters: Evento, Fecha, Turno -->
+<div class="flex items-center gap-3">
+<!-- Event Dropdown -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="church">church</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none text-[10px]">EVENTO ACTIVO</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate max-w-[200px]">Servicio General - Sede Central</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+<!-- Date Picker -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="calendar_today">calendar_today</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none text-[10px]">FECHA PROGRAMADA</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Dom, 26 Oct 2025</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Shift Selector -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="schedule">schedule</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none text-[10px]">TURNO OPERATIVO</span>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-medium">08:30 - 13:00</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] bg-primary/10 text-primary border border-primary/30">Mañana</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Hub: Cobertura & Stat Chips -->
+<div class="flex items-center gap-6 px-4 py-2 rounded-xl bg-surface-container/60 border border-outline-variant/60 shadow-inner">
+<div>
+<div class="flex items-center justify-between text-[11px] mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">COBERTURA MATRIZ</span>
+<span class="font-label-md text-label-md text-secondary font-bold font-mono">88% <span class="text-on-surface-variant font-normal">(44/50)</span></span>
+</div>
+<!-- Progress Bar Cyan to Emerald -->
+<div class="w-48 h-2 rounded-full bg-surface-container-highest overflow-hidden p-[1px]">
+<div class="h-full rounded-full bg-gradient-to-r from-primary to-secondary shadow-[0_0_8px_rgba(78,222,163,0.4)]" style="width: 88%"></div>
+</div>
+</div>
+<div class="h-8 w-px bg-outline-variant/60"></div>
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-error flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+              6 vacantes
+            </span>
+<span class="text-[10px] text-on-surface-variant">Críticas sin cubrir</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary font-semibold">8 Áreas</span>
+<span class="text-[10px] text-on-surface-variant">Habilitadas</span>
+</div>
+</div>
+</div>
+<!-- Primary Action Buttons -->
+<div class="flex items-center gap-2.5">
+<!-- AI Auto Assign -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high border border-primary/40 text-primary font-label-md text-label-md hover:bg-primary/10 hover:shadow-[0_0_12px_rgba(76,215,246,0.2)] transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[17px]" data-icon="auto_awesome">auto_awesome</span>
+<span>Auto-Asignar IA</span>
+</button>
+<!-- Save Matrix -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container-high hover:border-outline transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined text-[17px]" data-icon="save">save</span>
+<span>Guardar Matriz</span>
+</button>
+<!-- High-Contrast Primary: Notify Volunteers -->
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-[0_0_16px_rgba(78,222,163,0.35)] hover:bg-secondary-fixed-dim hover:shadow-[0_0_22px_rgba(78,222,163,0.5)] transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]" data-icon="send">send</span>
+<span>Notificar Voluntarios</span>
+</button>
+</div>
+</header>
+<!-- ======================================================================= -->
+<!-- 3. CONTENEDOR PRINCIPAL: PANEL IZQUIERDO + HORIZONTAL KANBAN MATRIZ     -->
+<!-- ======================================================================= -->
+<main class="flex-1 flex overflow-hidden p-4 gap-4 bg-surface"><div class="flex flex-col w-full gap-4 pb-20">
+<!-- Sub-cabecera Contextual & AI Status Telemetry -->
+<div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 rounded-xl bg-surface-container-low shadow-md">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center w-8 h-8 rounded-lg bg-surface-container-high text-primary shadow-[0_0_12px_rgba(76,215,246,0.3)]">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Asignaciones</span>
+<span class="text-outline-variant font-mono">/</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Optimizador IA de Cobertura</span>
+<span class="text-outline-variant font-mono">/</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Resolución Masiva #OPT-2025-X8</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface font-bold tracking-tight">Solución Algorítmica Multi-Área</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-highest shadow-inner">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+<span class="font-label-sm text-label-sm text-secondary font-mono tracking-wider">HEURÍSTICA v4.2 • ÓPTIMO 97.8%</span>
+</div>
+<div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px] text-primary">speed</span>
+<span>Tiempo cálculo: <strong class="text-on-surface font-mono">142ms</strong></span>
+</div>
+</div>
+</div>
+<!-- Panel Superior de Impacto y Métricas Clave (KPIs Antes vs. Después) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+<!-- KPI 1: Cobertura Matriz -->
+<div class="p-4 rounded-xl bg-surface-container-low shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Cobertura Proyectada</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container/30 text-secondary">+12% ALCANCE</span>
+</div>
+<div class="my-3 flex items-baseline gap-3">
+<span class="font-headline-lg text-headline-lg text-secondary font-extrabold font-mono tracking-tight">100%</span>
+<div class="flex flex-col text-on-surface-variant font-label-sm text-label-sm">
+<span>Antes: <span class="line-through text-outline">88% (44/50)</span></span>
+<span class="text-secondary font-semibold">Ahora: 50 / 50 puestos</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden p-[1px]">
+<div class="bg-gradient-to-r from-primary to-secondary h-full rounded-full shadow-[0_0_10px_rgba(78,222,163,0.5)] transition-all duration-1000" style="width: 100%"></div>
+</div>
+</div>
+<!-- KPI 2: Vacantes Críticas -->
+<div class="p-4 rounded-xl bg-surface-container-low shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Vacantes Resueltas</span>
+<span class="material-symbols-outlined text-primary text-[20px]">task_alt</span>
+</div>
+<div class="my-3 flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg text-primary font-extrabold font-mono">6<span class="text-on-surface-variant text-title-lg">/6</span></span>
+<span class="font-label-md text-label-md text-secondary font-semibold">100% Cubiertas</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pool disponible: <strong class="text-on-surface font-mono">18 voluntarios libres</strong></span>
+</div>
+<!-- KPI 3: SLA Match Scoring -->
+<div class="p-4 rounded-xl bg-surface-container-low shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Compatibilidad Media</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]">verified_user</span>
+</div>
+<div class="my-3 flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg text-tertiary font-extrabold font-mono">95.4%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Score Ponderado</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Roles especializados y licencias verificadas</span>
+</div>
+<!-- KPI 4: Conflictos Prevenidos -->
+<div class="p-4 rounded-xl bg-surface-container-low shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Solapamientos Evitados</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">security</span>
+</div>
+<div class="my-3 flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-extrabold font-mono">04</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Bloqueos horarios activos</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tiempo de traslado mínimo respetado: 15 min</span>
+</div>
+</div>
+<!-- Controles y Ponderadores del Algoritmo -->
+<div class="p-4 rounded-xl bg-surface-container shadow-md flex flex-col lg:flex-row items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold mr-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">tune</span> Ponderaciones:
+      </span>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>Certificación y Nivel</span>
+<span class="font-mono text-primary font-bold">40%</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Equidad &amp; Rotación</span>
+<span class="font-mono text-secondary font-bold">30%</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Puntualidad &gt; 95%</span>
+<span class="font-mono text-tertiary font-bold">20%</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+<span>Geocerca / En Sede</span>
+<span class="font-mono text-primary-fixed-dim font-bold">10%</span>
+</div>
+</div>
+<div class="flex items-center gap-2 w-full lg:w-auto justify-end">
+<div class="flex items-center rounded-lg bg-surface-container-lowest p-1 shadow-inner">
+<button class="px-3 py-1 rounded-md bg-surface-container-high font-label-sm text-label-sm text-primary font-bold shadow-sm" type="button">Modo Equilibrado</button>
+<button class="px-3 py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" type="button">Modo Estricto</button>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-sm text-label-sm transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Recalcular</span>
+</button>
+</div>
+</div>
+<!-- Alerta Mitigada / Observación Algorítmica -->
+<div class="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low shadow-sm">
+<div class="p-1 rounded-md bg-secondary/10 text-secondary">
+<span class="material-symbols-outlined text-[18px]">info</span>
+</div>
+<div class="flex-1">
+<p class="font-body-sm text-body-sm text-on-surface">
+<strong class="text-secondary font-semibold">Ventana de traslado auto-gestionada:</strong> David Paredes concluye su compromiso matutino previo a las 08:15. La distancia registrada hasta el punto de sonido es de 140 metros (tiempo proyectado: 3.5 min). Cero riesgo de retraso.
+      </p>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-mono uppercase font-bold">Resuelto</span>
+</div>
+<!-- Contenedor Principal: 6 Asignaciones Propuestas por IA -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Matriz de Reemplazos Automatizados</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary font-mono text-[11px] font-bold">6 CASOS</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="font-label-sm text-label-sm text-primary hover:underline" type="button">Seleccionar todos</button>
+<span class="text-outline-variant">•</span>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:underline" type="button">Revertir cambios</button>
+</div>
+</div>
+<!-- Grid de Casos de Resolución -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+<!-- CASO 1: Multimedia & TV -->
+<div class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all shadow-lg flex flex-col justify-between gap-3 group">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shadow-sm shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of Diego Arismendi, a young male volunteer with focused expression wearing an audiovisual production headset in a dark tech control room with cyan and blue ambient rim light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsfmbhNgqXGItxZpJ7_A4zetIjK0MBTfFy0FPFcm8fkl3UVYqf4-gSDlob6PpsHNW7wJjEecWCg9T2s4N08su4Kd7i2e3t0b30KeGCTvgq5bAcfQyaQfsfJKUaoyWprX_Cdou3qrkBOEFdZylEVXGXrVSyOomlZ29IcJATXkrJbvuYViD8phvFo9CF3-Nw3Iw5xUNx4gx7H0m4HFIAP31HXW2BU6ZOH6ZClXRsXTSn-QaH5-N38Y-Z"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Diego Arismendi</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary font-mono">NIVEL 5</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Red Jóvenes • 1,840 pts fidelidad</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-headline-md text-headline-md text-primary font-extrabold leading-none">98%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Match IA</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[17px]">tv</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Operador Switcher / Cám 2</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Multimedia &amp; TV</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Cert: Switcher TV v3</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm">Disp: 08:00 - 13:30</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Histórico: 24 servicios</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+<span>Restricciones validadas con cero colisión</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+<!-- CASO 2: Seguridad & Perímetro -->
+<div class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all shadow-lg flex flex-col justify-between gap-3 group">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shadow-sm shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of Marcos Benitez, adult male security team volunteer wearing a tactical black polo shirt and radio earphone in a well-lit stadium concourse with soft cyber teal lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqR0K0egS3eh_shEM_ci-CGY0abkuiSgZBHpaOZN7ddd01POLovFY3u21NounKGAolcFc0C3E_udzKQGG6naq1w0VCqKOvC7awWU0qdO9I7WvlQtBSrSsVuLXceweePJ5t4gvjiDX0m7vzHPQ2G3wjov2MuWA15ENyr4YLo_gldrYkV8Jgx1qiprueymZe7-TJSl-AE76GskZ9ss9hpnqJr8HBduQ0aEbzZFL2SlVU9S9oDCGGibM0"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Marcos Benítez</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary font-mono">NIVEL 4</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Red Adultos • 98.8% Puntualidad SLA</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-headline-md text-headline-md text-secondary font-extrabold leading-none">94%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Match IA</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[17px]">shield</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Supervisor Puerta Sur / Filtro</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Seguridad &amp; Accesos</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Radio VHF Verificado</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm">Protocolo Evacuación A2</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Turno completo</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+<span>Rango de mando validado para el sector Sur</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+<!-- CASO 3: Protocolo & Bienvenida -->
+<div class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all shadow-lg flex flex-col justify-between gap-3 group">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shadow-sm shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of Luciana Solis, a welcoming young woman smiling warmly, wearing a neat host badge and blazer with crisp studio lighting with subtle turquoise backlighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtD8A-qdMCYf2F0jhRVD-cR-J3iWoFYEBLgsEeuSug_0vcWaASuqoNlAXUYZ7kN4b1fRCONdYnJJPun7QJ7OjDHM0bhQL4DKLb5CUy1JC6T8xTbW_LaS8dS_N1UB2co7tZUptstyxxt8QQt3WbVaVM9Z3xqhL8u9hbSf8GFNaN9vIe8tMCjfln2_04AXtPapEozgQRB6g7JzPnfQbhS9cD57aQxindt5a7lfnadnQZfrxaEE0QY3y2"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Luciana Solís</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary font-mono">NIVEL 4</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Red Jóvenes • Presente en Sede</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-headline-md text-headline-md text-primary font-extrabold leading-none">96%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Match IA</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[17px]">door_front</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Guía de Pasillo Central B</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Protocolo &amp; Bienvenida</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Bilingüe (EN/ES)</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm">Check-in anticipado OK</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Score empatía: 9.9/10</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+<span>Ubicación GPS: Pasillo principal (0m desplazamiento)</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+<!-- CASO 4: Cuna & Niños -->
+<div class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all shadow-lg flex flex-col justify-between gap-3 group">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shadow-sm shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of Camila Rivas, a friendly professional educator female volunteer wearing an organized apron badge in a clean childcare facility setting with soft ambient fill light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIdZuqDE3sOIAKHpPoaX_KmNQeRYmyfr3ZgmyLrEiHKuKLrlHxCNuqSW1H1E2YZCcLpaSDkPBHCPTy5qovGLsVdvLGfA3FVWbgQ5WClSg_NGZY0k3tXsRagTi9PrgDdXQLB_LpDtfzWLDYyseSLcnhKknrXejbBvIjB8psbZJt7EQcuoimdILKz1ajiSY-vyuti-V3ZOr6ubzeJqpB_Paz3Qco49hJSuyYNWMB8TQhXUNI6kbyljlU"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Camila Rivas</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary font-mono">NIVEL 5</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Red Profesionales • Lic. Educación</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-headline-md text-headline-md text-secondary font-extrabold leading-none">95%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Match IA</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[17px]">child_care</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Educador Auxiliar 2-4 años</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Cuna &amp; Infantes</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Primeros Auxilios Vigente</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm">Cert: Protección Infantil</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Ratio seguro cubierto</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+<span>Cumple norma de bioseguridad 1:4 infantes</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+<!-- CASO 5: Sonido & Escenario -->
+<div class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all shadow-lg flex flex-col justify-between gap-3 group">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shadow-sm shrink-0 flex items-center justify-center text-primary font-bold font-mono text-title-lg">
+              DP
+            </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">David Paredes</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-on-surface-variant font-mono">NIVEL 3</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Relevo Matutino • Turno Enlace</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-headline-md text-headline-md text-tertiary font-extrabold leading-none">91%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Match IA</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[17px]">volume_up</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Asistente Microfonía &amp; Monitores</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Sonido Frontal</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Frecuencias Wireless RF</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label-sm text-label-sm">Entrada: 08:30 exacta</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Turno anterior: 08:15 fin</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+<span>Relevo validado sin corte acústico</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+<!-- CASO 6: Cafetería & Logística -->
+<div class="p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all shadow-lg flex flex-col justify-between gap-3 group">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shadow-sm shrink-0 flex items-center justify-center text-secondary font-bold font-mono text-title-lg">
+              EM
+            </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">Esteban Morales</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-on-surface-variant font-mono">NIVEL 3</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pool General • Disp. Inmediata</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono text-headline-md text-headline-md text-on-surface font-extrabold leading-none">89%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Match IA</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-lowest shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[17px]">coffee</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Coordinador Barista / Refrigerios</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Cafetería &amp; Logística</span>
+</div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Manipulación de Alimentos</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm">Stock Central Asignado</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Carga baja</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+<span>Aprobación automática de guardia matutina</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface peer-checked:bg-secondary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-on-secondary after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Execution Drawer / Bar -->
+<div class="fixed bottom-0 right-0 left-64 p-4 bg-surface-container-lowest/95 backdrop-blur-xl shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 z-40">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-secondary/15 text-secondary shadow-[0_0_15px_rgba(78,222,163,0.3)]">
+<span class="material-symbols-outlined text-[22px]">auto_fix_high</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface font-bold">6 Asignaciones listas para confirmación</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary/20 text-secondary">0 CONFLICTOS</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Notificaciones preparadas por App Erestor Ops y mensaje SMS/WhatsApp</span>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<button class="px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-label-md transition-colors shadow-sm" type="button">
+        Descartar Propuesta IA
+      </button>
+<button class="px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors shadow-sm" type="button">
+        Editar Manualmente
+      </button>
+<button class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-[0_0_24px_rgba(78,222,163,0.4)] hover:shadow-[0_0_32px_rgba(78,222,163,0.6)] active:scale-[0.98] transition-all" id="apply-ai-btn" type="button">
+<span class="material-symbols-outlined text-[19px]">bolt</span>
+<span>Aplicar Asignación Masiva y Notificar (6)</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const applyBtn = document.getElementById('apply-ai-btn');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', function() {
+        const originalContent = this.innerHTML;
+        this.innerHTML = `
+          <span class="material-symbols-outlined text-[19px] animate-spin">refresh</span>
+          <span>Desplegando Notificaciones...</span>
+        `;
+        this.classList.add('opacity-90');
+        setTimeout(() => {
+          this.innerHTML = `
+            <span class="material-symbols-outlined text-[19px]">done_all</span>
+            <span>¡Matriz 100% Asignada y Sincronizada!</span>
+          `;
+          this.classList.remove('bg-secondary', 'text-on-secondary');
+          this.classList.add('bg-primary', 'text-on-primary');
+        }, 1200);
+      });
+    }
+  })();
+</script></main>
+</div>
+</body></html>

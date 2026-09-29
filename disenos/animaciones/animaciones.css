@@ -1,0 +1,85 @@
+/* ==========================================================================
+   ERESTOR UI - CORE ANIMATIONS & TRANSITIONS
+   Diseño e Interacciones Hápticas / Visuales de Alta Precisión
+   ========================================================================== */
+
+/* 1. Barredor Láser de Escáner Biométrico (Biometric Viewfinder Laser Sweep) */
+@keyframes laserSweep {
+  0% { top: 6%; opacity: 0.95; }
+  50% { top: 92%; opacity: 0.35; }
+  100% { top: 6%; opacity: 0.95; }
+}
+
+.animate-laser {
+  animation: laserSweep 3.2s ease-in-out infinite;
+}
+
+/* 2. Aura Pulsante Cian (Cyan Glow Aura - Active Viewfinder) */
+@keyframes cyanAura {
+  0%, 100% { box-shadow: 0 0 24px rgba(6, 182, 212, 0.25); }
+  50% { box-shadow: 0 0 42px rgba(6, 182, 212, 0.50); }
+}
+
+.scanner-glow {
+  animation: cyanAura 3.8s ease-in-out infinite;
+}
+
+/* 3. Halo Esmeralda de Validación Exitosa (Emerald Success Burst) */
+@keyframes emeraldSuccessBurst {
+  0% { transform: scale(0.92); opacity: 0; box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
+  50% { transform: scale(1.02); opacity: 1; box-shadow: 0 0 50px rgba(16, 185, 129, 0.45); }
+  100% { transform: scale(1); opacity: 1; box-shadow: 0 0 32px rgba(16, 185, 129, 0.25); }
+}
+
+.animate-success-burst {
+  animation: emeraldSuccessBurst 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 4. Onda Radar de Telemetría (Ping Ripple) */
+@keyframes pingRadar {
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.animate-ping-radar {
+  animation: pingRadar 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* 5. Destello de Alerta Ámbar / Rojo (Warning Alert Strobe) */
+@keyframes alertStrobe {
+  0%, 100% { border-color: rgba(239, 68, 68, 0.35); box-shadow: 0 0 15px rgba(239, 68, 68, 0.15); }
+  50% { border-color: rgba(239, 68, 68, 0.95); box-shadow: 0 0 30px rgba(239, 68, 68, 0.45); }
+}
+
+.animate-alert-strobe {
+  animation: alertStrobe 1.8s ease-in-out infinite;
+}
+
+/* 6. Deslizamiento Suave de Modal / Flyout Tray */
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-modal-pop {
+  animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 7. Hover Card Glass Elevation */
+.glass-interactive {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.25);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+

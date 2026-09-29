@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Erestor Sentinel</title>
+    <link rel="stylesheet" href="../../shared/assets/css/styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 900px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-card-title {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .profile-card-title.cyan {
+            color: var(--neon-cyan);
+        }
+
+        .profile-card-title.purple {
+            color: var(--neon-purple);
+        }
+
+        .avatar-big {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 auto 8px;
+            background: var(--input-bg, rgba(255, 255, 255, 0.05));
+            border: 3px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .avatar-big:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar-big img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 1.5rem;
+        }
+
+        .avatar-big:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .avatar-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 10px 0 4px;
+        }
+
+        .avatar-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid;
+            font-size: 0.75rem;
+            font-family: var(--font-heading);
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.25s;
+        }
+
+        .avatar-btn.gallery {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .avatar-btn.gallery:hover {
+            background: var(--neon-cyan);
+            color: #000;
+        }
+
+        .avatar-btn.camera {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+
+        .avatar-btn.camera:hover {
+            background: var(--neon-purple);
+            color: #fff;
+        }
+
+        /* Modal preview */
+        .photo-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-modal-overlay.open {
+            display: flex;
+        }
+
+        .photo-modal {
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 20px;
+            padding: 28px;
+            max-width: 360px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Camera live view */
+        .camera-container {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-purple);
+            margin: 0 auto 18px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+            box-shadow: 0 0 20px rgba(134, 0, 255, 0.4);
+            display: none;
+        }
+
+        .camera-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+            /* Flip for mirror effect */
+        }
+
+        .photo-modal h3 {
+            font-family: var(--font-heading);
+            color: var(--neon-cyan);
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+        }
+
+        .preview-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-cyan);
+            margin: 0 auto 18px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+        }
+
+        .preview-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .profile-name {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: var(--font-heading);
+            letter-spacing: 1px;
+            background: rgba(134, 0, 255, 0.2);
+            color: var(--neon-purple);
+            border: 1px solid rgba(134, 0, 255, 0.4);
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .form-group-profile {
+            margin-bottom: 16px;
+        }
+
+        .form-group-profile label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .form-group-profile input,
+        .form-group-profile select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--input-bg, rgba(255, 255, 255, 0.04));
+            border: 1px solid var(--input-border, rgba(255, 255, 255, 0.1));
+            border-radius: var(--radius-btn, 8px);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group-profile input:focus,
+        .form-group-profile select:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+        }
+
+        .form-group-profile input:disabled,
+        .form-group-profile select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .form-group-profile select option {
+            background: var(--panel-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-profile {
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .btn-profile.cyan {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .btn-profile.cyan:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .btn-profile.purple {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+
+        .btn-profile.purple:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        .msg-box {
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .msg-box.success {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            color: var(--neon-cyan);
+        }
+
+        .msg-box.error {
+            background: rgba(255, 0, 127, 0.1);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            color: var(--neon-pink);
+        }
+
+        .divider-info {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--panel-border);
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .info-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-top: 3px;
+        }
+
+        /* ── Theme Picker Styles ───────────────────────────────────────── */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .theme-card {
+            border-radius: 14px;
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            text-align: center;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .theme-card.active {
+            border-color: var(--neon-cyan) !important;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1), 0 0 0 3px var(--neon-cyan) !important;
+        }
+
+        .theme-card .theme-name {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .theme-card .theme-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .theme-card .theme-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Per-card colors for new themes */
+        .tc-corporate {
+            background: #FFFFFF;
+            color: #0F172A;
+            border: 2px solid #E2E8F0;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+        }
+        .tc-corporate .theme-dots span:nth-child(1) { background: #3B82F6; }
+        .tc-corporate .theme-dots span:nth-child(2) { background: #6366F1; }
+        .tc-corporate .theme-dots span:nth-child(3) { background: #EC4899; }
+
+        .tc-dark-advanced {
+            background: #18181B;
+            color: #E4E4E7;
+            border: 2px solid #27272A;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        .tc-dark-advanced .theme-dots span:nth-child(1) { background: #7C3AED; }
+        .tc-dark-advanced .theme-dots span:nth-child(2) { background: #06B6D4; }
+        .tc-dark-advanced .theme-dots span:nth-child(3) { background: #D946EF; }
+
+        .tc-clean-slate {
+            background: #FFFFFF;
+            color: #111827;
+            border: 2px solid #E5E7EB;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .tc-clean-slate .theme-dots span:nth-child(1) { background: #4F46E5; }
+        .tc-clean-slate .theme-dots span:nth-child(2) { background: #6B7280; }
+        .tc-clean-slate .theme-dots span:nth-child(3) { background: #E11D48; }
+
+        .tc-glass {
+            background: linear-gradient(135deg, #1a1a2e, #533483);
+            color: #F0F4FF;
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .tc-glass .theme-dots span:nth-child(1) { background: #00D2FF; box-shadow: 0 0 6px #00D2FF; }
+        .tc-glass .theme-dots span:nth-child(2) { background: #A855F7; box-shadow: 0 0 6px #A855F7; }
+        .tc-glass .theme-dots span:nth-child(3) { background: #F472B6; box-shadow: 0 0 6px #F472B6; }
+
+        .tc-bento {
+            background: #FAFAF9;
+            color: #1C1917;
+            border: 2px solid #E7E5E4;
+            box-shadow: 0 4px 15px rgba(28,25,23,0.08);
+            border-radius: 12px;
+        }
+        .tc-bento .theme-dots span:nth-child(1) { background: #F59E0B; }
+        .tc-bento .theme-dots span:nth-child(2) { background: #0EA5E9; }
+        .tc-bento .theme-dots span:nth-child(3) { background: #F43F5E; }
+
+        .tc-brutalist {
+            background: #FFFFFF;
+            color: #0A0A0A;
+            border: 3px solid #0A0A0A;
+            border-radius: 0;
+            box-shadow: 4px 4px 0px #0A0A0A;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .tc-brutalist:hover {
+            box-shadow: 6px 6px 0px #0A0A0A;
+            transform: translate(-2px, -2px);
+        }
+        .tc-brutalist.active {
+            border-color: #0A0A0A !important;
+            box-shadow: 2px 2px 0px #0A0A0A, 0 0 0 4px #FACC15 !important;
+        }
+        .tc-brutalist .theme-dots span:nth-child(1) { background: #FACC15; border: 1px solid #000; }
+        .tc-brutalist .theme-dots span:nth-child(2) { background: #EF4444; border: 1px solid #000; }
+        .tc-brutalist .theme-dots span:nth-child(3) { background: #0A0A0A; border: 1px solid #000; }
+
+        .tc-erestor {
+            background: #090d16;
+            color: #00f0ff;
+            border: 2px solid #00f0ff;
+            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.25);
+        }
+        .tc-erestor .theme-dots span:nth-child(1) { background: #00f0ff; box-shadow: 0 0 6px #00f0ff; }
+        .tc-erestor .theme-dots span:nth-child(2) { background: #7000ff; box-shadow: 0 0 6px #7000ff; }
+        .tc-erestor .theme-dots span:nth-child(3) { background: #00ff88; box-shadow: 0 0 6px #00ff88; }
+
+        .theme-card .check-badge {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 1.1rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .theme-card.active .check-badge {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">ADMIN</div>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li id="menu-dashboard"><a href="../dashboard/index.html">Dashboard</a></li>
+            <li id="menu-usuarios"><a href="../users/usuarios.html">Gestión Usuarios</a></li>
+            <li id="menu-redes"><a href="../networks/redes.html">Redes</a></li>
+            <li id="menu-sedes"><a href="../networks/sedes.html">Sedes</a></li>
+            <li id="menu-eventos"><a href="../events/eventos.html">Eventos y Horas</a></li>
+            <li id="menu-asistencia-admin"><a href="../attendance/admin_asistencia.html">Control Asistencia</a></li>
+            <li id="menu-asistencia" style="display:none;"><a href="../attendance/asistencia.html">Registrar
+                    Asistencia</a></li>
+            <li id="menu-premios"><a href="../rewards/premios.html">Premios</a></li>
+            <li id="menu-areas"><a href="../networks/areas.html">Áreas de Servicio</a></li>
+            <li id="menu-asignaciones"><a href="../events/asignaciones.html">⚡ Asignar Personal</a></li>
+            <li id="menu-perfil" class="active" style="display:none;"><a href="../users/perfil.html"
+                   >👤 Mi
+                    Perfil</a></li>
+            <li id="menu-reportes"><a href="../reports/reportes.html">Reportes</a></li>
+            <li id="menu-configuracion"><a href="../dashboard/configuracion.html">Configuración</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <div class="dashboard-container">
+            <header class="top-nav">
+                <div class="nav-left">
+                    <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                    <div class="logo">ERESTOR // MI PERFIL</div>
+                </div>
+                <div class="user-nav-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Cambiar Modo">🌓</button>
+                    <div class="user-profile">
+                        <span class="user-name" id="user-display-name">Usuario</span>
+                        <span class="user-email" id="user-display-email">correo@ejemplo.com</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area">
+                <!-- Resumen del perfil -->
+                <div class="profile-grid">
+
+                    <!-- Tarjeta Avatar + Info -->
+                    <div class="profile-card"
+                        style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
+
+                        <!-- Avatar clickeable -->
+                        <div class="avatar-big" id="profileAvatar"
+                            onclick="document.getElementById('inputGallery').click()" title="Cambiar foto">
+                            <span id="avatarInitials">??</span>
+                            <div class="avatar-overlay">📷</div>
+                        </div>
+
+                        <!-- Inputs ocultos -->
+                        <input type="file" id="inputGallery" accept="image/*" style="display:none">
+                        <input type="file" id="inputCamera" accept="image/*" capture="user" style="display:none">
+
+                        <!-- Botones foto -->
+                        <div class="avatar-btns">
+                            <button class="avatar-btn gallery"
+                                onclick="document.getElementById('inputGallery').click()">🖼️ GALERÍA</button>
+                            <button class="avatar-btn camera"
+                                onclick="document.getElementById('inputCamera').click()">📷 CÁMARA</button>
+                        </div>
+                        <p style="font-size:0.72rem; color:var(--text-muted); margin:0 0 12px;">Haz clic en la foto o
+                            usa los botones</p>
+
+                        <div class="profile-name" id="profileName">Cargando...</div>
+                        <div class="profile-email" id="profileEmail">—</div>
+                        <span class="role-badge" id="profileRole">—</span>
+
+                        <div class="divider-info">
+                            <div class="info-item">
+                                <div class="info-label">Área</div>
+                                <div class="info-value" id="profileArea">—</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Red</div>
+                                <div class="info-value" id="profileRed">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editar Datos Personales -->
+                    <div class="profile-card">
+                        <div class="profile-card-title cyan">✏️ EDITAR DATOS</div>
+                        <div class="form-group-profile">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="editName" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group-profile">
+                            <label>DNI / Documento <span style="color:var(--text-muted); font-size:0.68rem; text-transform:none;">(🔒 No modificable)</span></label>
+                            <input type="text" id="editDni" disabled style="background:rgba(255,255,255,0.02); opacity:0.65; cursor:not-allowed;" title="El DNI está protegido por seguridad institucional">
+                        </div>
+                        <div class="form-group-profile">
+                            <label>Correo Electrónico <span style="color:var(--text-muted); font-size:0.68rem; text-transform:none;">(🔒 No modificable)</span></label>
+                            <input type="email" id="editEmail" disabled style="background:rgba(255,255,255,0.02); opacity:0.65; cursor:not-allowed;" title="El correo electrónico está protegido">
+                        </div>
+                        <div class="form-group-profile">
+                            <label>Teléfono / Celular de Contacto</label>
+                            <input type="tel" id="editPhone" placeholder="Tu teléfono">
+                        </div>
+                        <div class="form-group-profile">
+                            <label>Área de Servicio</label>
+                            <select id="editArea" class="form-control-modal"
+                                style="width:100%; padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:var(--text-primary);">
+                                <option value="">Sin Área</option>
+                            </select>
+                        </div>
+                        <div class="form-group-profile">
+                            <label>Red</label>
+                            <select id="editRed" class="form-control-modal"
+                                style="width:100%; padding:10px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:var(--text-primary);">
+                                <option value="">Seleccione Red...</option>
+                            </select>
+                        </div>
+                        <button class="btn-profile cyan" id="btnSaveInfo">GUARDAR CAMBIOS</button>
+                        <div class="msg-box" id="msgInfo"></div>
+                    </div>
+
+                    <!-- Cambiar Contraseña -->
+                    <div class="profile-card" style="grid-column: 1 / -1;">
+                        <div class="profile-card-title purple">🔐 CAMBIAR CONTRASEÑA</div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+                            <div class="form-group-profile">
+                                <label>Contraseña Actual</label>
+                                <input type="password" id="currentPass" placeholder="••••••">
+                            </div>
+                            <div class="form-group-profile">
+                                <label>Nueva Contraseña</label>
+                                <input type="password" id="newPass" placeholder="Mín. 6 caracteres">
+                            </div>
+                            <div class="form-group-profile">
+                                <label>Confirmar Nueva</label>
+                                <input type="password" id="confirmPass" placeholder="Repite la nueva">
+                            </div>
+                        </div>
+                        <button class="btn-profile purple" id="btnChangePass" style="max-width:300px;">CAMBIAR
+                            CONTRASEÑA</button>
+                        <div class="msg-box" id="msgPass"></div>
+                    </div>
+
+                </div>
+
+                <!-- 🎨 Selector de Tema -->
+                <div class="profile-card" style="grid-column: 1 / -1;">
+                    <div class="profile-card-title cyan">🎨 APARIENCIA — ELIGE TU
+                        TEMA</div>
+                    <div class="theme-grid" id="themeGrid">
+
+                        <div class="theme-card tc-erestor" data-theme="theme-erestor" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">🛡️ Erestor Telemetry</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Cyber-Glassmorphism Premium</div>
+                        </div>
+
+                        <div class="theme-card tc-corporate" data-theme="theme-corporate" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">🏢 Corporate Pro</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Corporativo (Default)</div>
+                        </div>
+
+                        <div class="theme-card tc-dark-advanced" data-theme="theme-dark-advanced" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">🌑 Oscuro Avanzado</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Elegante con acentos fríos</div>
+                        </div>
+
+                        <div class="theme-card tc-clean-slate" data-theme="theme-clean-slate" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">⬜ Clean Slate</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Blanco puro y minimalista</div>
+                        </div>
+
+                        <div class="theme-card tc-glass" data-theme="theme-glass" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">🔮 Glassmorphism</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Cristal translúcido</div>
+                        </div>
+
+                        <div class="theme-card tc-bento" data-theme="theme-bento" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">📦 Bento Grid</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Estructura modular</div>
+                        </div>
+
+                        <div class="theme-card tc-brutalist" data-theme="theme-brutalist" onclick="selectTheme(this)">
+                            <span class="check-badge">✅</span>
+                            <div class="theme-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="theme-name">⚡ Brutalismo</div>
+                            <div style="font-size:0.72rem; opacity:0.7;">Bordes gruesos y agresivos</div>
+                        </div>
+
+                    </div>
+                    <div class="msg-box" id="msgTheme" style="margin-top:14px;"></div>
+                </div>
+
+        </div>
+        </main>
+    </div>
+    </div>
+
+    <!-- Modal vista previa / Cámara -->
+    <div class="photo-modal-overlay" id="photoModal">
+        <div class="photo-modal">
+            <h3 id="modalTitle">📷 VISTA PREVIA</h3>
+
+            <!-- Vista previa de archivo -->
+            <div class="preview-circle" id="previewContainer">
+                <img id="previewImg" src="" alt="Vista previa">
+            </div>
+
+            <!-- Vista de cámara en vivo -->
+            <div class="camera-container" id="cameraContainer">
+                <video id="videoFeed" autoplay playsinline></video>
+            </div>
+
+            <p id="modalInstruction" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0;">¿Usar esta foto
+                como tu avatar?</p>
+
+            <div class="photo-modal-actions">
+                <!-- Botones para vista previa de archivo -->
+                <div id="fileActions" style="display:flex; gap:10px;">
+                    <button class="btn-profile cyan" id="btnConfirmPhoto" style="max-width:160px;">✔ GUARDAR</button>
+                    <button class="btn-profile" onclick="closePhotoModal()"
+                        style="max-width:140px; border-color:var(--text-muted); color:var(--text-muted);">CANCELAR</button>
+                </div>
+
+                <!-- Botones para cámara -->
+                <div id="cameraActions" style="display:none; gap:10px;">
+                    <button class="btn-profile purple" id="btnCapturePhoto" style="max-width:160px;">📸
+                        CAPTURAR</button>
+                    <button class="btn-profile" onclick="stopCamera()"
+                        style="max-width:140px; border-color:var(--text-muted); color:var(--text-muted);">CERRAR</button>
+                </div>
+            </div>
+            <div class="msg-box" id="msgPhoto"></div>
+        </div>
+    </div>
+
+    <!-- Canvas oculto para captura -->
+    <canvas id="captureCanvas" style="display:none;" width="640" height="640"></canvas>
+
+    <script src="../../shared/assets/js/common_ui.js?v=3.0"></script>
+    <script>
+        const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+        const token = sessionStorage.getItem('token') || '';
+        let pendingImageB64 = null;
+
+        // ── Theme Picker Logic ────────────────────────────────────────────
+        function initThemePicker() {
+            const currentTheme = localStorage.getItem('userTheme') || 'theme-corporate';
+            document.querySelectorAll('.theme-card').forEach(card => {
+                if (card.dataset.theme === currentTheme) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+        }
+
+        function selectTheme(card) {
+            const theme = card.dataset.theme;
+
+            // 1. Apply immediately for live preview
+            window.applyTheme(theme);
+
+            // 2. Update visual active state
+            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            // 3. Persist to backend
+            const msgEl = document.getElementById('msgTheme');
+            authFetch('../auth/api/update_profile.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'change_theme', theme: theme })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        msgEl.textContent = '✔ Tema guardado correctamente';
+                        msgEl.className = 'msg-box success';
+                        msgEl.style.display = 'block';
+                        setTimeout(() => { msgEl.style.display = 'none'; }, 2500);
+                    }
+                })
+                .catch(() => { });
+        }
+
+        // ── Cargar datos ─────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            initThemePicker();
+            if (!user.id) return;
+            const initials = (user.name || '??').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('avatarInitials').textContent = initials;
+            document.getElementById('profileName').textContent = user.name || '—';
+            document.getElementById('profileEmail').textContent = user.email || '—';
+            document.getElementById('profileRole').textContent = user.role || '—';
+            document.getElementById('editName').value = user.name || '';
+            document.getElementById('editDni').value = user.dni || 'No registrado';
+            document.getElementById('editEmail').value = user.email || '';
+            document.getElementById('editPhone').value = user.phone || '';
+            if (user.avatar) setAvatarImg(user.avatar);
+
+            // Ocultar barra administrativa si es un usuario normal
+            const isAdmin = ['superadmin', 'admin', 'coordinador', 'supervisor'].includes(user.role);
+            if (!isAdmin) {
+                const adminMenuIds = ['menu-dashboard', 'menu-usuarios', 'menu-redes', 'menu-sedes', 'menu-eventos', 'menu-asistencia-admin', 'menu-premios', 'menu-areas', 'menu-asignaciones', 'menu-reportes', 'menu-configuracion'];
+                adminMenuIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                let kioscoLink = document.getElementById('menu-asistencia-kiosco');
+                if (!kioscoLink) {
+                    const ul = document.querySelector('.sidebar-menu');
+                    if (ul) {
+                        const li = document.createElement('li');
+                        li.id = 'menu-asistencia-kiosco';
+                        li.innerHTML = '<a href="../attendance/kiosco.html">📱 Terminal Kiosco (Pasar Asistencia)</a>';
+                        ul.insertBefore(li, ul.lastElementChild);
+                    }
+                }
+            }
+
+            loadSelectors();
+        });
+
+        function loadSelectors() {
+            const pAreas = authFetch('../networks/api/areas.php?all=true').then(r => r.json());
+            const pRedes = authFetch('../networks/api/selectors.php').then(r => r.json());
+            const pUser = authFetch(`api/usuarios.php?id=${user.id}`).then(r => r.json());
+
+            Promise.all([pAreas, pRedes, pUser])
+                .then(([dataAreas, dataRedes, dataUser]) => {
+                    // 1. Populate Areas
+                    const selArea = document.getElementById('editArea');
+                    if (dataAreas.status === 'success') {
+                        // Clear existing options except the first one
+                        while (selArea.options.length > 1) selArea.remove(1);
+                        dataAreas.data.forEach(a => {
+                            const opt = document.createElement('option');
+                            opt.value = a.id;
+                            opt.textContent = a.nombre;
+                            selArea.appendChild(opt);
+                        });
+                    }
+
+                    // 2. Populate Redes
+                    const selRed = document.getElementById('editRed');
+                    if (dataRedes.status === 'success') {
+                        while (selRed.options.length > 1) selRed.remove(1);
+                        dataRedes.data.forEach(r => {
+                            const opt = document.createElement('option');
+                            opt.value = r.id;
+                            opt.textContent = (r.codigo ? r.codigo + ' - ' : '') + r.nombre;
+                            selRed.appendChild(opt);
+                        });
+                    }
+
+                    // 3. User Data
+                    const u = (dataUser.data && Array.isArray(dataUser.data)) ? dataUser.data[0] : (dataUser.data || {});
+                    if (u.id) {
+                        // Update UI summary
+                        document.getElementById('profileArea').textContent = u.area_nombre || '—';
+                        document.getElementById('profileRed').textContent =
+                            (u.red_codigo ? u.red_codigo + ' - ' : '') + (u.red_nombre || '—');
+                        
+                        if (u.avatar) setAvatarImg(u.avatar);
+
+                        // Update Dropdowns and DNI
+                        if (u.dni) document.getElementById('editDni').value = u.dni;
+                        selArea.value = u.area_id || '';
+                        selRed.value = u.red_id || '';
+
+                        // Sync sessionStorage just in case
+                        const updated = { ...user, ...u };
+                        sessionStorage.setItem('user', JSON.stringify(updated));
+                    }
+                })
+                .catch(err => console.error("Error loading profile data:", err));
+        }
+
+        // ── Avatar helpers ───────────────────────────────────────────────
+        function setAvatarImg(url) {
+            const av = document.getElementById('profileAvatar');
+            document.getElementById('avatarInitials').style.display = 'none';
+            const old = av.querySelector('img.av-photo');
+            if (old) old.remove();
+            const img = document.createElement('img');
+            img.className = 'av-photo';
+            img.src = url + '?t=' + Date.now();
+            av.insertBefore(img, av.querySelector('.avatar-overlay'));
+        }
+
+        // --- Manejo de Cámara ---
+        let stream = null;
+
+        async function startCamera() {
+            document.getElementById('modalTitle').textContent = '📸 CÁMARA EN VIVO';
+            document.getElementById('modalInstruction').textContent = 'Posa para la cámara';
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('cameraContainer').style.display = 'block';
+            document.getElementById('fileActions').style.display = 'none';
+            document.getElementById('cameraActions').style.display = 'flex';
+            document.getElementById('photoModal').classList.add('open');
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: 640, height: 640 }
+                });
+                document.getElementById('videoFeed').srcObject = stream;
+            } catch (err) {
+                console.error("Error al acceder a la cámara:", err);
+                alert("No pudimos acceder a tu cámara. Asegúrate de dar permisos.");
+                stopCamera();
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            document.getElementById('photoModal').classList.remove('open');
+            document.getElementById('cameraContainer').style.display = 'none';
+            document.getElementById('fileActions').style.display = 'flex';
+            document.getElementById('cameraActions').style.display = 'none';
+        }
+
+        document.getElementById('btnCapturePhoto').addEventListener('click', () => {
+            const video = document.getElementById('videoFeed');
+            const canvas = document.getElementById('captureCanvas');
+            const context = canvas.getContext('2d');
+
+            // Dibujar el frame actual del video en el canvas (centrado y recortado)
+            context.save();
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1); // Mirror back
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            context.restore();
+
+            pendingImageB64 = canvas.toDataURL('image/jpeg', 0.8);
+
+            // Detener stream y pasar a vista previa normal
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+
+            document.getElementById('modalTitle').textContent = '📷 VISTA PREVIA';
+            document.getElementById('modalInstruction').textContent = '¿Usar esta foto capturada?';
+            document.getElementById('cameraContainer').style.display = 'none';
+            document.getElementById('previewContainer').style.display = 'block';
+            document.getElementById('previewImg').src = pendingImageB64;
+            document.getElementById('cameraActions').style.display = 'none';
+            document.getElementById('fileActions').style.display = 'flex';
+        });
+
+        function openPhotoModal(dataUrl) {
+            document.getElementById('modalTitle').textContent = '📷 VISTA PREVIA';
+            document.getElementById('modalInstruction').textContent = '¿Usar esta foto como tu avatar?';
+            document.getElementById('previewContainer').style.display = 'block';
+            document.getElementById('cameraContainer').style.display = 'none';
+            document.getElementById('fileActions').style.display = 'flex';
+            document.getElementById('cameraActions').style.display = 'none';
+            document.getElementById('previewImg').src = dataUrl;
+            document.getElementById('photoModal').classList.add('open');
+            document.getElementById('msgPhoto').style.display = 'none';
+        }
+        function closePhotoModal() {
+            if (stream) stopCamera();
+            document.getElementById('photoModal').classList.remove('open');
+            pendingImageB64 = null;
+            document.getElementById('inputGallery').value = '';
+            document.getElementById('inputCamera').value = '';
+        }
+        function handleFileSelected(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = e => { pendingImageB64 = e.target.result; openPhotoModal(pendingImageB64); };
+            reader.readAsDataURL(file);
+        }
+        document.getElementById('inputGallery').addEventListener('change', e => handleFileSelected(e.target.files[0]));
+        // Sobrescribir el input camera viejo con nuestra lógica personalizada
+        document.querySelectorAll('.avatar-btn.camera').forEach(btn => {
+            btn.onclick = (e) => {
+                e.preventDefault();
+                startCamera();
+            };
+        });
+
+        // ── Confirmar subida ─────────────────────────────────────────────
+        document.getElementById('btnConfirmPhoto').addEventListener('click', function () {
+            if (!pendingImageB64) return;
+            const msgEl = document.getElementById('msgPhoto');
+            this.disabled = true; this.textContent = 'SUBIENDO...';
+            authFetch('../auth/api/upload_avatar.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: pendingImageB64 })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const updated = { ...user, avatar: data.avatar_url };
+                        sessionStorage.setItem('user', JSON.stringify(updated));
+                        setAvatarImg(data.avatar_url);
+                        closePhotoModal();
+                    } else { showMsg(msgEl, data.error || 'Error al subir foto', 'error'); }
+                })
+                .catch(() => showMsg(msgEl, 'Error de conexión', 'error'))
+                .finally(() => { this.disabled = false; this.textContent = '✔ GUARDAR'; });
+        });
+
+        // ── Guardar datos ────────────────────────────────────────────────
+        document.getElementById('btnSaveInfo').addEventListener('click', function () {
+            const name = document.getElementById('editName').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const area_id = document.getElementById('editArea').value || null;
+            const red_id = document.getElementById('editRed').value || null;
+
+            const msgEl = document.getElementById('msgInfo');
+            msgEl.style.display = 'none';
+            if (!name) { showMsg(msgEl, 'El nombre no puede estar vacío.', 'error'); return; }
+            this.disabled = true; this.textContent = 'GUARDANDO...';
+            authFetch('../auth/api/update_profile.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update_info', name, phone, area_id, red_id })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const updated = { ...user, name, phone, area_id, red_id };
+                        sessionStorage.setItem('user', JSON.stringify(updated));
+                        document.getElementById('profileName').textContent = name;
+                        document.getElementById('avatarInitials').textContent = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+                        document.getElementById('user-display-name').textContent = name;
+
+                        // Update UI summary labels
+                        const areaText = document.getElementById('editArea').options[document.getElementById('editArea').selectedIndex].text;
+                        const redText = document.getElementById('editRed').options[document.getElementById('editRed').selectedIndex].text;
+                        document.getElementById('profileArea').textContent = area_id ? areaText : '—';
+                        document.getElementById('profileRed').textContent = red_id ? redText : '—';
+
+                        showMsg(msgEl, '✔ Datos actualizados', 'success');
+                    } else { showMsg(msgEl, data.error || 'Error al guardar', 'error'); }
+                })
+                .catch(() => showMsg(msgEl, 'Error de conexión', 'error'))
+                .finally(() => { this.disabled = false; this.textContent = 'GUARDAR CAMBIOS'; });
+        });
+
+        // ── Cambiar contraseña ───────────────────────────────────────────
+        document.getElementById('btnChangePass').addEventListener('click', function () {
+            const current = document.getElementById('currentPass').value;
+            const newP = document.getElementById('newPass').value;
+            const confirm = document.getElementById('confirmPass').value;
+            const msgEl = document.getElementById('msgPass');
+            msgEl.style.display = 'none';
+            if (!current || !newP || !confirm) { showMsg(msgEl, 'Completa todos los campos.', 'error'); return; }
+            if (newP.length < 6) { showMsg(msgEl, 'Mínimo 6 caracteres.', 'error'); return; }
+            if (newP !== confirm) { showMsg(msgEl, 'Las contraseñas no coinciden.', 'error'); return; }
+            this.disabled = true; this.textContent = 'PROCESANDO...';
+            authFetch('../auth/api/update_profile.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'change_password', current_password: current, new_password: newP, confirm_password: confirm })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showMsg(msgEl, '✔ Contraseña cambiada exitosamente', 'success');
+                        ['currentPass', 'newPass', 'confirmPass'].forEach(id => document.getElementById(id).value = '');
+                    } else { showMsg(msgEl, data.error || 'Error', 'error'); }
+                })
+                .catch(() => showMsg(msgEl, 'Error de conexión', 'error'))
+                .finally(() => { this.disabled = false; this.textContent = 'CAMBIAR CONTRASEÑA'; });
+        });
+
+        function showMsg(el, text, type) {
+            el.textContent = text; el.className = 'msg-box ' + type; el.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

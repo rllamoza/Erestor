@@ -1,0 +1,19 @@
+<?php
+require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../db.php';
+
+$sql = "CREATE TABLE IF NOT EXISTS custom_dashboards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    layout_json JSON NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);";
+
+try {
+    $pdo->exec($sql);
+    echo "Tabla custom_dashboards creada exitosamente.\n";
+} catch (PDOException $e) {
+    echo "Error creando tabla: " . $e->getMessage() . "\n";
+}
+?>

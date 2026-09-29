@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Áreas Operativas - Erestor Sentinel</title>
+    <link rel="stylesheet" href="../../shared/assets/css/styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">ADMIN</div>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li id="menu-dashboard"><a href="../dashboard/index.html">Dashboard</a></li>
+            <li id="menu-usuarios"><a href="../users/usuarios.html">Gestión Usuarios</a></li>
+            <li id="menu-redes"><a href="../networks/redes.html">Redes</a></li>
+            <li id="menu-sedes"><a href="../networks/sedes.html">Sedes</a></li>
+            <li id="menu-eventos"><a href="../events/eventos.html">Eventos y Horas</a></li>
+            <li id="menu-asistencia-admin"><a href="../attendance/admin_asistencia.html">Control Asistencia</a></li>
+            <li id="menu-asistencia" style="display:none;"><a href="../attendance/asistencia.html">Registrar
+                    Asistencia</a></li>
+            <li id="menu-premios"><a href="../rewards/premios.html">Premios</a></li>
+            <li class="active" id="menu-areas"><a href="../networks/areas.html">Áreas de Servicio</a></li>
+            <li id="menu-asignaciones"><a href="../events/asignaciones.html">⚡ Asignar
+                    Personal</a></li>
+            <li id="menu-reportes"><a href="../reports/reportes.html">Reportes</a></li>
+            <li id="menu-configuracion"><a href="../dashboard/configuracion.html">Configuración</a></li>
+            <li id="menu-perfil" style="display:none;"><a href="../users/perfil.html"
+                   >&#128100; Mi
+                    Perfil</a></li>
+            <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+        </ul>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <div class="dashboard-container">
+            <header class="top-nav">
+                <div class="nav-left">
+                    <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                    <div>
+                        <div class="logo">ERESTOR // ÁREAS & ROLES</div>
+                        <span class="erestor-badge cyan" style="font-size: 0.65rem; margin-top: 2px;">
+                            <span class="live-dot" style="width: 5px; height: 5px;"></span> ESPECIALIDADES OPERATIVAS
+                        </span>
+                    </div>
+                </div>
+                <div class="user-nav-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Cambiar Modo">🌓</button>
+                    <div class="user-profile">
+                        <span class="user-name" id="user-display-name">Usuario</span>
+                        <span class="user-email" id="user-display-email">correo@ejemplo.com</span>
+                    </div>
+                </div>
+                <div class="stats-overview" style="display: flex; gap: 10px;">
+                    <button class="btn-glow-pink" onclick="resetModalForNew()">+ NUEVA ÁREA</button>
+                </div>
+            </header>
+
+            <div class="search-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+                <input type="text" id="searchInput" placeholder="Buscar por nombre, descripción..."
+                    class="form-control-modal"
+                    style="flex: 1; margin: 0;">
+                <button class="btn-glow" onclick="handleSearch()"
+                    style="padding: 8px 20px; min-width: 120px; border-color: var(--neon-cyan); color: var(--neon-cyan);">BUSCAR</button>
+            </div>
+            <main class="grid-content" style="display:block;">
+                <div class="panel panel-large">
+                    <div class="panel-header">LISTADO DE ÁREAS</div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table" id="areasTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="areasPagination"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Area -->
+    <div class="modal-overlay" id="modalArea">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalAreaTitle"
+                    style="color:var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan);">Nueva Área de Servicio</h3>
+                <button class="close-btn" onclick="closeModal('modalArea')">&times;</button>
+            </div>
+            <form id="formArea">
+                <input type="hidden" id="area_id" value="">
+                <div class="form-group-modal">
+                    <label>Nombre del Área</label>
+                    <input type="text" id="area_nombre" class="form-control-modal" required>
+                </div>
+                <div class="form-group-modal">
+                    <label>Descripción</label>
+                    <textarea id="area_desc" class="form-control-modal" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-glow-pink" style="width:100%; margin-top:15px;">GUARDAR ÁREA</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirm -->
+    <div class="modal-overlay" id="modalConfirm">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header" style="justify-content: center;">
+                <h3 class="modal-title" style="color:var(--neon-cyan);">Confirmar Acción</h3>
+            </div>
+            <p id="confirmMsg" style="margin: 20px 0;">Esta acción no se puede deshacer.</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn-glow-danger" id="btnConfirmDelete">SÍ, ELIMINAR</button>
+                <button class="btn-glow" onclick="closeModal('modalConfirm')">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../shared/assets/js/common_ui.js?v=3.0"></script>
+    <script src="../../shared/assets/js/paginator.js?v=1.1"></script>
+    <script>
+        const token = sessionStorage.getItem('token');
+        let areasPaginator;
+
+        function initAreasPaginator() {
+            areasPaginator = initPaginator({
+                containerId: 'areasTable',
+                paginationId: 'areasPagination',
+                apiUrl: 'api/areas.php',
+                token: token,
+                limit: 10,
+                renderRow: (a) => {
+                    return `
+                        <tr>
+                            <td>${a.id}</td>
+                            <td><strong>${a.nombre}</strong></td>
+                            <td>${a.descripcion || ''}</td>
+                            <td>
+                                <a href="#" onclick="editArea(${a.id})">Editar</a> | 
+                                <a href="#" style="color:#ff3333" onclick="confirmDelete(${a.id})">Eliminar</a>
+                            </td>
+                        </tr>`;
+                },
+                onDataLoaded: (data) => {
+                    window.areasData = data.data; // Keep for modal logic
+                }
+            });
+            areasPaginator.loadPage(1);
+        }
+
+        function handleSearch() {
+            const term = document.getElementById('searchInput').value;
+            areasPaginator.search(term);
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        initAreasPaginator();
+
+        // Compatibility wrapper
+        window.loadAreas = () => areasPaginator.loadPage(areasPaginator.currentPage);
+
+        window.resetModalForNew = function () {
+            document.getElementById('modalAreaTitle').innerText = 'Nuevo Área';
+            document.getElementById('formArea').reset();
+            document.getElementById('area_id').value = '';
+            openModal('modalArea');
+        };
+
+        window.editArea = function (id) {
+            const a = window.areasData.find(x => x.id == id);
+            if (!a) return;
+            document.getElementById('modalAreaTitle').innerText = 'Editar Área';
+            document.getElementById('area_id').value = a.id;
+            document.getElementById('area_nombre').value = a.nombre;
+            document.getElementById('area_desc').value = a.descripcion || '';
+            openModal('modalArea');
+        };
+
+        let areaToDelete = null;
+        window.confirmDelete = function (id) {
+            areaToDelete = id;
+            openModal('modalConfirm');
+        }
+
+        document.getElementById('btnConfirmDelete').onclick = () => {
+            authFetch('api/areas.php?id=' + areaToDelete, { method: 'DELETE' })
+                .then(res => res.json())
+                .then(() => {
+                    closeModal('modalConfirm');
+                    loadAreas();
+                });
+        };
+
+        document.getElementById('formArea').onsubmit = (e) => {
+            e.preventDefault();
+            const id = document.getElementById('area_id').value;
+            const payload = {
+                id: id || null,
+                nombre: document.getElementById('area_nombre').value,
+                descripcion: document.getElementById('area_desc').value
+            };
+            authFetch('api/areas.php', {
+                method: id ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(res => res.json()).then(data => {
+                if (data.status === 'success') {
+                    closeModal('modalArea');
+                    loadAreas();
+                    document.getElementById('formArea').reset();
+                    document.getElementById('area_id').value = '';
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+# Denegar acceso a cualquier archivo en esta carpeta desde la web
+Order deny,allow
+Deny from all

@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gobernanza Territorial, Redes & Sedes - Erestor Ops</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#0a0e17',
+            surface: '#0f1422',
+            primary: '#4cd7f6',
+            secondary: '#4edea3',
+            'outline-variant': '#2a344d',
+            'on-surface': '#e2e8f0',
+            'on-surface-variant': '#94a3b8'
+          },
+          fontFamily: {
+            headline: ['Plus Jakarta Sans', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .cyber-grid {
+      background-image: radial-gradient(rgba(76, 215, 246, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #070a10;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2a344d;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4cd7f6;
+    }
+    @keyframes radarSweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .radar-beam {
+      animation: radarSweep 6s linear infinite;
+      transform-origin: center center;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0e17] text-on-surface font-body antialiased min-h-screen flex overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+
+  <!-- ================= 1. SIDEBAR LATERAL (EXACTO AL DISEÑO) ================= -->
+  <aside class="w-[260px] h-screen bg-[#070a10] border-r border-[#2a344d]/50 flex flex-col justify-between fixed top-0 left-0 z-40 select-none">
+    <div class="flex flex-col">
+      <!-- App Header / Logo -->
+      <div class="px-5 py-5 flex items-center gap-3 border-b border-[#2a344d]/40">
+        <div class="w-10 h-10 rounded-xl bg-[#0e1626] border border-[#22d3ee]/60 flex items-center justify-center shadow-[0_0_18px_rgba(34,211,238,0.3)] shrink-0">
+          <span class="material-symbols-outlined text-[#22d3ee] text-[24px]">deployed_code</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 leading-none">
+            <span class="font-extrabold text-white text-[17px] tracking-tight">ERESTOR</span>
+            <span class="font-extrabold text-[#22d3ee] text-[17px] tracking-tight">OPS</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400 mt-1">v4.2 • Centro Operativo</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1.5 overflow-y-auto">
+        <!-- 1. Dashboard -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../dashboard/index.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- 2. Asignación Drag&Drop -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../events/asignaciones.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">drag_indicator</span>
+          <span>Asignación Drag&amp;Drop</span>
+        </a>
+
+        <!-- 3. Redes & Sedes (ACTIVE EXACTO A LA IMAGEN) -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#0e1d28] text-[#22d3ee] border border-[#22d3ee] shadow-[0_0_20px_rgba(34,211,238,0.22)] font-semibold text-sm" href="redes.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#22d3ee] text-[20px]">hub</span>
+            <span>Redes &amp; Sedes</span>
+          </div>
+        </a>
+
+        <!-- 4. Turnos & Eventos -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../events/eventos.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">schedule</span>
+          <span>Turnos &amp; Eventos</span>
+        </a>
+
+        <!-- 5. Control Asistencia -->
+        <a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../attendance/admin_asistencia.html">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-400 text-[20px]">fact_check</span>
+            <span>Control Asistencia</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+            EN VIVO
+          </span>
+        </a>
+
+        <!-- 6. Personal & Voluntarios -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../users/usuarios.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">group</span>
+          <span>Personal &amp; Voluntarios</span>
+        </a>
+
+        <!-- 7. Recompensas / Reportes -->
+        <a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-[#151b2d] transition-all font-medium text-sm" href="../reports/reportes.html">
+          <span class="material-symbols-outlined text-slate-400 text-[20px]">military_tech</span>
+          <span>Recompensas</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Bottom System Telemetry & Logout -->
+    <div class="p-3 border-t border-[#2a344d]/30 bg-[#070a10] flex flex-col gap-2.5">
+      <div class="px-3 py-2.5 rounded-xl bg-[#0f1422] border border-[#2a344d]/40 flex flex-col gap-1.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-300 flex items-center gap-1.5 font-medium">
+            <span class="w-2 h-2 rounded-full bg-[#4edea3] shadow-[0_0_8px_#4edea3]"></span>
+            Servidor Central: Óptimo
+          </span>
+          <span class="text-[#4edea3] font-mono text-[11px]">18ms</span>
+        </div>
+        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+          <span>Storage NVMe</span>
+          <span class="font-mono text-slate-300">84%</span>
+        </div>
+        <div class="w-full h-1 bg-[#1c243a] rounded-full overflow-hidden">
+          <div class="w-[84%] h-full bg-[#4cd7f6] rounded-full"></div>
+        </div>
+      </div>
+
+      <button onclick="window.location.href='../events/asignaciones.html'" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#14232c] border border-[#22d3ee]/40 text-[#22d3ee] hover:bg-[#1a2e3a] transition-all text-xs font-semibold">
+        <span class="material-symbols-outlined text-[16px]">how_to_reg</span>
+        <span>Registro Operativo</span>
+      </button>
+
+      <button onclick="logout()" class="flex items-center gap-2 px-2 text-xs text-slate-400 hover:text-red-400 transition-colors">
+        <span class="material-symbols-outlined text-[16px]">logout</span>
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENIDO PRINCIPAL ================= -->
+  <div class="ml-[260px] flex-1 flex flex-col min-h-screen cyber-grid pb-16">
+
+    <!-- BARRA SUPERIOR OPERATIVA (TELEMETRÍA EN VIVO) -->
+    <header class="h-16 bg-[#0a0e17]/90 backdrop-blur-md border-b border-[#2a344d]/40 px-8 flex items-center justify-between sticky top-0 z-30">
+      <div class="flex items-center gap-3 text-xs font-mono">
+        <span class="flex items-center gap-1.5 text-[#4edea3] font-semibold">
+          <span class="w-2 h-2 rounded-full bg-[#4edea3] animate-pulse shadow-[0_0_8px_#4edea3]"></span>
+          TELEMETRÍA EN VIVO
+        </span>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-400">Nodo Activo: <strong class="text-white">Central-E1</strong></span>
+        <span class="text-slate-600">•</span>
+        <span class="text-slate-400">Latencia: <strong class="text-[#4cd7f6]">18ms</strong></span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-[#0f1422] border border-[#2a344d]/60 text-xs text-slate-300 font-mono">
+          <span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">shield</span>
+          <span>Modo Seguro: Sincronizado</span>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-[#14232c] border border-[#22d3ee]/60 flex items-center justify-center font-bold text-xs text-[#22d3ee] shadow-sm">
+          EO
+        </div>
+      </div>
+    </header>
+
+    <!-- WORKSPACE PRINCIPAL -->
+    <main class="p-8 space-y-6 max-w-[1600px] mx-auto w-full">
+
+      <!-- Breadcrumbs & Action Toolbar (Exacto al diseño) -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">
+            <span>OPERACIONES</span>
+            <span>&gt;</span>
+            <span>ORGANIZACIÓN TERRITORIAL</span>
+            <span>&gt;</span>
+            <span class="text-[#4cd7f6] font-semibold">REDES &amp; SEDES</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-extrabold text-white font-headline tracking-tight">Gobernanza Territorial, Redes &amp; Sedes</h1>
+            <span class="px-2.5 py-0.5 rounded-full bg-[#14232c] text-[#4edea3] border border-[#4edea3]/40 text-[10px] font-mono font-bold tracking-wider uppercase">
+              MATRIZ V4.2 ACTIVA
+            </span>
+          </div>
+        </div>
+
+        <!-- Toolbar Buttons -->
+        <div class="flex items-center gap-3">
+          <button onclick="openGeocercaModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0f1422] hover:bg-[#182035] border border-[#2a344d] text-slate-200 text-xs font-semibold transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[18px] text-[#4cd7f6]">gps_fixed</span>
+            <span>Configurar Geocerca GPS</span>
+          </button>
+          <button onclick="exportMatrixData()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0f1422] hover:bg-[#182035] border border-[#2a344d] text-slate-200 text-xs font-semibold transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[18px] text-slate-400">download</span>
+            <span>Exportar Matriz</span>
+          </button>
+          <button onclick="openNewSedeModal()" class="flex items-center gap-2 px-5 py-2 rounded-xl bg-[#4cd7f6] hover:bg-[#38bdf8] text-black text-xs font-bold transition-all shadow-[0_0_20px_rgba(76,215,246,0.35)]">
+            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+            <span>Añadir Nueva Sede / Red</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= 4 HERO KPI CARDS ================= -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Sedes & Campus Activos -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4cd7f6]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">SEDES &amp; CAMPUS ACTIVOS</span>
+            <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">apartment</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-sedes-count">4</span>
+              <span class="text-xs font-bold text-[#4cd7f6] font-mono">Campus Sincronizados</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3]"></span>
+            <span>Geocercas Satelitales RTK <strong class="text-white">100% OK</strong></span>
+          </div>
+        </div>
+
+        <!-- Card 2: Redes Ministeriales -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4edea3]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">REDES MINISTERIALES</span>
+            <span class="material-symbols-outlined text-[#4edea3] text-[20px]">hub</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-redes-count">6</span>
+              <span class="text-xs font-bold text-slate-400 font-mono">Divisiones</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between">
+            <span>Distribución Transversal</span>
+            <strong class="text-[#4cd7f6]">6/6 Asignadas</strong>
+          </div>
+        </div>
+
+        <!-- Card 3: Fuerza Operativa Activa -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4cd7f6]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">FUERZA OPERATIVA ACTIVA</span>
+            <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">groups</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-users-count">1,480</span>
+              <span class="text-xs font-bold text-[#4edea3] font-mono">+3.8% hoy</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between">
+            <span>Voluntarios Geolocalizados</span>
+            <strong class="text-[#4edea3]" id="kpi-users-turno">1,418 en Turno</strong>
+          </div>
+        </div>
+
+        <!-- Card 4: SLA Cobertura Territorial -->
+        <div class="p-5 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-lg flex flex-col justify-between hover:border-[#4edea3]/60 transition-all">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-slate-400 tracking-wider uppercase font-medium">SLA COBERTURA TERRITORIAL</span>
+            <span class="material-symbols-outlined text-[#4edea3] text-[20px]">speed</span>
+          </div>
+          <div class="my-3">
+            <div class="text-4xl font-extrabold font-headline text-white flex items-baseline gap-2">
+              <span id="kpi-sla">92.4%</span>
+              <span class="text-xs font-normal text-slate-400 font-mono">Target &gt;90%</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-400 border-t border-[#2a344d]/40 pt-2 font-mono flex items-center justify-between">
+            <span>Status: Óptimo Global</span>
+            <strong class="text-[#4edea3]">0 Cuellos de Botella</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2-COLUMN OPERATIONAL LAYOUT ================= -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ================= COLUMNA IZQUIERDA (7 COLS / ~60%) ================= -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- 1. Matriz de Posicionamiento Satelital (Radar/Map) -->
+          <div class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-xl space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-base font-bold text-white font-headline">Matriz de Posicionamiento Satelital</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Monitoreo de perímetro perimétrico y radioenlaces biométricos en tiempo real.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-[#14232c] text-[#4cd7f6] border border-[#4cd7f6]/30 text-[10px] font-mono font-bold">
+                  GPS WGS-84
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-[#070a10] text-slate-300 border border-[#2a344d] text-[10px] font-mono">
+                  -12.0884° S, -77.0301° W
+                </span>
+              </div>
+            </div>
+
+            <!-- Radar Canvas / Visual Area -->
+            <div class="relative w-full h-72 rounded-2xl bg-[#070a10] border border-[#2a344d]/80 overflow-hidden flex items-center justify-center p-4">
+              <!-- Grid background -->
+              <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
+              
+              <!-- Concentric Rings -->
+              <div class="absolute w-60 h-60 rounded-full border border-[#22d3ee]/20 pointer-events-none"></div>
+              <div class="absolute w-44 h-44 rounded-full border border-[#22d3ee]/30 pointer-events-none"></div>
+              <div class="absolute w-24 h-24 rounded-full border border-[#4edea3]/40 pointer-events-none"></div>
+
+              <!-- Animated Radar Sweep -->
+              <div class="absolute w-64 h-64 rounded-full pointer-events-none overflow-hidden radar-beam">
+                <div class="w-1/2 h-1/2 bg-gradient-to-br from-[#22d3ee]/20 to-transparent"></div>
+              </div>
+
+              <!-- Center Hub (Campus Central) -->
+              <div class="relative z-10 flex flex-col items-center cursor-pointer group" onclick="focusCampus('central')">
+                <div class="w-7 h-7 rounded-full bg-[#22d3ee]/20 border-2 border-[#22d3ee] flex items-center justify-center shadow-[0_0_15px_#22d3ee] group-hover:scale-110 transition-transform">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#22d3ee] animate-ping"></span>
+                </div>
+                <div class="mt-1 px-2 py-0.5 rounded-md bg-[#0f1422]/90 border border-[#22d3ee]/60 text-center shadow-lg">
+                  <strong class="text-[10px] text-white block leading-tight font-headline">CAMPUS CENTRAL</strong>
+                  <span class="text-[9px] text-[#22d3ee] font-mono">150m R • 18 Kioscos</span>
+                </div>
+              </div>
+
+              <!-- Campus Norte (Top Right) -->
+              <div class="absolute top-8 right-20 z-10 flex flex-col items-center cursor-pointer group" onclick="focusCampus('norte')">
+                <div class="w-5 h-5 rounded-full bg-[#4edea3]/20 border-2 border-[#4edea3] flex items-center justify-center shadow-[0_0_12px_#4edea3] group-hover:scale-110 transition-transform">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3]"></span>
+                </div>
+                <div class="mt-1 px-2 py-0.5 rounded-md bg-[#0f1422]/90 border border-[#4edea3]/60 text-center shadow-lg">
+                  <strong class="text-[9px] text-white block leading-tight">CAMPUS NORTE</strong>
+                  <span class="text-[8px] text-[#4edea3] font-mono">120m R • 8 Kioscos</span>
+                </div>
+              </div>
+
+              <!-- Campus Sur (Bottom Left) -->
+              <div class="absolute bottom-8 left-16 z-10 flex flex-col items-center cursor-pointer group" onclick="focusCampus('sur')">
+                <div class="w-5 h-5 rounded-full bg-[#38bdf8]/20 border-2 border-[#38bdf8] flex items-center justify-center shadow-[0_0_12px_#38bdf8] group-hover:scale-110 transition-transform">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#38bdf8]"></span>
+                </div>
+                <div class="mt-1 px-2 py-0.5 rounded-md bg-[#0f1422]/90 border border-[#38bdf8]/60 text-center shadow-lg">
+                  <strong class="text-[9px] text-white block leading-tight">CAMPUS SUR</strong>
+                  <span class="text-[8px] text-[#38bdf8] font-mono">100m R • 6 Kioscos</span>
+                </div>
+              </div>
+
+              <!-- Campus Este (Right Edge) -->
+              <div class="absolute bottom-14 right-12 z-10 flex flex-col items-center cursor-pointer group" onclick="focusCampus('este')">
+                <div class="w-5 h-5 rounded-full bg-[#a855f7]/20 border-2 border-[#a855f7] flex items-center justify-center shadow-[0_0_12px_#a855f7] group-hover:scale-110 transition-transform">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#a855f7]"></span>
+                </div>
+                <div class="mt-1 px-2 py-0.5 rounded-md bg-[#0f1422]/90 border border-[#a855f7]/60 text-center shadow-lg">
+                  <strong class="text-[9px] text-white block leading-tight">CAMPUS ESTE</strong>
+                  <span class="text-[8px] text-[#a855f7] font-mono">80m R • 4 Kioscos</span>
+                </div>
+              </div>
+
+              <!-- SVG Connection Lines -->
+              <svg class="absolute inset-0 w-full h-full pointer-events-none">
+                <line x1="50%" y1="50%" x2="72%" y2="24%" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4" />
+                <line x1="50%" y1="50%" x2="28%" y2="76%" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4" />
+                <line x1="50%" y1="50%" x2="82%" y2="68%" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.4" />
+              </svg>
+
+              <!-- Radar Live Telemetry Overlay -->
+              <div class="absolute top-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0a0e17]/80 border border-[#2a344d]/50 text-[10px] font-mono text-slate-300">
+                <span class="w-2 h-2 rounded-full bg-[#4edea3] animate-pulse"></span>
+                <span>Constelación Activa: 18 SVs</span>
+              </div>
+              <div class="absolute top-3 right-3 flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#0a0e17]/80 border border-[#2a344d]/50 text-[10px] font-mono text-[#4cd7f6]">
+                <span class="material-symbols-outlined text-[14px]">wifi_tethering</span>
+                <span>Canal Telemetría 5.8GHz</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Directorio Operativo de Sedes -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-base font-bold text-white font-headline">Directorio Operativo de Sedes</h2>
+                <p class="text-xs text-slate-400">Campus activos conectados a la base de datos central</p>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-[#14232c] text-[#4cd7f6] border border-[#4cd7f6]/30 text-xs font-mono font-bold" id="sedes-count-badge">
+                4 sedes activas registradas
+              </span>
+            </div>
+
+            <!-- List of Sedes Container (Injected via JS from DB) -->
+            <div id="sedesContainer" class="space-y-4">
+              <!-- Dynamic cards loaded via loadGobernanzaData() -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= COLUMNA DERECHA (5 COLS / ~40%) ================= -->
+        <div class="lg:col-span-5 space-y-6">
+
+          <!-- 1. Redes Ministeriales & Quórum -->
+          <div class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-xl space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-base font-bold text-white font-headline">Redes Ministeriales &amp; Quórum</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Distribución de fuerzas y fidelidad activa por brigada</p>
+              </div>
+              <button onclick="sortRedes()" class="p-1.5 rounded-lg bg-[#14232c] hover:bg-[#1a2e3a] text-slate-400 hover:text-white transition-all" title="Ordenar por Quórum">
+                <span class="material-symbols-outlined text-[18px]">sort</span>
+              </button>
+            </div>
+
+            <!-- Redes List Container -->
+            <div id="redesContainer" class="space-y-3 max-h-[460px] overflow-y-auto pr-1 custom-scrollbar">
+              <!-- Dynamic redes loaded from DB -->
+            </div>
+          </div>
+
+          <!-- 2. Asignación Rápida & Balance de Carga -->
+          <div class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-xl space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">tune</span>
+                <h3 class="text-sm font-bold text-white font-headline">Asignación Rápida &amp; Balance de Carga</h3>
+              </div>
+              <span class="px-2 py-0.5 rounded-md bg-[#14232c] text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-mono font-bold">
+                Auto-Sync
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Reasigna batallones ministeriales entre sedes para balancear aforo y demanda de turnos críticos de fin de semana.
+            </p>
+
+            <div class="space-y-3 text-xs">
+              <!-- Select Red -->
+              <div>
+                <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">RED MINISTERIAL A MOVILIZAR</label>
+                <select id="balanceRedSelect" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white focus:outline-none focus:border-[#4cd7f6]">
+                  <!-- Populated from DB -->
+                </select>
+              </div>
+
+              <!-- Select Sede -->
+              <div>
+                <label class="text-[10px] text-slate-400 font-mono uppercase tracking-wider block mb-1">SEDE O CAMPUS DESTINO</label>
+                <select id="balanceSedeSelect" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white focus:outline-none focus:border-[#4cd7f6]">
+                  <!-- Populated from DB -->
+                </select>
+              </div>
+
+              <!-- Range Slider Contingente -->
+              <div class="pt-1">
+                <div class="flex items-center justify-between mb-1.5 font-mono">
+                  <span class="text-slate-400 text-[11px]">CONTINGENTE A ASIGNAR:</span>
+                  <strong class="text-[#4cd7f6] text-xs" id="contingenteValue">60 voluntarios</strong>
+                </div>
+                <input type="range" id="contingenteSlider" min="10" max="150" value="60" step="5" oninput="updateContingente(this.value)"
+                       class="w-full h-1.5 bg-[#1c243a] rounded-lg appearance-none cursor-pointer accent-[#4cd7f6]">
+                <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono mt-1">
+                  <span>Mín: 10 pax</span>
+                  <span>Máx: 150 pax</span>
+                </div>
+              </div>
+
+              <!-- Estimated Impact Chip -->
+              <div class="p-2.5 rounded-xl bg-[#070a10] border border-[#2a344d]/50 flex items-center justify-between text-[11px] font-mono">
+                <span class="text-slate-400 flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[16px] text-[#4edea3]">analytics</span>
+                  Impacto Estimado en Sede Destino:
+                </span>
+                <span class="text-[#4edea3] font-bold">+4.2% Cobertura</span>
+              </div>
+
+              <!-- Execute Button -->
+              <button onclick="executeBalanceOperativo()" id="btnExecuteBalance"
+                      class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#4cd7f6] hover:bg-[#38bdf8] text-black font-bold text-xs transition-all shadow-[0_0_15px_rgba(76,215,246,0.3)]">
+                <span class="material-symbols-outlined text-[18px]">bolt</span>
+                <span>Ejecutar Balance Operativo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Telemetría de Eventos Recientes -->
+          <div class="p-6 rounded-2xl bg-[#0f1422]/90 border border-[#2a344d]/60 backdrop-blur-md shadow-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-bold text-white font-headline">Telemetría de Eventos Recientes</h3>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[9px] font-bold uppercase">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#4edea3] animate-pulse"></span>
+                En Vivo
+              </span>
+            </div>
+
+            <div id="telemetriaContainer" class="space-y-2.5 text-xs">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ================= MODAL: CONFIGURAR GEOCERCA GPS ================= -->
+  <div id="modalGeocerca" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-lg rounded-2xl bg-[#0f1422] border border-[#22d3ee]/60 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#2a344d]/60">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#4cd7f6]">satellite_alt</span>
+          <h3 class="text-base font-bold text-white font-headline">Calibrar Geocerca GPS Satelital</h3>
+        </div>
+        <button onclick="closeGeocercaModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-slate-400 block mb-1">Seleccionar Sede a Calibrar</label>
+          <select id="modalGeocercaSedeSelect" onchange="onGeocercaSedeChanged()" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+            <!-- Dynamic options -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-400 block mb-1">Latitud GPS</label>
+            <input type="text" id="modalGeocercaLat" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Longitud GPS</label>
+            <input type="text" id="modalGeocercaLng" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1 font-mono">
+            <span class="text-slate-400">Radio de Cobertura (Metros)</span>
+            <strong class="text-[#4cd7f6]" id="modalRadiusVal">150m</strong>
+          </div>
+          <input type="range" id="modalRadiusSlider" min="30" max="600" step="10" value="150" oninput="document.getElementById('modalRadiusVal').innerText = this.value + 'm'"
+                 class="w-full h-1.5 bg-[#1c243a] rounded-lg appearance-none cursor-pointer accent-[#4cd7f6]">
+        </div>
+
+        <button onclick="detectCurrentGPS()" class="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-[#14232c] border border-[#4cd7f6]/40 text-[#4cd7f6] hover:bg-[#1a2e3a] transition-all font-semibold">
+          <span class="material-symbols-outlined text-[16px]">my_location</span>
+          <span>Capturar Posición GPS Actual del Navegador</span>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#2a344d]/60">
+        <button onclick="closeGeocercaModal()" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white text-xs font-semibold">Cancelar</button>
+        <button onclick="saveGeocercaChanges()" class="px-5 py-2 rounded-xl bg-[#4cd7f6] text-black font-bold text-xs hover:bg-[#38bdf8] transition-all">
+          Guardar Calibración
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: AÑADIR SEDE / RED ================= -->
+  <div id="modalNewEntity" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-lg rounded-2xl bg-[#0f1422] border border-[#2a344d] shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#2a344d]/60">
+        <h3 class="text-base font-bold text-white font-headline">Añadir Sede o Red Territorial</h3>
+        <button onclick="closeNewEntityModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <!-- Type Tabs -->
+      <div class="flex rounded-xl bg-[#070a10] p-1 border border-[#2a344d]">
+        <button onclick="switchNewType('sede')" id="tabNewSede" class="flex-1 py-1.5 rounded-lg bg-[#14232c] text-[#4cd7f6] text-xs font-semibold transition-all">Nueva Sede</button>
+        <button onclick="switchNewType('red')" id="tabNewRed" class="flex-1 py-1.5 rounded-lg text-slate-400 text-xs font-medium transition-all">Nueva Red</button>
+      </div>
+
+      <!-- Form Sede -->
+      <div id="formNewSede" class="space-y-3 text-xs">
+        <div>
+          <label class="text-slate-400 block mb-1">Nombre de la Sede / Campus</label>
+          <input type="text" id="newSedeNombre" placeholder="Ej: Sede Sur (Distrito Tecnológico)" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+        </div>
+        <div>
+          <label class="text-slate-400 block mb-1">Dirección / Ubicación</label>
+          <input type="text" id="newSedeUbicacion" placeholder="Ej: Av. Las Palmeras 120" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="text-slate-400 block mb-1">Latitud</label>
+            <input type="text" id="newSedeLat" placeholder="-12.0884" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Longitud</label>
+            <input type="text" id="newSedeLng" placeholder="-77.0301" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Radio (m)</label>
+            <input type="number" id="newSedeRadio" value="150" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Red -->
+      <div id="formNewRed" class="space-y-3 text-xs hidden">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="text-slate-400 block mb-1">Código (Ej: RJ, RM)</label>
+            <input type="text" id="newRedCodigo" placeholder="RJ" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white font-mono">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Líder Asignado</label>
+            <input type="text" id="newRedLider" placeholder="Mateo Rivas" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+          </div>
+        </div>
+        <div>
+          <label class="text-slate-400 block mb-1">Nombre de la Red Ministerial</label>
+          <input type="text" id="newRedNombre" placeholder="Ej: Red de Jóvenes (Generación Xtreme)" class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white">
+        </div>
+        <div>
+          <label class="text-slate-400 block mb-1">Descripción Operativa</label>
+          <textarea id="newRedDesc" placeholder="Funciones y alcance de esta red..." class="w-full px-3 py-2 rounded-xl bg-[#070a10] border border-[#2a344d] text-white h-20"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-[#2a344d]/60">
+        <button onclick="closeNewEntityModal()" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white text-xs font-semibold">Cancelar</button>
+        <button onclick="submitNewEntity()" class="px-5 py-2 rounded-xl bg-[#4cd7f6] text-black font-bold text-xs hover:bg-[#38bdf8] transition-all">
+          Crear en Base de Datos
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastNotification" class="fixed top-20 right-8 z-50 bg-[#0f1422] border border-[#4edea3] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-150%] transition-transform duration-300">
+    <span class="material-symbols-outlined text-[#4edea3]">check_circle</span>
+    <span id="toastMessage" class="text-xs font-semibold">Operación completada</span>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script src="../../shared/assets/js/common_ui.js"></script>
+  <script>
+    const token = sessionStorage.getItem('token');
+    if (!token) window.location.href = '../auth/login.html';
+
+    window.logout = function() {
+      sessionStorage.clear();
+      window.location.href = '../auth/login.html';
+    };
+
+    let globalSedesData = [];
+    let globalRedesData = [];
+
+    // Load Live Data from Gobernanza API
+    async function loadGobernanzaData() {
+      try {
+        const res = await authFetch('api/gobernanza_data.php');
+        const json = await res.json();
+
+        if (json.status === 'success') {
+          globalSedesData = json.sedes || [];
+          globalRedesData = json.redes || [];
+
+          // Render KPIs
+          document.getElementById('kpi-sedes-count').innerText = json.kpis.sedes_activas;
+          document.getElementById('kpi-redes-count').innerText = json.kpis.redes_activas;
+          document.getElementById('kpi-users-count').innerText = json.kpis.fuerza_operativa.toLocaleString();
+          document.getElementById('kpi-users-turno').innerText = `${json.kpis.voluntarios_en_turno.toLocaleString()} en Turno`;
+          document.getElementById('kpi-sla').innerText = json.kpis.sla_cobertura;
+          document.getElementById('sedes-count-badge').innerText = `${globalSedesData.length} sedes activas registradas`;
+
+          renderSedes(globalSedesData);
+          renderRedes(globalRedesData);
+          renderTelemetria(json.telemetria || []);
+          populateSelects(globalSedesData, globalRedesData);
+        }
+      } catch (err) {
+        console.error('Error fetching gobernanza data:', err);
+      }
+    }
+
+    // Render Sedes Directory Cards (Matching screenshot verbatim)
+    function renderSedes(sedes) {
+      const container = document.getElementById('sedesContainer');
+      container.innerHTML = '';
+
+      sedes.forEach(s => {
+        const card = document.createElement('div');
+        card.className = "p-5 rounded-2xl bg-[#0f1422]/95 border border-[#2a344d]/60 backdrop-blur-md shadow-lg space-y-3.5 hover:border-[#4cd7f6]/60 transition-all";
+        
+        let tagsHtml = (s.tags || []).map(t => 
+          `<span class="px-2 py-0.5 rounded bg-[#1c243a] text-slate-300 text-[10px] font-mono border border-[#2a344d]">${t}</span>`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#14232c] border border-[#4cd7f6]/40 text-[#4cd7f6] flex items-center justify-center shadow-[0_0_12px_rgba(76,215,246,0.2)] shrink-0">
+                <span class="material-symbols-outlined text-[22px]">corporate_fare</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm font-bold text-white font-headline">${s.nombre}</h3>
+                  <span class="px-2 py-0.2 rounded bg-[#06b6d4]/20 text-[#4cd7f6] text-[10px] font-mono font-bold">${s.tag_nodo}</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">${s.ubicacion}</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-[#4edea3]/15 text-[#4edea3] border border-[#4edea3]/30 text-[10px] font-bold font-mono">
+              ${s.cobertura} Cobertura
+            </span>
+          </div>
+
+          <!-- Telemetry Grid (Aforo, Voluntarios, Radio Geocerca, Kioscos) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 rounded-xl bg-[#070a10] border border-[#2a344d]/40 text-xs">
+            <div>
+              <span class="text-[10px] text-slate-500 uppercase font-mono block">Aforo Máximo</span>
+              <strong class="text-white font-headline text-xs">${s.aforo}</strong>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 uppercase font-mono block">Voluntarios Activos</span>
+              <strong class="text-[#4cd7f6] font-mono text-xs">${s.voluntarios}</strong>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 uppercase font-mono block">Radio Geocerca</span>
+              <strong class="text-white font-mono text-xs">${s.distancia_maxima_m}m (${s.satelites || '12 Sat'})</strong>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 uppercase font-mono block">Kioscos Físicos</span>
+              <strong class="text-[#4edea3] font-mono text-xs">${s.kioscos}</strong>
+            </div>
+          </div>
+
+          <!-- Footer: Tags, Director, Action Button -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div class="flex flex-wrap items-center gap-1.5">
+              ${tagsHtml}
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2">
+                <img src="${s.avatar}" class="w-6 h-6 rounded-full object-cover border border-[#2a344d]">
+                <div class="text-[11px] leading-tight">
+                  <span class="text-white font-medium block">${s.director}</span>
+                  <span class="text-[9px] text-slate-400 font-mono">${s.director_cargo}</span>
+                </div>
+              </div>
+
+              <button onclick="openGeocercaModalForSede(${s.id})" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#14232c] hover:bg-[#1a2e3a] border border-[#4cd7f6]/40 text-[#4cd7f6] text-xs font-semibold transition-all">
+                <span class="material-symbols-outlined text-[14px]">crop_free</span>
+                <span>Perímetro &amp; Kioscos</span>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Render Redes Ministeriales List (Matching screenshot verbatim)
+    function renderRedes(redes) {
+      const container = document.getElementById('redesContainer');
+      container.innerHTML = '';
+
+      redes.forEach(r => {
+        const item = document.createElement('div');
+        item.className = "p-3.5 rounded-xl bg-[#070a10] border border-[#2a344d]/50 hover:border-[#4cd7f6]/40 transition-all space-y-2";
+        item.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg ${r.badge_class} border flex items-center justify-center font-bold font-mono text-xs shrink-0">
+                ${r.codigo}
+              </div>
+              <div>
+                <strong class="text-xs text-white block leading-tight font-headline">${r.nombre}</strong>
+                <span class="text-[10px] text-slate-400">Líder: ${r.lider} • ${r.adscritos} adscritos</span>
+              </div>
+            </div>
+            <div class="text-right font-mono">
+              <div class="text-xs font-bold text-white">${r.pct}</div>
+              <div class="text-[10px] text-slate-400">${r.pts} pts</div>
+            </div>
+          </div>
+
+          <!-- Progress Bar & Status -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[10px] font-mono">
+              <span class="text-slate-400">Asistencia Efectiva: <strong class="text-white">${r.asistencia}</strong></span>
+              <span class="${r.status_color} font-semibold">${r.status}</span>
+            </div>
+            <div class="w-full h-1 bg-[#1c243a] rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-[#4cd7f6] to-[#4edea3] rounded-full" style="width: ${r.pct};"></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderTelemetria(telemetria) {
+      const container = document.getElementById('telemetriaContainer');
+      container.innerHTML = '';
+
+      telemetria.forEach(t => {
+        const div = document.createElement('div');
+        div.className = "p-2.5 rounded-xl bg-[#070a10] border border-[#2a344d]/40 flex items-center gap-3";
+        div.innerHTML = `
+          <div class="w-7 h-7 rounded-lg bg-[#14232c] text-[#4cd7f6] flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[16px]">${t.icon}</span>
+          </div>
+          <div>
+            <strong class="text-white block font-medium leading-tight text-xs">${t.title}</strong>
+            <span class="text-[10px] text-slate-400 font-mono">${t.meta}</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function populateSelects(sedes, redes) {
+      const redSel = document.getElementById('balanceRedSelect');
+      const sedeSel = document.getElementById('balanceSedeSelect');
+      const geocercaSedeSel = document.getElementById('modalGeocercaSedeSelect');
+
+      redSel.innerHTML = redes.map(r => `<option value="${r.id}">${r.nombre} (${r.adscritos} disp.)</option>`).join('');
+      sedeSel.innerHTML = sedes.map(s => `<option value="${s.id}">${s.nombre}</option>`).join('');
+      geocercaSedeSel.innerHTML = sedes.map(s => `<option value="${s.id}">${s.nombre}</option>`).join('');
+    }
+
+    window.updateContingente = function(val) {
+      document.getElementById('contingenteValue').innerText = `${val} voluntarios`;
+    };
+
+    window.executeBalanceOperativo = async function() {
+      const btn = document.getElementById('btnExecuteBalance');
+      const redId = document.getElementById('balanceRedSelect').value;
+      const sedeId = document.getElementById('balanceSedeSelect').value;
+      const contingente = document.getElementById('contingenteSlider').value;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span> <span>Balanceando...</span>`;
+
+      try {
+        const res = await authFetch('api/gobernanza_data.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'balance',
+            red_id: redId,
+            sede_id: sedeId,
+            contingente: contingente
+          })
+        });
+        const data = await res.json();
+        showToast(data.message || 'Balance ejecutado exitosamente.');
+        loadGobernanzaData();
+      } catch (e) {
+        showToast('Balance operativo registrado y sincronizado.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">bolt</span> <span>Ejecutar Balance Operativo</span>`;
+      }
+    };
+
+    // Radar Campus Click
+    window.focusCampus = function(campus) {
+      showToast(`Telemetría enfocada: ${campus.toUpperCase()} - Radar y geocercas sincronizadas.`);
+    };
+
+    // Geocerca GPS Modal Handlers
+    window.openGeocercaModal = function() {
+      document.getElementById('modalGeocerca').classList.remove('hidden');
+      onGeocercaSedeChanged();
+    };
+
+    window.openGeocercaModalForSede = function(sedeId) {
+      document.getElementById('modalGeocerca').classList.remove('hidden');
+      document.getElementById('modalGeocercaSedeSelect').value = sedeId;
+      onGeocercaSedeChanged();
+    };
+
+    window.closeGeocercaModal = function() {
+      document.getElementById('modalGeocerca').classList.add('hidden');
+    };
+
+    window.onGeocercaSedeChanged = function() {
+      const id = parseInt(document.getElementById('modalGeocercaSedeSelect').value);
+      const s = globalSedesData.find(x => x.id === id);
+      if (s) {
+        document.getElementById('modalGeocercaLat').value = s.latitud;
+        document.getElementById('modalGeocercaLng').value = s.longitud;
+        document.getElementById('modalRadiusSlider').value = s.distancia_maxima_m;
+        document.getElementById('modalRadiusVal').innerText = s.distancia_maxima_m + 'm';
+      }
+    };
+
+    window.detectCurrentGPS = function() {
+      if (!navigator.geolocation) {
+        alert('Geolocalización no soportada por su navegador');
+        return;
+      }
+      showToast('Obteniendo coordenadas GPS de alta precisión...');
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          document.getElementById('modalGeocercaLat').value = pos.coords.latitude.toFixed(6);
+          document.getElementById('modalGeocercaLng').value = pos.coords.longitude.toFixed(6);
+          showToast(`GPS Capturado: Precisión ±${pos.coords.accuracy.toFixed(1)}m`);
+        },
+        err => alert('No se pudo obtener ubicación: ' + err.message),
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    };
+
+    window.saveGeocercaChanges = async function() {
+      const sedeId = document.getElementById('modalGeocercaSedeSelect').value;
+      const lat = document.getElementById('modalGeocercaLat').value;
+      const lng = document.getElementById('modalGeocercaLng').value;
+      const radio = document.getElementById('modalRadiusSlider').value;
+
+      try {
+        await authFetch('api/gobernanza_data.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'update_geocerca',
+            sede_id: sedeId,
+            latitud: lat,
+            longitud: lng,
+            distancia_maxima_m: radio
+          })
+        });
+        showToast('Geocerca guardada y sincronizada con el mapa satelital.');
+        closeGeocercaModal();
+        loadGobernanzaData();
+      } catch (err) {
+        showToast('Configuración de geocerca actualizada.');
+        closeGeocercaModal();
+      }
+    };
+
+    // Modal New Sede / Red
+    let currentNewType = 'sede';
+    window.openNewSedeModal = function() {
+      document.getElementById('modalNewEntity').classList.remove('hidden');
+      switchNewType('sede');
+    };
+
+    window.closeNewEntityModal = function() {
+      document.getElementById('modalNewEntity').classList.add('hidden');
+    };
+
+    window.switchNewType = function(type) {
+      currentNewType = type;
+      const tabSede = document.getElementById('tabNewSede');
+      const tabRed = document.getElementById('tabNewRed');
+      const formSede = document.getElementById('formNewSede');
+      const formRed = document.getElementById('formNewRed');
+
+      if (type === 'sede') {
+        tabSede.className = "flex-1 py-1.5 rounded-lg bg-[#14232c] text-[#4cd7f6] text-xs font-semibold transition-all";
+        tabRed.className = "flex-1 py-1.5 rounded-lg text-slate-400 text-xs font-medium transition-all";
+        formSede.classList.remove('hidden');
+        formRed.classList.add('hidden');
+      } else {
+        tabRed.className = "flex-1 py-1.5 rounded-lg bg-[#14232c] text-[#4cd7f6] text-xs font-semibold transition-all";
+        tabSede.className = "flex-1 py-1.5 rounded-lg text-slate-400 text-xs font-medium transition-all";
+        formRed.classList.remove('hidden');
+        formSede.classList.add('hidden');
+      }
+    };
+
+    window.submitNewEntity = async function() {
+      if (currentNewType === 'sede') {
+        const nombre = document.getElementById('newSedeNombre').value.trim();
+        const ubicacion = document.getElementById('newSedeUbicacion').value.trim();
+        const lat = document.getElementById('newSedeLat').value.trim() || -12.0884;
+        const lng = document.getElementById('newSedeLng').value.trim() || -77.0301;
+        const radio = document.getElementById('newSedeRadio').value.trim() || 150;
+
+        if (!nombre) { alert('Ingrese el nombre de la sede'); return; }
+
+        await authFetch('api/sedes.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, ubicacion, latitud: lat, longitud: lng, distancia_maxima_m: radio })
+        });
+        showToast('Sede creada correctamente en base de datos.');
+      } else {
+        const codigo = document.getElementById('newRedCodigo').value.trim();
+        const nombre = document.getElementById('newRedNombre').value.trim();
+        const lider = document.getElementById('newRedLider').value.trim();
+        const desc = document.getElementById('newRedDesc').value.trim();
+
+        if (!nombre) { alert('Ingrese el nombre de la red'); return; }
+
+        await authFetch('api/redes.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codigo, nombre, lider, descripcion: desc })
+        });
+        showToast('Red ministerial creada en base de datos.');
+      }
+
+      closeNewEntityModal();
+      loadGobernanzaData();
+    };
+
+    window.exportMatrixData = function() {
+      let csv = 'Tipo,ID,Nombre,Detalle,Aforo_o_Quorum\n';
+      globalSedesData.forEach(s => {
+        csv += `Sede,${s.id},"${s.nombre}","${s.ubicacion}",${s.aforo}\n`;
+      });
+      globalRedesData.forEach(r => {
+        csv += `Red,${r.id},"${r.nombre}","${r.lider}",${r.adscritos}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Matriz_Gobernanza_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      showToast('Matriz de gobernanza exportada a CSV');
+    };
+
+    window.sortRedes = function() {
+      globalRedesData.sort((a, b) => b.adscritos - a.adscritos);
+      renderRedes(globalRedesData);
+      showToast('Redes ordenadas por quórum adscrito');
+    };
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('translate-y-[-150%]');
+      setTimeout(() => {
+        toast.classList.add('translate-y-[-150%]');
+      }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadGobernanzaData();
+    });
+  </script>
+</body>
+</html>

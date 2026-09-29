@@ -1,0 +1,14 @@
+id: int
+serie_id: varchar(50)
+nombre: varchar(100)
+descripcion: text
+red_id: int
+sede_id: int
+fecha_inicio: datetime
+fecha_fin: datetime
+puntos_base: int
+activo: tinyint(1)
+created_at: timestamp
+updated_at: timestamp
+deleted_at: timestamp
+distancia_maxima_m: int

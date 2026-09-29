@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Uploaded dynamic assets and test snapshots
+uploads/asistencias/*
+!uploads/asistencias/.gitkeep
+uploads/avatars/*
+!uploads/avatars/.gitkeep
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+scratch/
+
+# Environment / local overrides
+.env
+.env.local
