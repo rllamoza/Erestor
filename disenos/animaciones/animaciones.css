@@ -163,4 +163,88 @@
   animation: iconPop 0.3s cubic-bezier(0.17, 0.89, 0.32, 1.28);
 }
 
+/* 15. Interferencia Táctica Periódica (Glitch / Shake Intermitente - Solo Área de Visor) */
+@keyframes tacticalGlitchJitter {
+  0%, 91%, 100% {
+    transform: translate(0, 0) skew(0deg);
+    filter: none;
+  }
+  92% {
+    transform: translate(-3px, 1.5px) skewX(0.8deg);
+    filter: drop-shadow(-2px 0 rgba(239, 68, 68, 0.7)) drop-shadow(2px 0 rgba(6, 182, 212, 0.8));
+  }
+  93.5% {
+    transform: translate(3.5px, -2px) skewX(-1.1deg);
+    filter: drop-shadow(3px -1px rgba(239, 68, 68, 0.85)) drop-shadow(-2px 1px rgba(6, 182, 212, 0.9));
+  }
+  95% {
+    transform: translate(-3px, 1px) skewX(1.4deg);
+    filter: drop-shadow(-3px 0 rgba(239, 68, 68, 0.8)) drop-shadow(3px 0 rgba(6, 182, 212, 0.85));
+  }
+  96.5% {
+    transform: translate(2.5px, 2px) skewX(-0.9deg);
+    filter: drop-shadow(2px 2px rgba(239, 68, 68, 0.65)) drop-shadow(-1px -2px rgba(6, 182, 212, 0.75));
+  }
+  98% {
+    transform: translate(-1px, -1px) skewX(0.4deg);
+    filter: drop-shadow(-1px 0 rgba(239, 68, 68, 0.4)) drop-shadow(1px 0 rgba(6, 182, 212, 0.5));
+  }
+  99% {
+    transform: translate(1px, 0.5px) skewX(-0.2deg);
+    filter: none;
+  }
+}
+
+.tactical-glitch-frame {
+  animation: tacticalGlitchJitter 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  transform-origin: center center;
+  will-change: transform, filter;
+}
+
+@keyframes glitchSliceBar {
+  0%, 91%, 100% {
+    opacity: 0;
+    top: 20%;
+    height: 0;
+  }
+  92% {
+    opacity: 0.65;
+    top: 35%;
+    height: 10px;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.45), rgba(239, 68, 68, 0.4), transparent);
+  }
+  94% {
+    opacity: 0.85;
+    top: 65%;
+    height: 16px;
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.45), rgba(6, 182, 212, 0.5), transparent);
+  }
+  96% {
+    opacity: 0.7;
+    top: 48%;
+    height: 8px;
+    background: linear-gradient(90deg, transparent, rgba(78, 222, 163, 0.35), rgba(6, 182, 212, 0.4), transparent);
+  }
+  98% {
+    opacity: 0.3;
+    top: 80%;
+    height: 12px;
+    background: rgba(6, 182, 212, 0.25);
+  }
+  99% {
+    opacity: 0;
+  }
+}
+
+.glitch-slice-overlay {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 28;
+  mix-blend-mode: screen;
+  animation: glitchSliceBar 5s linear infinite;
+}
+
+
 
