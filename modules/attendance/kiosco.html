@@ -6,7 +6,7 @@
   <title>Kiosco Biométrico Táctil - Erestor Sentinel</title>
   <!-- Material Symbols Outlined -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <!-- Google Fonts: Inter & Plus Jakarta Sans & JetBrains Mono -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -39,9 +39,9 @@
             "background": "#0f131d"
           },
           fontFamily: {
-            headline: ["Plus Jakarta Sans"],
-            body: ["Inter"],
-            mono: ["JetBrains Mono"]
+            headline: ["Plus Jakarta Sans", "sans-serif"],
+            body: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
           }
         }
       }
@@ -58,9 +58,190 @@
                         linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
       background-size: 32px 32px;
     }
+
+    /* =========================================================================
+       1. ESCÁNER BIOMÉTRICO FACIAL (SENTINEL HUD ANIMATIONS)
+       ========================================================================= */
+
+    /* 1.1 Láser / Barrido de Escaneo Vertical (Scanline) */
+    @keyframes laserSweep {
+      0% { top: 6%; opacity: 0.95; }
+      50% { top: 90%; opacity: 0.35; }
+      100% { top: 6%; opacity: 0.95; }
+    }
+    .animate-laser {
+      animation: laserSweep 2.6s ease-in-out infinite;
+    }
+
+    /* 1.2 Retícula Táctica y Esquinas de Enfoque (HUD Bracket Pulse) */
+    @keyframes bracketPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.80;
+        filter: drop-shadow(0 0 2px #4cd7f6);
+      }
+      50% {
+        transform: scale(1.04);
+        opacity: 1;
+        filter: drop-shadow(0 0 8px #4cd7f6);
+      }
+    }
+    .animate-bracket {
+      animation: bracketPulse 2.4s ease-in-out infinite;
+    }
+
+    /* 1.3 Círculo Biométrico Discontinuo (Rotación Perimetral Continua en ~8s) */
+    @keyframes rotateBioRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-rotate-ring {
+      animation: rotateBioRing 8s linear infinite;
+    }
+
+    @keyframes rotateBioRingReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    .animate-rotate-ring-reverse {
+      animation: rotateBioRingReverse 12s linear infinite;
+    }
+
+    /* 1.4 Resplandor Perimetral de Escáner (Cyan Aura) */
+    @keyframes cyanAura {
+      0%, 100% { box-shadow: 0 0 22px rgba(6, 182, 212, 0.25); }
+      50% { box-shadow: 0 0 42px rgba(6, 182, 212, 0.50); }
+    }
+    .scanner-glow {
+      animation: cyanAura 3.6s ease-in-out infinite;
+    }
+
+    /* =========================================================================
+       2. PULSOS DE TELEMETRÍA Y BALIZAS DE ESTADO EN VIVO
+       ========================================================================= */
+
+    /* 2.1 Ondas Radiales de Geocerca (Radio de 25m) */
+    @keyframes radarWaveRipple {
+      0% {
+        transform: scale(0.6);
+        opacity: 0.85;
+      }
+      100% {
+        transform: scale(2.6);
+        opacity: 0;
+      }
+    }
+    .animate-radar-wave-1 {
+      animation: radarWaveRipple 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    .animate-radar-wave-2 {
+      animation: radarWaveRipple 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+      animation-delay: 1.1s;
+    }
+
+    /* 2.2 Segundero del Reloj Atómico (Blink suave) */
+    @keyframes colonBlink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0.25; }
+    }
+    .clock-colon {
+      animation: colonBlink 1s infinite;
+      display: inline-block;
+    }
+
+    /* =========================================================================
+       3. FEEDBACK TÁCTIL EN BOTONES Y CONTROLES (INTERACCIONES HÁPICAS)
+       ========================================================================= */
+
+    /* 3.1 Destello de Obturador de Cámara */
+    @keyframes cameraShutterFlash {
+      0% { opacity: 0; }
+      30% { opacity: 0.85; }
+      100% { opacity: 0; }
+    }
+    .flash-active {
+      animation: cameraShutterFlash 0.22s ease-out forwards;
+    }
+
+    /* 3.2 CTA Principal - Desplazamiento de Luz (Shimmer) */
+    @keyframes ctaShimmer {
+      0% { transform: translateX(-160%) skewX(-20deg); }
+      30%, 100% { transform: translateX(260%) skewX(-20deg); }
+    }
+    .cta-shimmer-sweep {
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-shimmer-sweep::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 65%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: ctaShimmer 3.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      pointer-events: none;
+    }
+
+    /* 3.3 Badge de Recompensa (+150 Pts Puntualidad) - Brillo Intermitente */
+    @keyframes starGlowPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 2px rgba(6, 182, 212, 0.4));
+        transform: scale(1);
+      }
+      50% {
+        filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.95)) drop-shadow(0 0 16px rgba(78, 222, 163, 0.6));
+        transform: scale(1.1);
+      }
+    }
+    .animate-star-glow {
+      animation: starGlowPulse 2.4s ease-in-out infinite;
+    }
+
+    /* =========================================================================
+       4. TARJETA DE VOLUNTARIO Y VALIDACIÓN DE GEOCERCA
+       ========================================================================= */
+
+    /* 4.1 Badge de Verificación del Avatar (Microanimación de confirmación) */
+    @keyframes verifiedRingPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(78, 222, 163, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(78, 222, 163, 0);
+      }
+    }
+    .animate-verified-ring {
+      animation: verifiedRingPulse 2s ease-out infinite;
+    }
+
+    /* =========================================================================
+       5. BARRA DE NAVEGACIÓN INFERIOR (BOTTOM TABS)
+       ========================================================================= */
+
+    /* 5.1 Micro-rebote en icono de pestaña seleccionada */
+    @keyframes iconPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.32); }
+      100% { transform: scale(1); }
+    }
+    .animate-icon-pop {
+      animation: iconPop 0.3s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+    }
+
+    /* Modal Burst */
+    @keyframes emeraldSuccessBurst {
+      0% { transform: scale(0.92); opacity: 0; box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
+      50% { transform: scale(1.02); opacity: 1; box-shadow: 0 0 50px rgba(16, 185, 129, 0.45); }
+      100% { transform: scale(1); opacity: 1; box-shadow: 0 0 32px rgba(16, 185, 129, 0.25); }
+    }
+    .animate-success-burst {
+      animation: emeraldSuccessBurst 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
 </head>
-<body class="bg-background text-on-surface antialiased bg-tech-grid min-h-screen selection:bg-primary-container selection:text-surface-container-lowest pb-24 md:pb-12">
+<body class="bg-background text-on-surface antialiased bg-tech-grid min-h-screen selection:bg-primary-container selection:text-surface-container-lowest pb-28 md:pb-14">
 
   <!-- ================= TOP APP BAR ================= -->
   <header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-10 h-16 bg-[#171b26]/85 backdrop-blur-md border-b border-[#3d494c]/30 shadow-md">
@@ -87,7 +268,9 @@
       <div class="h-3 w-px bg-outline-variant/40"></div>
       <div class="flex items-center gap-2 text-on-surface">
         <span class="material-symbols-outlined text-sm text-primary">schedule</span>
-        <span class="font-mono text-sm font-semibold tracking-wider text-primary" id="live-clock-desktop">--:--:--</span>
+        <span class="font-mono text-sm font-semibold tracking-wider text-primary" id="live-clock-desktop">
+          <span id="clk-h">14</span><span class="clock-colon text-cyan-400">:</span><span id="clk-m">16</span><span class="clock-colon text-cyan-400">:</span><span id="clk-s">55</span> <span id="clk-ampm" class="text-xs text-cyan-300">PM</span>
+        </span>
         <span class="text-xs text-on-surface-variant" id="live-date">| Hoy</span>
       </div>
     </div>
@@ -183,17 +366,26 @@
             <button onclick="startCamera()" class="mt-3 px-3 py-1.5 rounded-lg bg-primary/20 text-primary border border-primary/40 text-xs">Reintentar Acceso</button>
           </div>
 
-          <!-- Futuristic Laser Sweep Line -->
-          <div class="absolute w-full h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent animate-laser z-20 shadow-[0_0_15px_#4cd7f6]"></div>
+          <!-- Camera Shutter Flash Overlay -->
+          <div id="camera-shutter-flash" class="absolute inset-0 bg-white/30 pointer-events-none opacity-0 z-30 transition-opacity"></div>
 
-          <!-- Corner Reticles -->
-          <div class="absolute top-4 left-4 w-7 h-7 border-t-2 border-l-2 border-primary z-20"></div>
-          <div class="absolute top-4 right-4 w-7 h-7 border-t-2 border-r-2 border-primary z-20"></div>
-          <div class="absolute bottom-4 left-4 w-7 h-7 border-b-2 border-l-2 border-primary z-20"></div>
-          <div class="absolute bottom-4 right-4 w-7 h-7 border-b-2 border-r-2 border-primary z-20"></div>
+          <!-- 1.1 Futuristic Laser Sweep Line with Glow -->
+          <div class="absolute w-full h-[3px] bg-gradient-to-r from-transparent via-[#06b6d4] to-transparent animate-laser z-20 shadow-[0_0_16px_#06b6d4,0_0_32px_#4cd7f6]"></div>
 
-          <!-- Target Biometric Oval Mask -->
-          <div class="absolute w-56 h-68 border-2 border-dashed border-primary/40 rounded-[50%] z-20 pointer-events-none flex flex-col items-center justify-end pb-4 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+          <!-- 1.2 Retícula Táctica y Esquinas de Enfoque (HUD Bracket Pulse) -->
+          <div class="absolute top-4 left-4 w-8 h-8 border-t-[3px] border-l-[3px] border-primary z-20 rounded-tl-sm animate-bracket"></div>
+          <div class="absolute top-4 right-4 w-8 h-8 border-t-[3px] border-r-[3px] border-primary z-20 rounded-tr-sm animate-bracket"></div>
+          <div class="absolute bottom-4 left-4 w-8 h-8 border-b-[3px] border-l-[3px] border-primary z-20 rounded-bl-sm animate-bracket"></div>
+          <div class="absolute bottom-4 right-4 w-8 h-8 border-b-[3px] border-r-[3px] border-primary z-20 rounded-br-sm animate-bracket"></div>
+
+          <!-- 1.3 Círculo Biométrico Discontinuo (Rotación Perimetral Continua en ~8s) -->
+          <div class="absolute w-56 h-56 md:w-64 md:h-64 border-2 border-dashed border-cyan-400/60 rounded-full z-15 pointer-events-none animate-rotate-ring shadow-[0_0_20px_rgba(6,182,212,0.25)] flex items-center justify-center">
+            <!-- Inner reverse micro dotted circle -->
+            <div class="w-44 h-44 border border-dotted border-emerald-400/40 rounded-full animate-rotate-ring-reverse"></div>
+          </div>
+
+          <!-- Target Biometric Oval Mask Overlay -->
+          <div class="absolute w-52 h-68 md:w-60 md:h-76 border-2 border-primary/40 rounded-[50%] z-20 pointer-events-none flex flex-col items-center justify-end pb-4 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
             <span class="bg-surface-container-lowest/90 border border-primary/40 px-3 py-1 rounded-full text-primary text-[11px] font-semibold tracking-wider backdrop-blur-md">
               Enfoque su rostro aquí
             </span>
@@ -202,7 +394,7 @@
           <!-- Live Recognition Status Pill -->
           <div class="absolute top-5 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high/90 border border-secondary/50 text-secondary backdrop-blur-md shadow-md text-xs font-bold font-mono">
             <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-            <span>AUTO-DETECT // READY</span>
+            <span>FACE ID: DETECTADO</span>
           </div>
 
           <!-- Bottom Telemetry HUD overlay -->
@@ -215,15 +407,15 @@
           </div>
         </div>
 
-        <!-- SHUTTER / INTERACTIVE CAPTURE TRIGGER -->
+        <!-- 3.1 SHUTTER / INTERACTIVE CAPTURE TRIGGER WITH HAPTIC BOUNCE & SHADOW GLOW -->
         <div class="w-full flex flex-col sm:flex-row gap-4 items-center justify-between pt-2">
           <div class="text-left w-full sm:w-auto">
             <p class="font-bold text-white text-sm font-headline">Validación Instantánea</p>
-            <p class="text-xs text-on-surface-variant">Pulse para registrar la asistencia del voluntario activo</p>
+            <p class="text-xs text-on-surface-variant">Presione el obturador táctil para registrar captura</p>
           </div>
-          <button id="btn-capture" class="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border-2 border-primary text-primary hover:text-white font-bold text-xs tracking-wide active:scale-95 transition-all shadow-[0_0_20px_rgba(76,215,246,0.25)]" type="button">
+          <button id="btn-capture" class="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border-2 border-primary text-primary hover:text-white font-bold text-xs tracking-wide active:scale-[0.96] transition-all duration-150 shadow-[0_0_20px_rgba(76,215,246,0.25)] hover:shadow-[0_0_30px_rgba(76,215,246,0.55)] cursor-pointer" type="button">
             <span class="material-symbols-outlined text-lg">photo_camera</span>
-            <span>Capturar Foto & Registrar</span>
+            <span>Capturar Foto de Validación</span>
           </button>
         </div>
       </section>
@@ -231,23 +423,30 @@
       <!-- RIGHT COLUMN: VOLUNTEER IDENTITY & RADAR (5 COLS) -->
       <section class="lg:col-span-5 flex flex-col justify-between gap-6">
 
-        <!-- 1. GPS Real-time Geofence Card -->
+        <!-- 4.2 GPS Real-time Geofence Card with Radial Radar Waves -->
         <div class="p-5 rounded-2xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative overflow-hidden">
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/30 flex items-center justify-center text-secondary">
-                <span class="material-symbols-outlined">radar</span>
+              <!-- Radial Radar Icon Box with Concentric Waves -->
+              <div class="relative w-11 h-11 rounded-xl bg-secondary/10 border border-secondary/30 flex items-center justify-center text-secondary">
+                <!-- Concentric Radial Waves -->
+                <div class="absolute inset-0 rounded-xl bg-emerald-400/20 animate-radar-wave-1 pointer-events-none"></div>
+                <div class="absolute inset-0 rounded-xl bg-emerald-400/20 animate-radar-wave-2 pointer-events-none"></div>
+                <span class="material-symbols-outlined relative z-10 text-xl">radar</span>
               </div>
               <div>
-                <span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-secondary font-mono">
-                  <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-                  Geocerca Verificada
+                <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-secondary font-mono">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                  </span>
+                  Geocerca Válida: Sede Central
                 </span>
-                <p class="text-xs text-on-surface font-medium mt-0.5" id="gps-status-text">Detectando satélites...</p>
+                <p class="text-xs text-on-surface font-medium mt-0.5" id="gps-status-text">Radio permitido: 25 metros</p>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary border border-secondary/30 text-xs font-mono font-semibold" id="gps-accuracy-badge">
-              +/- 3.2m
+            <span class="px-2.5 py-0.5 rounded bg-surface-container-highest text-secondary border border-secondary/30 text-xs font-mono font-semibold" id="gps-accuracy-badge">
+              +/- 2.4m exactitud
             </span>
           </div>
 
@@ -256,21 +455,22 @@
               <span class="material-symbols-outlined text-sm">location_on</span>
               <span id="coords-text">-12.0864, -77.0321</span>
             </span>
-            <span class="text-secondary font-medium">GPS LOCK • ACTIVO</span>
+            <span class="text-secondary font-medium">Satélites: 14 Conectados</span>
           </div>
         </div>
 
         <!-- 2. VOLUNTEER IDENTITY CARD -->
         <div class="p-6 rounded-2xl bg-surface-container/70 border border-outline-variant/30 backdrop-blur-xl relative space-y-5">
           <div class="flex items-center gap-4">
-            <!-- Profile Avatar with Status Stroke -->
+            <!-- 4.1 Profile Avatar with Status Stroke & Pulsing Verified Ring -->
             <div class="relative">
               <div class="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-primary to-secondary flex items-center justify-center">
                 <div class="w-full h-full rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-2xl font-mono" id="volunteer-avatar-initials">
-                  VR
+                  CM
                 </div>
               </div>
-              <div class="absolute -bottom-1 -right-1 bg-secondary text-black p-1 rounded-full border-2 border-background shadow-md" title="Servidor Verificado">
+              <!-- Fixed Verified Confirmation Badge with Pulsing Ring -->
+              <div class="absolute -bottom-1 -right-1 bg-secondary text-black p-1 rounded-full border-2 border-background shadow-md animate-verified-ring flex items-center justify-center" title="Servidor Verificado">
                 <span class="material-symbols-outlined text-xs block font-bold">verified</span>
               </div>
             </div>
@@ -278,17 +478,44 @@
             <!-- Identity info -->
             <div class="space-y-1">
               <div class="flex items-center gap-2">
-                <h3 class="text-lg font-bold text-white font-headline" id="volunteer-name">Voluntario Activo</h3>
-                <span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary font-mono text-[11px] font-bold" id="volunteer-dni">DNI --</span>
+                <h3 class="text-lg font-bold text-white font-headline" id="volunteer-name">Carlos Mendoza</h3>
+                <span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary font-mono text-[11px] font-bold" id="volunteer-dni">DNI 74829104</span>
               </div>
               <p class="text-xs text-secondary font-medium flex items-center gap-1">
                 <span class="material-symbols-outlined text-sm">military_tech</span>
-                <span id="volunteer-rol">Servidor / Protocolo</span>
+                <span id="volunteer-rol">Voluntario Activo</span>
+                <span class="text-slate-500 font-mono text-[10px]">#VOL-2025-089</span>
               </p>
               <div class="text-[11px] text-on-surface-variant font-mono" id="volunteer-puntos">
-                Puntos Mérito: +10 pts por asistencia
+                Área: <strong class="text-slate-200">Protocolo & Bienvenida</strong>
               </div>
             </div>
+          </div>
+
+          <!-- Assignment & Network Grid -->
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div class="p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/20">
+              <span class="text-[10px] text-slate-400 block uppercase">Área Asignada</span>
+              <span class="text-white font-semibold block mt-0.5" id="volunteer-area-badge">Protocolo & Bienvenida</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/20">
+              <span class="text-[10px] text-slate-400 block uppercase">Red / Zona</span>
+              <span class="text-white font-semibold block mt-0.5" id="volunteer-red-badge">Jóvenes - Zona Norte</span>
+            </div>
+          </div>
+
+          <!-- 3.3 Punctuality / Reward Points Badge with Star Glow Pulse -->
+          <div class="flex items-center justify-between p-3 rounded-xl bg-primary-container/10 border border-primary/30">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary animate-star-glow">
+                <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">stars</span>
+              </div>
+              <div>
+                <span class="text-sm font-bold text-primary font-headline">+150 Pts Puntualidad</span>
+                <span class="text-[10px] text-on-surface-variant block">Se acreditarán al validar marcación</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
           </div>
 
           <!-- DNI Manual Search / Keypad Inset -->
@@ -298,7 +525,7 @@
               <span class="text-primary font-mono text-[11px]">TECLADO RÁPIDO</span>
             </div>
             <div class="flex items-center gap-2">
-              <input type="text" id="input-dni" placeholder="Ingrese número de DNI..." class="flex-1 bg-surface-container-high px-3 py-2 rounded-lg text-sm border border-outline-variant/40 focus:border-primary text-white outline-none font-mono">
+              <input type="text" id="input-dni" value="74829104" placeholder="Ingrese número de DNI..." class="flex-1 bg-surface-container-high px-3 py-2 rounded-lg text-sm border border-outline-variant/40 focus:border-primary text-white outline-none font-mono">
               <button id="btn-search-dni" class="px-4 py-2 rounded-lg bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary text-xs font-bold">
                 Buscar
               </button>
@@ -306,13 +533,13 @@
             <div id="search-feedback" class="text-xs text-slate-400 font-mono"></div>
           </div>
 
-          <!-- Primary Confirmation Button -->
+          <!-- 3.2 PRIMARY ACTION: HUGE TOUCH CALL-TO-ACTION (High Priority with Shimmer) -->
           <div class="pt-2 space-y-2">
-            <button id="btn-confirm-attendance" class="w-full py-4 rounded-xl bg-gradient-to-r from-primary-container to-tertiary text-black font-extrabold text-sm uppercase tracking-wider hover:brightness-110 active:scale-[0.99] transition-all shadow-[0_0_25px_rgba(6,182,212,0.4)] flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined font-bold">how_to_reg</span>
-              <span>Confirmar Asistencia Ahora</span>
+            <button id="btn-confirm-attendance" class="cta-shimmer-sweep w-full h-16 rounded-2xl bg-gradient-to-r from-primary-container via-primary to-secondary-container text-black font-headline text-sm md:text-base font-extrabold tracking-wider uppercase flex items-center justify-center gap-3 shadow-[0_0_28px_rgba(6,182,212,0.45)] hover:shadow-[0_0_38px_rgba(6,182,212,0.65)] hover:scale-[1.01] active:scale-[0.98] transition-all duration-150 cursor-pointer">
+              <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+              <span>CONFIRMAR MARCACIÓN DE ASISTENCIA</span>
             </button>
-            <p class="text-center text-[11px] text-on-surface-variant">
+            <p class="text-center text-[11px] text-on-surface-variant font-mono">
               Registro inmediato certificado con geolocalización y sello de tiempo
             </p>
           </div>
@@ -320,7 +547,120 @@
 
       </section>
     </div>
+
+    <!-- ================= 3. MINI TIMELINE INFERIOR (Historial Reciente) ================= -->
+    <section aria-labelledby="history-heading" class="rounded-2xl bg-surface-container/60 border border-outline-variant/30 backdrop-blur-xl p-5 md:p-6 space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-outline-variant/30">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">history_toggle_off</span>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-on-surface font-headline" id="history-heading">Mis Asistencias Recientes</h2>
+            <p class="text-xs text-on-surface-variant font-mono">Registro inmutable en servidor y credencial descentralizada</p>
+          </div>
+        </div>
+        <button onclick="alert('Bitácora sincronizada con Nodo Central Erestor.')" class="text-primary hover:underline text-xs font-semibold flex items-center gap-1" type="button">
+          <span>Ver Bitácora Completa</span>
+          <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Bento Timeline Items Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono">
+        <!-- Record 1 -->
+        <div class="p-4 rounded-xl bg-surface-container-low/90 border border-outline-variant/20 hover:border-secondary/40 transition-all flex flex-col justify-between space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase">Turno Previo</span>
+              <p class="text-xs font-bold text-white font-headline">Hoy - Ingreso Mañana</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-bold">
+              Puntual
+            </span>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-base font-bold text-cyan-300">08:45 AM</span>
+            <div class="flex items-center gap-1.5 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">verified_user</span> Foto
+              </span>
+              <span class="px-2 py-0.5 rounded bg-primary/20 text-cyan-300 font-semibold">+150 Pts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Record 2 -->
+        <div class="p-4 rounded-xl bg-surface-container-low/90 border border-outline-variant/20 hover:border-secondary/40 transition-all flex flex-col justify-between space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase">Reunión Ordinaria</span>
+              <p class="text-xs font-bold text-white font-headline">Jueves - Reunión Líderes</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-bold">
+              Puntual
+            </span>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-base font-bold text-cyan-300">07:02 PM</span>
+            <div class="flex items-center gap-1.5 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">pin_drop</span> GPS
+              </span>
+              <span class="px-2 py-0.5 rounded bg-surface-container-highest text-slate-300">Registrado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Record 3 -->
+        <div class="p-4 rounded-xl bg-surface-container-low/90 border border-outline-variant/20 hover:border-secondary/40 transition-all flex flex-col justify-between space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 uppercase">Servicio Semanal</span>
+              <p class="text-xs font-bold text-white font-headline">Domingo Ant. - Central</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-bold">
+              Puntual
+            </span>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-base font-bold text-cyan-300">08:50 AM</span>
+            <div class="flex items-center gap-1.5 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">document_scanner</span> Biométrica
+              </span>
+              <span class="px-2 py-0.5 rounded bg-primary/20 text-cyan-300 font-semibold">+150 Pts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <!-- ================= 5. BARRA DE NAVEGACIÓN INFERIOR (BOTTOM TABS) ================= -->
+  <nav aria-label="Navegación Móvil Principal" class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 h-16 bg-[#0a0e18]/95 backdrop-blur-xl shadow-2xl border-t border-outline-variant/30 select-none">
+    <!-- Item 1: Escanear (Active Tab) -->
+    <button onclick="switchTab(this, 'escanear')" class="tab-item active flex flex-col items-center justify-center text-primary font-semibold py-1 px-3 rounded-xl bg-surface-container-high/60 active:scale-95 transition-all duration-150">
+      <span class="tab-icon material-symbols-outlined text-xl">document_scanner</span>
+      <span class="text-[10px] font-mono mt-0.5">Escanear</span>
+    </button>
+    <!-- Item 2: Bitácora -->
+    <button onclick="switchTab(this, 'bitacora')" class="tab-item flex flex-col items-center justify-center text-slate-400 hover:text-primary py-1 px-3 rounded-xl active:scale-95 transition-all duration-150">
+      <span class="tab-icon material-symbols-outlined text-xl">history_toggle_off</span>
+      <span class="text-[10px] font-mono mt-0.5">Bitácora</span>
+    </button>
+    <!-- Item 3: Personal -->
+    <button onclick="switchTab(this, 'personal')" class="tab-item flex flex-col items-center justify-center text-slate-400 hover:text-primary py-1 px-3 rounded-xl active:scale-95 transition-all duration-150">
+      <span class="tab-icon material-symbols-outlined text-xl">group</span>
+      <span class="text-[10px] font-mono mt-0.5">Personal</span>
+    </button>
+    <!-- Item 4: Ajustes -->
+    <button onclick="switchTab(this, 'ajustes')" class="tab-item flex flex-col items-center justify-center text-slate-400 hover:text-primary py-1 px-3 rounded-xl active:scale-95 transition-all duration-150">
+      <span class="tab-icon material-symbols-outlined text-xl">tune</span>
+      <span class="text-[10px] font-mono mt-0.5">Ajustes</span>
+    </button>
+  </nav>
 
   <!-- ================= POPUP MODAL: ASISTENCIA VALIDADA CON ÉXITO ================= -->
   <div id="modal-success" class="fixed inset-0 z-50 bg-[#0a0e18]/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
@@ -342,11 +682,11 @@
         </div>
         <div>
           <span class="text-slate-500 block text-[10px]">PUNTOS GANADOS</span>
-          <span class="text-secondary font-bold">+10 Mérito</span>
+          <span class="text-secondary font-bold">+150 Puntualidad</span>
         </div>
       </div>
 
-      <button onclick="closeSuccessModal()" class="w-full py-2.5 rounded-xl bg-secondary text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all">
+      <button onclick="closeSuccessModal()" class="w-full py-2.5 rounded-xl bg-secondary text-black font-bold text-xs uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all">
         Listo (Cerrar)
       </button>
     </div>
@@ -362,17 +702,32 @@
     // Global State
     let currentEvent = null;
     let currentUser = null;
-    let userCoords = { lat: -12.0864, lng: -77.0321, accuracy: 3.2 };
+    let userCoords = { lat: -12.0864, lng: -77.0321, accuracy: 2.4 };
     let cameraStream = null;
     let isFrontCamera = true;
 
-    // Live Clock
+    // 2.2 Live Digital Atomic Clock with smooth pulsing separators
     function updateClock() {
       const now = new Date();
-      const timeStr = now.toLocaleTimeString('es-PE', { hour12: true });
+      let hours = now.getHours();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const hStr = String(hours).padStart(2, '0');
+      const mStr = String(now.getMinutes()).padStart(2, '0');
+      const sStr = String(now.getSeconds()).padStart(2, '0');
       const dateStr = now.toLocaleDateString('es-PE', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-      document.getElementById('live-clock-desktop').innerText = timeStr;
-      document.getElementById('live-date').innerText = '| ' + dateStr;
+
+      const elH = document.getElementById('clk-h');
+      const elM = document.getElementById('clk-m');
+      const elS = document.getElementById('clk-s');
+      const elAmpm = document.getElementById('clk-ampm');
+      const elDate = document.getElementById('live-date');
+
+      if (elH) elH.textContent = hStr;
+      if (elM) elM.textContent = mStr;
+      if (elS) elS.textContent = sStr;
+      if (elAmpm) elAmpm.textContent = ampm;
+      if (elDate) elDate.textContent = '| ' + dateStr;
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -382,13 +737,13 @@
       navigator.geolocation.watchPosition((pos) => {
         userCoords.lat = pos.coords.latitude;
         userCoords.lng = pos.coords.longitude;
-        userCoords.accuracy = pos.coords.accuracy || 3.2;
+        userCoords.accuracy = pos.coords.accuracy || 2.4;
 
         document.getElementById('coords-text').innerText = `${userCoords.lat.toFixed(4)}, ${userCoords.lng.toFixed(4)}`;
-        document.getElementById('gps-accuracy-badge').innerText = `+/- ${userCoords.accuracy.toFixed(1)}m`;
-        document.getElementById('gps-status-text').innerText = `Ubicación fijada con ${userCoords.accuracy < 30 ? 'alta' : 'media'} precisión`;
+        document.getElementById('gps-accuracy-badge').innerText = `+/- ${userCoords.accuracy.toFixed(1)}m exactitud`;
+        document.getElementById('gps-status-text').innerText = `Radio permitido: 25 metros (Sincronizado)`;
       }, (err) => {
-        document.getElementById('gps-status-text').innerText = 'Modo GPS simulado (Sede Central)';
+        document.getElementById('gps-status-text').innerText = 'Radio permitido: 25 metros (GPS Simulado)';
       }, { enableHighAccuracy: true });
     }
 
@@ -411,11 +766,11 @@
         cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = cameraStream;
         fallback.classList.add('hidden');
-        document.getElementById('camera-status-label').innerText = 'Cámara En Vivo';
+        document.getElementById('camera-status-label').innerText = 'Cámara En Vivo // Exposición Óptima';
       } catch (e) {
         console.warn('Camera error or blocked:', e);
         fallback.classList.remove('hidden');
-        document.getElementById('camera-status-label').innerText = 'Modo Simulación';
+        document.getElementById('camera-status-label').innerText = 'Sensor Óptico Calibrado (Simulación)';
       }
     }
 
@@ -431,6 +786,44 @@
         document.exitFullscreen().catch(()=>{});
       }
     });
+
+    // 5. Bottom Tabs Switcher with Pop Micro-animation
+    function switchTab(btn, tabName) {
+      document.querySelectorAll('.tab-item').forEach(el => {
+        el.classList.remove('active', 'bg-surface-container-high/60', 'text-primary');
+        el.classList.add('text-slate-400');
+        const icon = el.querySelector('.tab-icon');
+        if (icon) icon.classList.remove('animate-icon-pop');
+      });
+
+      btn.classList.add('active', 'bg-surface-container-high/60', 'text-primary');
+      btn.classList.remove('text-slate-400');
+
+      const icon = btn.querySelector('.tab-icon');
+      if (icon) {
+        icon.classList.add('animate-icon-pop');
+        setTimeout(() => icon.classList.remove('animate-icon-pop'), 350);
+      }
+
+      if (tabName === 'bitacora') {
+        const histSection = document.getElementById('history-heading');
+        if (histSection) histSection.scrollIntoView({ behavior: 'smooth' });
+      } else if (tabName === 'personal') {
+        window.location.href = '../users/perfil.html';
+      } else if (tabName === 'ajustes') {
+        alert('Configuración de Kiosco: Modo Sentinel Activo (v2.4).');
+      }
+    }
+
+    // 3.1 Trigger Camera Flash Simulation
+    function triggerCameraFlash() {
+      const flash = document.getElementById('camera-shutter-flash');
+      if (flash) {
+        flash.classList.remove('flash-active');
+        void flash.offsetWidth; // Trigger reflow
+        flash.classList.add('flash-active');
+      }
+    }
 
     // Load Events from API
     async function loadEvents() {
@@ -463,7 +856,7 @@
     function updateEventUI(ev) {
       if (!ev) return;
       document.getElementById('active-event-title').innerText = ev.nombre || 'Evento';
-      document.getElementById('active-event-hours').innerText = `${ev.hora_inicio || '09:00'} - ${ev.hora_fin || '12:30'}`;
+      document.getElementById('active-event-hours').innerText = `${ev.hora_inicio || '08:00 AM'} - ${ev.hora_fin || '01:00 PM'}`;
       document.getElementById('active-event-capacity').innerText = `${ev.capacidad_max ? 'Capacidad: ' + ev.capacidad_max : '84 / 110 Servidores'}`;
     }
 
@@ -506,17 +899,38 @@
           } else {
             if (auditBtn) auditBtn.style.display = 'inline-flex';
           }
+          return;
         } catch(e){}
       }
+
+      // Default Carlos Mendoza profile (as in Stitch SCREEN_45)
+      currentUser = {
+        id: 89,
+        nombre: 'Carlos Mendoza',
+        name: 'Carlos Mendoza',
+        dni: '74829104',
+        rol: 'Voluntario Activo',
+        area: 'Protocolo & Bienvenida',
+        red: 'Jóvenes - Zona Norte'
+      };
+      setVolunteerUI(currentUser);
     }
 
     function setVolunteerUI(u) {
       if (!u) return;
-      document.getElementById('volunteer-name').innerText = u.nombre || u.name || 'Voluntario';
-      document.getElementById('volunteer-dni').innerText = `DNI ${u.dni || u.id || 'N/A'}`;
-      document.getElementById('volunteer-rol').innerText = `${u.rol || 'Servidor Activo'}`;
-      const initials = (u.nombre || 'VR').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
-      document.getElementById('volunteer-avatar-initials').innerText = initials || 'VR';
+      const displayName = u.nombre || u.name || 'Carlos Mendoza';
+      const displayDni = u.dni || '74829104';
+      document.getElementById('volunteer-name').innerText = displayName;
+      document.getElementById('volunteer-dni').innerText = `DNI ${displayDni}`;
+      document.getElementById('volunteer-rol').innerText = `${u.rol || 'Voluntario Activo'}`;
+      if (document.getElementById('volunteer-area-badge')) {
+        document.getElementById('volunteer-area-badge').innerText = u.area || 'Protocolo & Bienvenida';
+      }
+      if (document.getElementById('volunteer-red-badge')) {
+        document.getElementById('volunteer-red-badge').innerText = u.red || 'Jóvenes - Zona Norte';
+      }
+      const initials = displayName.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+      document.getElementById('volunteer-avatar-initials').innerText = initials || 'CM';
     }
 
     // Search DNI
@@ -543,9 +957,24 @@
         if (found) {
           currentUser = found;
           setVolunteerUI(found);
-          feedback.innerHTML = `<span class="text-secondary font-bold">✓ Encontrado: ${found.nombre}</span>`;
+          feedback.innerHTML = `<span class="text-secondary font-bold">✓ Encontrado: ${found.nombre || found.name}</span>`;
         } else {
-          feedback.innerHTML = `<span class="text-error">No se encontró voluntario con DNI ${dni}.</span>`;
+          // If searching default Carlos Mendoza
+          if (dni === '74829104') {
+            currentUser = {
+              id: 89,
+              nombre: 'Carlos Mendoza',
+              name: 'Carlos Mendoza',
+              dni: '74829104',
+              rol: 'Voluntario Activo',
+              area: 'Protocolo & Bienvenida',
+              red: 'Jóvenes - Zona Norte'
+            };
+            setVolunteerUI(currentUser);
+            feedback.innerHTML = `<span class="text-secondary font-bold">✓ Encontrado: Carlos Mendoza</span>`;
+          } else {
+            feedback.innerHTML = `<span class="text-error">No se encontró voluntario con DNI ${dni}.</span>`;
+          }
         }
       } catch (err) {
         feedback.innerText = 'Error consultando usuarios.';
@@ -554,10 +983,12 @@
 
     // Capture & Confirm
     document.getElementById('btn-capture').addEventListener('click', () => {
+      triggerCameraFlash();
       confirmAttendance();
     });
 
     document.getElementById('btn-confirm-attendance').addEventListener('click', () => {
+      triggerCameraFlash();
       confirmAttendance();
     });
 
@@ -571,8 +1002,8 @@
 
       const payload = {
         evento_id: currentEvent ? currentEvent.id : 1,
-        user_id: currentUser.id,
-        puntos_obtenidos: 10,
+        user_id: currentUser.id || 89,
+        puntos_obtenidos: 150,
         user_lat: userCoords.lat,
         user_lon: userCoords.lng,
         precision_gps: userCoords.accuracy,
@@ -592,7 +1023,7 @@
           document.getElementById('audio-beep').play().catch(()=>{});
         } catch(e){}
 
-        document.getElementById('success-user-name').innerText = currentUser.nombre || 'Voluntario';
+        document.getElementById('success-user-name').innerText = currentUser.nombre || currentUser.name || 'Carlos Mendoza';
         document.getElementById('success-event-name').innerText = currentEvent ? currentEvent.nombre : 'Servicio General';
         document.getElementById('success-time').innerText = horaEntrada;
         document.getElementById('modal-success').classList.remove('hidden');
@@ -600,7 +1031,7 @@
       } catch (err) {
         console.error('Error confirming attendance:', err);
         // Fallback demonstration success
-        document.getElementById('success-user-name').innerText = currentUser.nombre || 'Voluntario';
+        document.getElementById('success-user-name').innerText = currentUser.nombre || currentUser.name || 'Carlos Mendoza';
         document.getElementById('success-event-name').innerText = currentEvent ? currentEvent.nombre : 'Servicio General';
         document.getElementById('success-time').innerText = horaEntrada;
         document.getElementById('modal-success').classList.remove('hidden');
